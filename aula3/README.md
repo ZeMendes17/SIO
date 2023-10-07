@@ -128,3 +128,27 @@ As we can see in the running **hacker_server** we have received the Administrato
 Session Cookie.
 
 ## Content Security Policy
+
+It is a way to protect a website from injection of malicious code. This does not stop all types of
+XSS, but it is on of the most important steps. For more protection it should be combined with CORS,
+described in the next section.
+
+The objective is to define what content can be present in the HTML, or how it is handled by the
+browser. HTML Content Policy makes use of the headers that specify how the browser should load
+and execute resources. The most important is **Content-Security-Policy**, which specifies a set
+of rules for content. **content-security-policy.com** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
