@@ -136,19 +136,89 @@ described in the next section.
 The objective is to define what content can be present in the HTML, or how it is handled by the
 browser. HTML Content Policy makes use of the headers that specify how the browser should load
 and execute resources. The most important is **Content-Security-Policy**, which specifies a set
-of rules for content. **content-security-policy.com** 
+of rules for content. **content-security-policy.com**
 
+To see this in action, lets consider an example where we define all JS should be loaded from the
+web page server, and no JS objects are allowed from external sites, or only from a restricted
+set. For this purpose, we can set the **Content-Security-Protocol** to: **default-script 'self'
+cdn.jsdeliivr.net**
 
+With this value, scripts will only be loaded from the local server or cdn.jsdelivr.net a known Content Delivery Network.
 
+#### Exercise:
 
+To enable Content Security Policy in the server by removing the comment in line 63 of file xss_demo/views.py and restarting the server. This will just call a function that is written a few lines before this line.
+If we now try to inject payloads that load scripts from external sites.
 
+Further rules could be added so that no script is added inline, no images are loaded from external sites, all
+resources are loaded from secure locations, etc . . .
 
+We will comment it again to continue the guide.
 
+### Cross-Origin Resource Sharing (CORS)
 
+Cross-Origin Resource Sharing (CORS) is a mechanism that uses additional HTTP headers to tell a browser
+to let a web application running at one origin (domain) have permission to access selected resources from a server at a different origin. A web application executes a cross-origin HTTP request when it requests a resource that has a different origin (domain, protocol, and port) than its own origin. 
 
+In the previous exercises, several payload that load resources from external locations could be injected. If
+CORS is properly setup, the browser will not load resources from external sites, or only load resources from
+selected sites. This effectively can be used to limit cross site request forgery and most cross site scripting
+attacks.
 
+The CORS specification states that many resources will be affected, and can effectively be prevented from loading. This includes images, fonts, textures, and any other resource, as well as scripts and even calls made inside Javacript scripts.
+Requests can be considered to be of two types: Simple and Preflight. The type of request is defined by the method, headers, destination and several other aspects. depicts the flow used by the browser to select how to handle each request.
 
+#### Exercise:
+* To setup:
+Inside the *scripts* directory there is a second server: **cors_server.py**.
+The additional server will simulate a service being exploited by a XSS attack, such as
+a website for a shop or a bank. The blog software we used previously will remain our method of invoking
+remote resources.
+Start the site.
 
+Now lets inject payloads as messages in the app's posts' comments in order to test the diﬀerent paths in the CORS ﬂow. 
+We can observe what is loaded by looking at the browser console, and the server console. Take in consideration that the browser may issue background requests that are not displayed in the network view, but logged by the server!
 
+The following snippet can be used to simulate different requests from within JS.
+```
+$.ajax({
+<script>
+    $.ajax({
+    url: 'http://external:8000/smile.jpg',
+    type: 'GET',
+    success: function() { alert("smile.jpg loaded"); },
+    });
+</script>
+```
+In the browser console, it received a log:
+```
+Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://external:8000/smile.jpg. (Reason: CORS header ‘Access-Control-Allow-Origin’ missing). Status code: 200.
+```
+
+And the server console received:
+```
+127.0.0.1 - - [08/Oct/2023 04:52:29] "GET /smile.jpg HTTP/1.1" 200 -
+Serving file: smile.jpg
+Request Debug:  GET
+Host: external:8000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Origin: http://aula3:6543
+Connection: keep-alive
+Referer: http://aula3:6543/
+```
+
+The reson that the firs log appears is because the **external** server doesn’t allow the resources to be shared (loaded) from other web sites. This will avoid indirect
+calls from users that were tricked with some XSS payload.
+
+Because we are dealing with images, they do not pose a threat, and we can actually allow these resources to be obtained. In order to do this, we can add a **header Access-Control-Allow-Origin** stating that every website can include the images. Check the file *header Access-Control-Allow-Origin* and uncomment the code around line 20. Then repeat the previous tests.
+
+One of the tests still went wrong. This is because a GET with additional headers can be used to trigger
+authenticated actions (user authentication uses headers). Therefore, the browser will first check if the request can be made by issuing a OPTIONS request. The result of this request should be the access policy (Access-Control-Allow-Origin), and the list of methods supported (Access-Control-Allow-Methods with each method separated by a comma).
+
+In the cors_server.py file, add a method named do_OPTIONS(self), which returns the correct headers enabling users
+to GET images.
 
 

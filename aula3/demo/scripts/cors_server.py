@@ -17,8 +17,8 @@ class CustomRequestHandler(BaseHTTPRequestHandler):
         
         if os.path.exists(fname):
             self.send_response(200)
-            #if fname.endswith('.jpg'):
-            #    self.send_header('Access-Control-Allow-Origin', '*')
+            if fname.endswith('.jpg'):
+               self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
                 
             print("Serving file: {}".format(fname))
