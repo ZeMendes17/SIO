@@ -126,6 +126,9 @@ Description field. So, by including the following code into the comment:
 
 As we can see in the running **hacker_server** we have received the Administrator
 Session Cookie.
+Now we can use the value given to enter in the Administrator account.
+Open Inspect mode, go to Storage and then Cookie's tab, change the name to **auth_tkt** (as given)
+and cookie to the given value in the hacker server console.
 
 ## Content Security Policy
 
