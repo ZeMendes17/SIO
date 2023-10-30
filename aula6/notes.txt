@@ -1,0 +1,71 @@
+# 1. Introduction
+
+Our system has some cryptographic hash functions itself, lets test them:
+```
+echo -n "Hello World" |md5sum
+```
+> R: b10a8db164e0754105b7a99be72e3fe5  
+
+```
+echo -n "Hello World" | shasum
+```
+> R: 0a4d55a8d778e5022fab701977c5d840bbc486d0
+
+Also has sha256sum, sha384sum and sha512sum.
+
+# 2. Cryptographic hash functions
+
+The command echo is used here with -n as argument. Can you explain why?
+R: -n option suppresses the trailing newline that is normally appended to each
+line of output.
+
+Using our example above, without -n the String that would be used in the
+has function would be "Hello World\n" and not "Hello World".
+
+## Q1
+
+Does the number in command’s name have any relation to the number of
+characters that are printed out?
+
+R: Yes, the higher the number in the commands name, the higher the length of
+the printed out characters.
+
+## Q2
+
+Given that cryptographic hash functions generate a relatively short output for an input of any size,
+how can these functions be used to circumvent text size restrictions enforced by services like X (a.k.a.
+Twitter)?
+
+R: They can circumvent text size restrictions using this cryptographic
+hash functions, because they generate an output with the same always lenght.
+Thus, if the text size restriction is higher than output of the hash function
+there should be no problem.
+
+# 3. Avalanche effect
+
+An essential requirement for cryptographic hash functions is that a small change in a text must produce a
+completely different hash – avalanche effect.
+
+Let's verify this:
+- Choose 1 of the aforementioned commands;
+- Choose a sentence and produce its hash;
+- Change a single bit in the sentence and produce a new hash;
+- Compare the 2 outputs and take conclusions.
+
+**Hint**: To change a bit in a sentence you can use the command man ascii to identify characters that differ in a
+single bit, such as '0' and '1', and replace one by another.
+
+## Example:
+```
+echo "Hello World" | sha256sum
+```
+AND
+```
+echo "Hello Worle" | sha256sum
+```
+
+We can verify that the output is completly different.
+
+## Statistical analysis of avalanche effect
+
+
