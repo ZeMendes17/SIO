@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{titling}
+\usepackage{geometry}
+\usepackage{graphicx}
+\graphicspath{ {./Images/} }
+\usepackage[shortlabels]{enumitem}
+\usepackage{fancyhdr}
+\usepackage{ulem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\def\ojoin{\setbox0=\hbox{$\bowtie$}%
+  \rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
+\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
+
+\renewcommand\maketitlehooka{\null\mbox{}\vfill} %para centralizar verticalmente
+\renewcommand\maketitlehookd{\vfill\null}
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{\thepage}
+\lfoot{ \includegraphics[scale=0.01]{UA.jpg} José Mendes 107188 LEI}
+\geometry{
+  a4paper,
+  headheight=4cm,
+  top=5.5cm,
+  bottom=4.5cm,
+  footskip=4cm
+}
+
+
+\title{Segurança Informática e nas Organizações}
+\author{José Mendes 107188}
+\date{2023/2024}
+
+\begin{document}
+
+
+\begin{titlepage}
+    \maketitle
+    \begin{center}
+        \includegraphics[scale=0.4]{UA.png}
+    \end{center}
+    \thispagestyle{empty} %remove o count da pagina
+\end{titlepage}
+
+\pagebreak
+
+\section{Introdução}
+
+\end{document}
