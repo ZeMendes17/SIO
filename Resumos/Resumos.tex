@@ -74,4 +74,598 @@
 
 \section{Introdução}
 
+\subsection{Segurança}
+
+\begin{flushleft}
+  \textbf{Segurança -} É o assunto focado na previsão de sistemas, processos, ambientes, \dots
+
+  Ao longo de todos os aspetos do ciclo de vida de um sistema:
+  \begin{itemize}
+    \item Planeamento
+    \item Desenvolvimento
+    \item Execução
+    \item Processos
+    \item Pessoas
+    \item Clientes e Supply Chain
+    \item Mecanismos
+    \item Standards e Regulamentos
+    \item Propriedade Intelectual
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Planeamento}
+
+Design de uma solução está de acordo com alguns requisitos dentro de um
+contexto normativo.
+
+\begin{flushleft}
+  \textbf{Sem flaws}
+  \begin{itemize}
+    \item Todos os estados da operação são os previstos;
+    \item Não há estados adicionais que fogem da lógica esperada (mesmo se transições forçadas são usadas);
+  \end{itemize}
+
+  \textbf{Dentro do scope de um contexto normativo}
+  \begin{itemize}
+    \item Especifico para cada atividade e setor (Ex: ISO 27001, ISO 27007, ISO 37001);
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Desenvolvimento}
+
+Implementação de uma solução de acordo com o design, sem outros modos de operação.
+
+\begin{flushleft}
+  \textbf{Sem bugs a comprometer uma execução correta}
+  \begin{itemize}
+    \item Sem crashes;
+    \item Sem resultados invalidos ou inesperados;
+    \item Com tempos de execução corretos;
+    \item Com consumo de recursos adequado;
+    \item Sem leaks de informação;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Software}
+  \begin{itemize}
+    \item Requer uma implementação cuidadosa;
+    \item Requer testes para obter uma implementação com os comportamentos esperados;
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Execução}
+
+Código executa tal como foi escrito, com todos os processos previstos.
+
+\begin{flushleft}
+  \textbf{O ambiente é controlado, não pode ser manipulado ou observado.}
+
+  \textbf{Sem a existência de comportamentos anomalos, introduzido por aspetos ambientais} (como velocidade de armazenamento,
+  quantidade de RAM, comunicação confiaveis)
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{1}
+\end{center}
+
+\subsubsection{Pessoas e Parceiros}
+
+O comportamento do Staff não pode ter um impacto negativo na solução.
+
+\begin{flushleft}
+  \begin{itemize}
+    \item As normas existem para regular que ações são expectáveis;
+    \item O Staff é treinado para distinguir comportamento correto de comportamento incorreto;
+    \item O Staff tem os incentivos corretos para se comportar adequadamente;
+    \item Quando o Staff é comprometido, ou se desvia, as ações têm impacto limitado;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Análise e Audiroia}
+
+Qual é o verdadeiro comportamento da solução?
+
+\begin{flushleft}
+  \textbf{Identificar desvios dos atributos experados}
+  \begin{itemize}
+    \item Faults, erros, comportamentos
+  \end{itemize}
+
+  \textbf{Identificar o risco para a solução ser modificada}
+  \begin{itemize}
+    \item Exposição a possíveis ataquantes;
+    \item Incentivos que que alguém possa ter para modificar a solução;
+    \item Identificar potenciais actors (threats);
+  \end{itemize}
+
+  \textbf{Identificar o impacto dos desvios}
+  \begin{itemize}
+    \item Perda total de dados? Denial of Service? Increase Operation Cost?
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{2}
+\end{center}
+
+\subsection{Perspetivas}
+
+A Segutrança tem muitas perspetivas interligadas.
+
+\begin{flushleft}
+  \textbf{Defensive:} Focado em manter previsão,
+
+  \textbf{Offensive:} Focado em explorar a previsibilidade.
+  \begin{itemize}
+    \item Pode ter uma intenção maliciosa/criminosa;
+    \item Pode ter como objetivo, a validação da solução (Red Teams);
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Outras:}
+  \begin{itemize}
+    \item Engenharia Inversa: Recuperar o design de porjetos contruidos;
+    \item Forensics: Extrair informação e reconstruir eventos anteriores;
+    \item Recuperação de Desastres: Minimizar o impacto de ataques;
+    \item Auditoria: Avaliar se a solução está de acordo com um conjunto de requisitos;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Objetivos de Segurança de Informação}
+
+\begin{center}
+  \includegraphics[scale=0.2]{3}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Confidencialidade:} A informação pode apenas ser acessada por um grupo restrito de entidades;
+  
+  \vspace{2mm}
+
+  \uline{Medidas:}
+  \begin{itemize}
+    \item Encryptar informação;
+    \item Usar passwords de acesso (fortes);
+    \item Usar sistemas de gestão de identidade e autenticação;
+    \item Doors, Strong Walls;
+    \item Security personnel;
+    \item Treinar (o Staff);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Integridade:} A informação permanece inalterada (Pode ser aplicada ao comportamento de dispositivos e serviços);
+
+  \vspace{2mm}
+
+  \uline{Medidas:}
+  \begin{itemize}
+    \item Controlo de identidade (hashes);
+    \item Backups;
+    \item Controlo de acesso;
+    \item Dispositivos de armazenamento robustos;
+    \item Processos de verificação de dados;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Disponibilidade:} A informação está disponível a target entities (Pode ser aplicada aos serviços e dispositivos);
+
+  \vspace{2mm}
+
+  \uline{Medidas:}
+  \begin{itemize}
+    \item Backups;
+    \item Planos de recuperação de desastres;
+    \item Redundância;
+    \item Virtualização;
+    \item Monitorização;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Privacidade:} Como a informação pessoal é tratada (isto envolve:
+  Obtida, Processada, Armazenada, Partilhada, Eliminada);
+
+  \vspace{2mm}
+
+  \uline{Medidas:}
+  \begin{itemize}
+    \item Controlo de acesso;
+    \item Processos transparentes;
+    \item Ciphers;
+    \item Integridade e controlo de autenticação;
+    \item Logs;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Objetivos da Segurança}
+
+\begin{flushleft}
+  \textbf{Defesa contra eventos catastróficos:}
+  \begin{itemize}
+    \item Fenómenos naturais;
+    \item Temperaturas extremas, inundações, trevoada, trovões, radiação, \dots
+  \end{itemize}
+
+  \textbf{Degradação do Hardware do computador:}
+  \begin{itemize}
+    \item Falha no fornecimento de energia;
+    \item Bad sectors em discos;
+    \item Bit errors em células RAM ou SSD;
+  \end{itemize}
+
+  \textbf{Defesa contra falhas normais:}
+  \begin{itemize}
+    \item Queda de energia;
+    \item Falhas internas do sistema;
+    \begin{itemize}
+      \item Linux Kernel panic, Windows blue screen, OS X panic;
+      \item Deadlocks;
+      \item Uso anormal de recursos;
+    \end{itemize}
+    \item Falhas de software / Falhas de comunicação; 
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Defesa contra atividades não autorizadas (adversários):}
+  \begin{itemize}
+    \item Iniciado por alguém "de fora" ou "de dentro";
+  \end{itemize}
+
+  \uline{Tipos de atividades não autorizadas:}
+  \begin{itemize}
+    \item Acesso a informação;
+    \item Alteração de informação;
+    \item Utilização de recursos (CPU, memory, print, network, \dots);
+    \item Denial of Service;
+    \item Vandalismo (interferir com o funcionamento normal do sistema,
+    sem obter benefícios);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Conceitos Base}
+
+\begin{enumerate}
+  \item Domínios;
+  \item Políticas;
+  \item Mecanismos;
+  \item Controlos;
+\end{enumerate}
+
+\subsubsection{Domínios}
+
+Um conjunto de entidades que partilham atributos de segurança semelhantes.
+
+\begin{flushleft}
+  \begin{itemize}
+    \item Permite gerir segurança de uma forma agregada;
+    \begin{itemize}
+      \item A gestão define os atributos do domínio;
+      \item As entidades adicionadas ao domínio herdam os atributos do "grupo";
+    \end{itemize}
+    \item Comportamento e interações são homogéneas dentro do domínio;
+    \item Domínios podem ser organizados em hierarquias;
+    \item As interações entre domínios são, normalmente, controladas;
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{4}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Políticas}
+
+Conjunto de guidelnes relacionados com a segurança, que mandam sobre o domínio.
+
+\begin{itemize}
+  \item Organizações têm múltiplas políticas;
+  \begin{itemize}
+    \item Aplicavéis a cada domínio específico;
+    \item Podem dar overlap e terem scopes diferentes/níveis abstratos;
+  \end{itemize}
+  \item As múltiplas políticas têm de ser coerentes;
+  \item \uline{Exemplos:}
+  \begin{itemize}
+    \item Users apenas podem acessar serviços web;
+    \item Os assuntos devem ser autenticados para entrar no domínio;
+    \item Walls devem ser construidas de betão;
+    \item Comunicações devem ser encriptadas;
+  \end{itemize}
+  \item Define o poder para cada assunto;
+  \begin{itemize}
+    \item Least privilege principle: cada assunto apenas deve ter os previlégios
+    necessários para executar as suas tarefas;
+  \end{itemize}
+  \item Define procedimentos de segurança (quem faz o quê em que situação);
+  \item Define os requisitos de segurança mínimos para um domínio;
+  \begin{itemize}
+    \item Security levels, Security Groups
+    \item Autorização é necessária (and the related minimum authentication requirements (Strong/weak,
+    single/multifactor, remote/face-to-face))
+    \item Define estratégias de defesa e táticas de contra-ataque;
+    \begin{itemize}
+      \item Arquitetura defensiva;
+      \item Monotorização de atividades criticas ou sinais de ataque;
+      \item Reação contra ataques ou outros cenários anormais;
+    \end{itemize}
+    \item Define que atividades são legais e ilegais;
+    \begin{itemize}
+      \item Forbid list model: Some activities are denied, the rest are allowed;
+      \item Permit list model: Some activities are allowed, the rest is forbidden;
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Mecanismos}
+
+\begin{itemize}
+  \item Implementam as políticas;
+  \begin{itemize}
+    \item Definem, num nível mais elevado, o que precisa de ser feito ou evitado;
+    \item São usados para implementar políticas;
+  \end{itemize}
+
+  \pagebreak
+
+  \item Mecânismos de segurnaça genéricos:
+  \begin{itemize}
+    \item Confinamento (sandboxing);
+    \item Autenticação;
+    \item Controlo de acesso;
+    \item Execução priveligiada;
+    \item Filtragem;
+    \item Logging;
+    \item Auditoria;
+    \item Algoritmos criptográficos;
+    \item Protocolos criptográficos;
+  \end{itemize}
+\end{itemize}
+
+\begin{center}
+  \includegraphics[scale=0.4]{5}
+  \includegraphics[scale=0.4]{6}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Controlos}
+
+Controlos são quqlquer aspeto que permita minimizar o risco (proteger as propriedades \textbf{CIA})
+
+\begin{flushleft}
+  \begin{itemize}
+    \item Controlos incluem políticas e mecanismos, mas também:
+    \begin{itemize}
+      \item Standards e regulamentos;
+      \item Processos;
+      \item Técnicas;
+    \end{itemize}
+    \item Controlos são explicitamente definidos e podem ser auditáveis;
+    \begin{itemize}
+      \item E.g.: ISO 27001 defines 114 controls in 14 groups (… asset management, physical security, incidente management…)
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{7}
+
+  Horizontal: Relação ao evento
+
+  Vertical: Relação à sua natureza
+\end{center}
+
+\pagebreak
+
+\subsection{Segurança na Prática}
+
+Prevenção realista.
+
+\begin{flushleft}
+  \begin{itemize}
+    \item \uline{Segurança perfeita é impossível};
+    \item Focar nos eventos mais prováveis (pode depender de localização, legal framework, \dots)
+    \item Considerar o custo e o profit;
+    \begin{itemize}
+      \item Um grande número de controlos tem um low cost;
+      \item No entanto, não limite superior para o custo de uma estratégia de segurança;
+    \end{itemize}
+    \item Considerar todos os domínios e entidades;
+    \begin{itemize}
+      \item Um simples breach pode escalar para um problema maior;
+    \end{itemize}
+    \item Considerar impacto (Under the light of CIA and other potential impact areas (e.g., brand))
+    \item Considerar o custo e o tempo de recuperação;
+    \item Caracterizar ataquantes (definir controlos específicos para esses, vão
+    sempre existir atacantes com mais recursos);
+    \item Considerar que o sistema será comprometido (Ter planos de recuperação);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Segurança em Sistemas Computacionais}
+
+\begin{flushleft}
+  \begin{itemize}
+    \item Computadores podem fazer grandes danos em pouco tempo;
+    \begin{itemize}
+      \item Gerem grandes quantidades de informação;
+      \item Processam e comunicam com grande velocidade;
+    \end{itemize}
+    \item O número de \textbf{weaknesses está sempre a aumentar};
+    \begin{itemize}
+      \item Devido a complexidade acrescida;
+    \end{itemize}
+    \item As redes permitem mecanismos de ataque mais sofisticados;
+    \begin{itemize}
+      \item Ataques anónimos de qualquer parte do mundo;
+      \item Espalha-se rapidamente através de barreira geográficas;
+      \item Exploitation of insecure hosts and applications
+    \end{itemize}
+    \item Os ataquantes constroem ataques em cadeia complexos;
+    \begin{itemize}
+      \item First exploration
+      \item Lateral movement
+      \item Exfilration
+    \end{itemize}
+  \end{itemize}
+
+  \pagebreak
+
+  \begin{center}
+    \includegraphics[scale=0.4]{8}
+  \end{center}
+
+  \begin{flushleft}
+    \begin{itemize}
+      \item A maior parte das vezes os users não sabem dos riscos
+      \begin{itemize}
+        \item Não sabem os problemas, impacto, boas práticas nem as soluções;
+      \end{itemize}
+      \item A maior parte das vezes os users são descuidados
+      \begin{itemize}
+        \item Porque tomam riscos;
+        \item Não querem saber (não têm/identificam alguma responsabilidade);
+        \item Não estimam o risco corretamente;
+      \end{itemize}
+    \end{itemize}
+  \end{flushleft}
+
+  \subsection{Maiores fontes de vulnerabilidades}
+
+  \begin{flushleft}
+    \textbf{Aplicações hostis ou com bugs}
+    \begin{itemize}
+      \item Rootkits: Insert elements in the operating system
+      \item Worms: Software programs controlled by an attacker
+      \item Virus: Pieces of code that infect other files (e.g., macros)
+    \end{itemize}
+
+    \textbf{Users}
+    \begin{itemize}
+      \item Ignorantes, descuidados, não querem saber
+      \item Usam alternativas não seguras
+      \item Confiam que as aplicações de segurança resolvem os problemas
+      \item Download de software de fontes não confiáveis
+      \item hostis
+    \end{itemize}
+
+    \textbf{Administração defeituosa}
+    \begin{itemize}
+      \item A configuração default é a mais segura
+      \item Security restriction vs flexible operation
+      \item Excessões a indivíduos
+    \end{itemize}
+
+    \pagebreak
+
+    \textbf{Comunicação através de redes desconhecidas/não controladas}
+    \begin{itemize}
+      \item Public hotspots, campus networks, hostile governments
+    \end{itemize}
+  \end{flushleft}
+
+  \subsection{Perimeter Defense}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{9}
+  \end{center}
+
+  \begin{flushleft}
+    \textbf{Proteção contra atacantes externos}
+    \begin{itemize}
+      \item Internet, Foreign users, outras organizações
+    \end{itemize}
+
+    \textbf{Assume que os users internos são confiáveis e partilham
+    as mesmas políticas}
+    \begin{itemize}
+      \item Amigos, família, colaboradores
+    \end{itemize}
+
+    \textbf{Usados em cenários domésticos ou em pequenas empresas}
+
+    \vspace{2mm}
+
+    \textbf{Limitações:}
+    \begin{itemize}
+      \item Muito simples;
+      \item Não protege contra ataques internos (users previamente confiáveis,
+      atacantes que adquiriram acesso interno);
+    \end{itemize}
+  \end{flushleft}
+
+  \subsection{Defesa em Profundidade}
+
+  \begin{flushleft}
+    \textbf{Proteção contra atacantes externos e internos}
+    \begin{itemize}
+      \item Da internet, de outras organizações, de users internos;
+    \end{itemize}
+
+    \textbf{Assume domínios bem definidos pela organização}
+    \begin{itemize}
+      \item Walls, doors, authentication, security personell, ciphers, secure networks
+    \end{itemize}
+
+    \textbf{Limitações}
+    \begin{itemize}
+      \item Precisa de coordenação entre os diferentes controlos (podemos acabar
+      com controlos overlapping, mas também com "buracos" nos perímetros de segurança);
+    \end{itemize}
+  \end{flushleft}
+
+  \pagebreak
+
+  \subsection{Zero Trust}
+
+  \begin{flushleft}
+    \textbf{Modelos de defesa sem perímetros específicos}
+    \begin{itemize}
+      \item Não há confiança por herança nas entidades só por serem internas (
+        na verdade, pode não haver noção de "interno" e "externo");
+    \end{itemize}
+
+    \textbf{Modelo recomendado para novos sistemas}
+    \begin{itemize}
+      \item Sistemas tradicionais deviam migrar para este modelo;
+      \item Implies the design of systems/services specific for this model
+      \item Legacy systems vão precisar de camadas de proteção adicionais (
+        Firewalls, filtros, adapatadores, plugins)
+    \end{itemize}
+  \end{flushleft}
+
+  \subsubsection{Princípios (NCSC)}
+
+  \begin{enumerate}
+    \item Saber a arquitetura (users, devices, services e data)
+    \item Saber as identidades (users, devices, services e data)
+    \item Avaliar o comportamento do user, service e saúde do device
+    \item Usar políticas para autorizar requests
+    \item Autenticar e autorizar em todo o lado (No open APIs, or IP address-based access)
+    \item Focar a Monitorização nos users, devices e services
+    \item Não confiar em nenhuma rede, incluindo a nossa (
+      Os atacantes internos não devem ter mais privilégios que os externos)
+    \item Escolher services feitos para \textbf{zero trust} (evitar legacy services, mas podem ser integrados)
+  \end{enumerate}
+
+\end{flushleft}
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
