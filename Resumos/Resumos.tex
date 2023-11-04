@@ -655,17 +655,358 @@ Prevenção realista.
       Os atacantes internos não devem ter mais privilégios que os externos)
     \item Escolher services feitos para \textbf{zero trust} (evitar legacy services, mas podem ser integrados)
   \end{enumerate}
+  \end{flushleft}
+  
+  \pagebreak
 
-\end{flushleft}
+  \section{Vulnerabilidades}
+
+  \uline{Uma empresa é tão mais suscetível de ataques quanto maior a sua dimensão}, uma vez que
+  ataques bem sucedidos serão mais rentáveis
+
+  \vspace{2mm}
+
+  De forma a prevenir \textbf{ataques}, que exploram \textbf{vulnerabilidades}, as organizações devem investir
+  na \textbf{defesa} dos seus sistemas, de forma a garantir a segurança da informação que armazenam.
+
+  \vspace{2mm}
+
+  \subsection{Segurança de Informação}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{10}
+  \end{center}
+
+  \subsubsection{Medidas (e algumas ferramentas)}
+
+  No entanto, \textbf{defesa} é um conceito abstrato, que na realidade ganha forma em cinco medidas.
+
+  \begin{flushleft}
+    \textbf{Desencorajamento:} através da punição dos infratores (restrições legais e forensic evidences) e utilização de barreiras de segurança
+    (firewalls, Autenticação, Sandboxing, \dots)
+
+    \vspace{2mm}
+
+    \textbf{Deteção:} sistema de deteção de intrusões (e.g Seek, Bro, Suricata), ou através de auditorias e análises forenses;
+
+    \vspace{2mm}
+
+    \textbf{Ilusão:} dos atacantes com honeypots ou honeynets (como que pishing para atacantes) e follow-up com análise forense;
+
+    \vspace{2mm}
+
+    \textbf{Prevenção:} através de políticas de segurança (e.g least priviledge principle), deteção (e.g OpensVas, metasploit) e correção de vulnerabilidades (e.g updates regulares);
+
+    \vspace{2mm}
+
+    \textbf{Recuperação:} com backups, sistemas redundantes, recuperação forense;
+  \end{flushleft}
+
+  \subsection{Vulnerabilidade}
+
+  É um erro no software que pode ser diretamente usado por um atacante para
+  ganhar acesso a um sistema ou rede.
+
+  \begin{flushleft}
+    Um erro é uma vulnerabilidade \uline{se permitir a um atacante usá-lo para violar
+    uma política de segurança para esse sistema}.
+
+    Isto exclui políticas de segurança completamente "abertas" em que todos os users
+    são confiáveis, ou onde não há consideração do risco do sistema.
+
+    \pagebreak
+
+    Uma vulnerabilidade \textbf{CVE} é um estado num sistema computacionas
+    (ou conjunto de sistemas) que podem:
+    \begin{itemize}
+      \item Permitir ao atacante executar comandos como outro user;
+      \item Permitir ao atacante aceder a dados que é contrário às restrições
+      de acesso específicadas para esses dados;
+      \item Permitir a um atacante fingir ser outra entidade;
+      \item Permitir ao atacante realizar denial of service;
+    \end{itemize}
+  \end{flushleft}
+
+  \subsection{Exposição}
+
+  Problema de \uline{configuração} que permite ao atacante aceder a informação ou capacidades que o podem
+  auxiliar, sem conseguir no entanto comprometer diretamente o sistema.
+
+  \vspace{2mm}
+
+  \textbf{Um problema de configuração ou um erro é uma exposição se não permitir
+  diretamente comprometer a segurança do sistema}, mas pode ser um componente
+  importante para a realização de um ataque bem sucedido, e é uma violação
+  de uma política de segurança.
+
+  \vspace{2mm}
+
+  \textbf{Uma exposição descreve um estado no sistema computacional (ou conjunto de sistemas)
+  que não é uma vulnerabilidade mas pode:}
+  \begin{itemize}
+    \item Permitir a um atacante conduzir atividades para obter informação;
+    \item Permitir a um atacante esconder atividades;
+    \item Inclui uma capacidade que se comporta como esperado, mas pode ser
+    facilmente abusada;
+    \item É o ponto primário de entrada em que um atacante pode tentar
+    usar para ganhar acesso ao sistema ou aos dados;
+    \item É considerado um poblema por algumas políticas de segurança;
+  \end{itemize}
+
+  \subsection{CVE - Common Vulnerabilities and Exposures}
+
+  É um repositório público de vulnerabilidades, que lista e descreve vulnerabilidades e
+  exposições de segurança.
+
+  \vspace{2mm}
+
+  \textbf{Dicionário de vulnerabilidades e exposições sobre segurança de informação}
+  \begin{itemize}
+    \item Para gestão de vulnerabilidades;
+    \item Para gestão de resolução de problemas;
+    \item Para alertar sobre novas vulnerabilidades;
+    \item Para deteção de intrusões;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Usa identificadores comuns para os mesmos CVEs}
+  \begin{itemize}
+    \item Permite a partilha de dados entre produtos de segurança;
+    \item Oferece um baseline index point para avaliar coverage of
+    tools and services;
+  \end{itemize}
+
+  \textbf{Detalhes sobre uma vulnerabilidade podem ser mantidos privados}
+  \begin{itemize}
+    \item Parte da divulgação responsável: até que o proprietário forneça uma solução;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  (Ver imagem no slide 4)
+
+  \subsubsection{Identificadoes CVE}
+
+  \textbf{Aka CVE names, CVE numbers, CVE-IDs, CVEs}
+
+  \vspace{2mm}
+
+  \textbf{Identificador único e comum para vulnerabilidades de segurança de informação publicamente conhecidas}
+  \begin{itemize}
+    \item Têm status "candidate" ou "entry";
+    \item Candiddato: Em review para inclusão na lista;
+    \item Entry: Aceite na lista CVE;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Formato}
+  \begin{itemize}
+    \item Numero identificador CVE (CVE-Year-Order);
+    \item Status (candidate, entry);
+    \item Descrição curta da vulnerabilidade ou exposição;
+    \item Referências a fontes de informação;
+  \end{itemize}
+
+  \subsubsection{Benefícios do CVE}
+
+  \textbf{Fornece uma linguagem comum para os problemas referenciados}
+  \begin{itemize}
+    \item Facilita a partilha de dados entre ferramentas e serviços;
+    \item Sistemas de deteção de intrusões;
+    \item Ferramentas de acesso;
+    \item Bases de dados de vulnerabilidades;
+    \item Researchers;
+    \item Equipes de resposta a incidentes;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Vai liderar para melhorar as ferramentas de segurança} (mais compreensívo,
+  melhores comparações, interoperabilidade)
+
+  \vspace{2mm}
+
+  \textbf{Vai originar mais inovação} (Ponto focal para discutir questões críticas de conteúdo de banco de dados)
+
+  \subsubsection{CVE e ataques}
+
+  Ataques são tornados possíveis através de múltiplas vulnerabilidades (um CVE para cada vulnerabilidade)
+
+  
+
+  \subsection{Deteção de Vulnerabilidades}
+
+  \textbf{Ferramentas específicas podem ser usadas para detetar vulnerabilidades}
+
+  Estas exploram vulnerabilidades conhecidas, testando padrões (e.g buffer overflow, SQL injection, XSS, \dots)
+
+  \vspace{2mm}
+
+  \textbf{Ferramentas específicas podem replicar ataques conhecidos}
+
+  Usar exploits conhecidos para vulnerabilidades conhecidas. Podem ser usadas
+  para implementar medidas de defesa.
+
+  \vspace{2mm}
+  
+  \textbf{Vital para certificar a robustez de um sistema de produção e aplicações}
+
+  Serviço muitas vezes oferecido por empresas externas.
+
+  \vspace{2mm}
+
+  \textbf{Pode ser aplicado a:}
+  \begin{itemize}
+    \item Source code;
+    \item Aplicações em execução (análise dinâmica);
+    \item Externamente como um cliente remoto;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Não dever ser aplicado \uline{cegamente} a sistemas de produção}
+
+  Potencial perda de dados/corrupção, DoS, atividade ilegal, \dots
+
+  \subsection{CWE - Common Weakness Enumeration}
+
+  De forma complementar temos outro repositório, mas focado na exploração das causas das
+  vulnerabilidades, ou seja, identifica as vulnerabilidades provocadas pelos
+  developers devido a
+  uma utilização incorreta do
+  software.
+
+  \vspace{2mm}
+
+  São encontradas no código, design, arquitetura do sistema. Cada CWE representa
+  um único tipo de vulnerabilidade. É mantido pelo MITRE e esta lista
+  fornece detalhes para cada CWE.
+  
+  \vspace{2mm}
+
+  Um CWE podem organizar-se de forma hierárquica, havendo um pai que fornece uma descrição genérica e vários
+filhos, cada um focado numa parte concreta do problema.
+
+\vspace{2mm}
+
+  Níveis mais profundos de CWEs, oferecem mais granularidade, normalmente
+  com menos filhos, ou sem filhos.
+
+  \begin{center}
+    \subsubsection*{CWE $\ne$ CVE}
+  \end{center}
+
+  \pagebreak
+
+  \begin{center}
+    \includegraphics[scale=0.35]{11}
+    \includegraphics[scale=0.35]{12}
+  \end{center}
+
+  \subsection{Rastreamento de Vulnerabilidades por parte dos vendedores}
+
+  Durante o ciclo de desenvolvimento, as vulnerabilidades são tratadas como bugs,
+  pode existir uma equipa de segurança ou não. Qunado o software está disponivel,
+  as vulnerabilidades também sõa rastreadas globalmente, para cada sistema
+  e software disponivel ao público.
+
+  \vspace{2mm}
+
+  O rastreamento público ajuda a:
+  \begin{itemize}
+    \item Focar a discussão à volta do problema;
+    \item Aos defensores a facilmente testar o sistema, aumentando a segurança;
+    \item Aos atacantes a facilmente saberem quais as vulnerabilidades a explorar;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  As vulnerabilidades são rastreadas de forma privada (consitui um arsenal para
+  ataques futuros contra alvos)
+
+  \vspace{2mm}
+
+  O conhecimento sobre vulnerabilidades é publicamente disponível e pode
+  ser trocado por dinheiro. Mas também pode ser trocado de forma privada
+  por ainda mais dinheiro.
 
 
+  \subsection{Rastreamento de Vulnerabilidades}
 
+  Não é algo fácil de fazer, uma ver que os exploits não são sempre
+  conhecidos, o impacto e o custo podem ser difíceis de estimar (underestimated).
 
+  \vspace{2mm}
 
+  Feeds anteriores podem criar um falso sentido de segurança.
 
+  \vspace{2mm}
 
+  Possuir uma \textbf{comunicação dinâmica} é bom:
+  \begin{itemize}
+    \item \uline{Para os defensores}, pois eles podem testar e implementar defesas;
+    \item \uline{Para atacantes}, pois estes podeqm incorporar os exploits;
+  \end{itemize}
 
+  \pagebreak
 
+  \subsection{Ataques de dia zero}
 
+  Aka Zero Day (or Zero Hour) Attacks/Threat.
+
+  \vspace{2mm}
+
+  Este tipo de ataque caracteriza-se por \uline{explorar uma vulnerabilidade desconhecida}.
+  Este ocorre no dia zero do conhecimento da vulnerabilidade, para a qual não existe
+  um security fix.
+
+  \vspace{2mm}
+
+  Se for explorada de forma discreta, pode durar meses ou até anos, conhecido
+  por atacantes e não pelos outros, frequentemente parte do arsenal de ataque, sendo inclusive
+  comercializadas em certos mercados (negro).
+
+  \subsection{Sobrevivência}
+
+  Como sobreviver a um ataque Dia Zero? Como podemos reagir a um destes ataques?
+
+  \vspace{2mm}
+
+  Apesar de ser o oposto do que geralmente é esperado dos sistemas (estandardização,
+protocolos bem definidos e regulares), a \textbf{diversidade} é a chave para a sobrevivência.
+
+\vspace{2mm}
+
+Isto porque dada a sua exclusividade, operações e protocolos distintos são mais difíceis de
+contornar, uma vez que requerem um estudo dedicado do sistema em particular e não podem
+ser aplicados de forma generalizada a outros.
+
+\vspace{2mm}
+
+Dada a sua diversidade, o SO Android terá menos probabilidade de ser atacado que o iOS.
+
+\subsection{CERT - Computer Emergency Readiness Team}
+
+Esta é uma \uline{equipa responsável por resistir a ataques} em sistemas distribuídos (em rede),
+limitando o dano e garantindo a continuidade dos serviços críticos.
+
+\vspace{2mm}
+
+\subsubsection*{CERT/CC (Coordination Center) @ CMU}
+
+Um componente de um maior programa CERT, é um centro importante
+para problemas de segurança na internet.
+
+\subsection{CSIRT - Computer Security Incident Response Team}
+
+Dentro das equipas CERT, há uma componente de sigla CSIRT, cuja responsabilidade é
+receber, analisar e responder a relatórios de incidente e atividade.
+
+\subsection{Alertas de Segurança e activity trends}
+
+Vital para a disseminação rápida de conhecimento sobre novas vulnerabilidades
+(e.g US-CERT Cyber Security Alerts, SANS Internet Storm Center, Cisco Security Center, \dots)
 
 \end{document}
