@@ -1009,4 +1009,459 @@ receber, analisar e responder a relatórios de incidente e atividade.
 Vital para a disseminação rápida de conhecimento sobre novas vulnerabilidades
 (e.g US-CERT Cyber Security Alerts, SANS Internet Storm Center, Cisco Security Center, \dots)
 
+\pagebreak
+
+\section{Modelos de Controlo de Acesso}
+
+\subsection{Tipos de Acesso}
+
+\begin{flushleft}
+  \textbf{Acesso Físico:} Contacto físico entre o sujeito e o objeto de interesse
+  (e.g. acesso a um edifício, internet, computador, aparelho, tocken \dots)
+
+  \textbf{Acesso Informático ou Eletrónico:} Contacto orientado à informação entre
+  o sujeito e o objeto de interesse, isto é, contacto através de dialogos
+  request-response. Este contacto é mediado por computadores, redes,
+  sistemas operativos, aplicações, middleware, \dots
+\end{flushleft}
+
+\subsection{Controlo de Acesso}
+
+\begin{center}
+  \includegraphics[scale=0.4]{13}
+\end{center}
+
+Políticas e mecânismos que mediam o acesso do sujeito a um objeto.
+
+\vspace{2mm}
+
+\begin{flushleft}
+  \textbf{Requisitos Normais (AAA):}
+  \begin{itemize}
+    \item Autenticação (com algum Level of Assurange (LoA))
+    \item Políticas de Autorização
+    \item Acountability (Auditoria) $\rightarrow$ logging
+  \end{itemize}
+\end{flushleft}
+
+Sujeitos e objetos são os dois \uline{entidades digitais}.
+
+\begin{flushleft}
+  \textbf{Sujeitos:} Algo exibindo atividade (e.g. processos, computadores, redes)
+
+  \vspace{2mm}
+
+  \textbf{Objetos:} O alvo da ação (e.g. dados armazenados, tempo de CPU,
+  memória, processos, computadores, redes)
+
+  \vspace{2mm}
+
+  \textbf{Nota:} Uma entidade pode ser um sujeito e um objeto ao mesmo tempo.
+\end{flushleft}
+
+\subsection{Princípio do Menor Privilégio aka Least Privilege Principle}
+
+Todos os programas e todos os utilizadores do sistema devem operar usando
+o menor conjunto de privilégios necessários para completar o trabalho.
+
+\vspace{2mm}
+
+\begin{flushleft}
+  \textbf{Privilégios:} Autorização para executar um dado trabalho, parecido
+  com access control clearance.
+\end{flushleft}
+
+Cada sujeito deve ter, em todo o momento, o número de privilégios exato necessário
+para completar os trabalhos dados. Menos previlégios criam
+barreiras intrespassáveis, enquanto que mais privilégios criam Vulnerabilidades
+(dano causado por acidentes ou erros, má utilização de privilégios, \dots)
+
+\pagebreak
+
+\subsection{Modelos de Controlo de Acesso}
+
+\begin{center}
+  \includegraphics[scale=0.4]{14}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Mecânismos ACL-based:} ACL: Access Control List, coluna da matrix
+
+  \vspace{2mm}
+
+  \textbf{Lista de direitos de acesso para sujeitos especificos:} Os direitos de
+  acesso podem ser positivos e negativos, sujeitos base podem ser usados normalmente.
+  
+  \vspace{2mm}
+
+  \textbf{Normalmente, ACLs estão guardados com os objetos}
+
+  \vspace{2mm}
+
+  \textbf{Mecânismos Capability-based:} Capability: token de autorização impossivel
+  de falsificar, linha da matrix, contém referências a objetos e direitos de acesso.
+
+  \vspace{2mm}
+
+  \textbf{Conceder acesso:} Transmissão de capabilities entre sujeitos (mediado/não mediado)
+
+  \vspace{2mm}
+
+  \textbf{Normalmente, capabilities estão guardados com os sujeitos}
+\end{flushleft}
+
+\subsubsection{Tipos de Controlo de Acesso: MAC e DAC}
+
+\begin{flushleft}
+  \textbf{Mandatory Access Control (MAC):}
+  \begin{itemize}
+    \item Política de controlo de acesso é fixa e implementada
+    pelo monitor de controlo de acesso;
+    \item Os direitos de controlo de acesso não podem ser adaptados
+    pelos sujeitos ou pelos donos dos objetos;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Discretionary Access Control (DAC):}
+  \begin{itemize}
+    \item Alguns sujeitos podem alterar os direitos dados ou negados
+    a outros sujeitos para um dado objeto;
+    \item Normalmente, isto é dado aos donos dos objetos e aos
+    administradores do sistema;
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Tipos de Controlo de Acesso: Role-Based Access Control (RBAC)}
+
+\begin{flushleft}
+  \textbf{Não é nem MAC nem DAC}
+  \begin{itemize}
+    \item Os roles são dinamicamente atribuidos aos sujeitos;
+    \item Para controlo de acesso, o role importa usado pelo sujeito
+    e não a identidade do sujeito (a identidade é mais relevante para acesso
+    a roles e logging);
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Controlo de Acesso vincula funções a operações (significativas)}
+  \begin{itemize}
+    \item Operações são transações de sistema complexas e significativas;
+    \item Operações podem envolver múltiplos objetos individuais lower-level;
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Regras RBAC}
+
+\begin{flushleft}
+  \textbf{Atribuição de roles:}
+  \begin{itemize}
+    \item Toda a atividade do sujeito num sistema é conduzida através de transações.
+    As transações são permitidas para roles específicos, logo, todos os sujeitos têm de ter
+    algum role ativo;
+    \item Um sujeito pode executar uma transação \textbf{apenas se} tiver selecionado/tiver
+    sido atribuido o role que permite a execução dessa transação;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Autorização de role:} O role ativo de um sujeito tem de ser autorizado para esse sujeito;
+
+  \vspace{2mm}
+
+  \textbf{Autorização de transação:} Um sujeito pode executar uma transação \textbf{apenas se}
+  essa transação for autorizada através dos role membership's do sujeito e
+  se não houver nenhuma limitação que possa ser aplicada sobre sujeitos, roles e permissões. 
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{15}
+\end{center}
+
+\subsubsection{RBAC: Roles e Groups}
+
+\begin{flushleft}
+  \textbf{Roles:} São uma coleção de permissões que são atribuidas aos sujeitos, que num
+  determinado instante têm esse role. Um sujeito pode (deve) apenas ter um role ativo de cada vez.
+
+  \vspace{2mm}
+
+  \textbf{Groups:} São conjuntos de users, e as permissões podem ser atribuidas
+  a ambos, users e groups. Um sujeito pode pertemcer a vários grupos ao mesmo tempo.
+
+  \vspace{2mm}
+
+  \textbf{O conceito de sessão:} A atribuição de um role é tipo a ativação de uma sessão.
+  O group membership é um atributo estático ordinário.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{16}
+\end{center}
+
+\subsubsection{Modelo NIST RBAC}
+
+\begin{flushleft}
+  \textbf{Flat RBAC:} Simples modelo RBAC, com \textbf{user-role review}
+  \begin{center}
+    \includegraphics[scale=0.6]{17}
+  \end{center}
+
+  \vspace{2mm}
+
+  \textbf{Hierarchical RBAC:} Flat RBAC com \textbf{role hierarchies} (DAG ou árvore).
+  Hierarquias gerais e restritas.
+
+  \vspace{2mm}
+
+  \textbf{Constrained RBAC:} RBAC com \textbf{role constraints} para separar
+  deveres.
+
+  \vspace{2mm}
+
+  \textbf{Symmetric RBAC:} RBAC com \textbf{permission-role review}
+  \begin{center}
+    \includegraphics[scale=0.6]{18}
+  \end{center}
+\end{flushleft}
+
+\subsubsection{Tipos de Controlo de Acesso: Context-Based Access Control (CBAC)}
+
+\begin{flushleft}
+  \textbf{Os direitos de acesso têm um contexto histórico}, não podem ser
+  determinados sem considerar operações de acesso anteriores.
+
+  \vspace{2mm}
+
+  \textbf{Chinese Wall Policy:} Grupos conflituantes, políticas de controo de acesso
+  devem considerar acessos passados a objetos em diferentes membros de grupos conflituantes.
+\end{flushleft}
+
+\subsubsection{Tipos de Controlo de Acesso: Attribute-Based Access Control (ABAC)}
+
+\begin{flushleft}
+  \textbf{Decisões de controlo de acesso são baseadas em atributos associados
+  a entidades relevantes}
+
+  \pagebreak
+
+  \textbf{Arquitetura OASIS XACML:}
+  \begin{itemize}
+    \item Policy Administration Point (PAP), onde as políticas são geridas
+    \item Policy Decision Point (PDP), onde as decisões de autorização são avaliadas e tomadas
+    \item Policy Enforcement Point (PEP), onde os pedidos de acesso são intercetados e
+    confrontados com decisões PDP
+    \item Policy Information Point (PIP), onde o PDP obtém informação externa
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{XACML: Controlo de Acesso com PEP e PDP}
+
+\begin{flushleft}
+  \textbf{Um sujeito realiza um pedido}, intercetado pelo PEP, que envia o pedido
+  de autorização para o PDP.
+
+  \vspace{2mm}
+
+  \textbf{O PDP avalia o pedido contra as suas políticas e chega a uma decisão},
+  que é returnada pelo PEP.
+  
+  \begin{itemize}
+    \item As políticas são devolvidas por um Policy Retrieval Point (PRP)
+    \item Atributos úteis são obtidos por um Policy Information Point (PIP)
+    \item As políticas são geridas pelo Policy Administration Point (PAP)
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{19}
+\end{center}
+
+\subsection{Modelos de Controlo de Acesso: Break-the-Glass}
+
+\begin{flushleft}
+  \textbf{Em alguns cenários, pode ser necessário utrpassar os limites de acesso estabelecidos}
+  (e.g questão de vida ou morte).
+
+  \vspace{2mm}
+
+  \textbf{Neste casos, o sujeito pode usar uma decisão break-the-glass sobre a recusa de acesso}.
+  Ultrapassa a recusa com a própria responsabilidade, logging é fundamental para
+  prevenir abusos.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Separação de Deveres}
+
+\begin{flushleft}
+  \textbf{Requisito fundamental de segurança para prevenção de fraude e erro}.
+  Disseminação de tarefas e privilégios associados, para um negócio específico,
+  por múltiplos sujeitos. Muitas vezes implementado com RBAC.
+  
+  \vspace{2mm}
+
+  \textbf{Controlo de Danos}. Segregação de deveres ajuda a reduzir os potenciais
+  danos das ações de uma pessoa. Alguns deveres não devem ser combinados numa única posição.
+\end{flushleft}
+
+\subsection{Modelos do flow de informação}
+
+\begin{flushleft}
+  \textbf{Autorizaçao é aplicada ao flow dos dados}
+  \begin{center}
+    \includegraphics[scale=0.4]{20}
+  \end{center}
+  Objetivo: envitar flows de informação que não queremos/perigosos
+
+  \vspace{2mm}
+
+  \textbf{Atributos de segurança Src e Dst}, o flow apenas deve acontecer entre duas entidades
+  com os atributos de segurança apropriados. A autorização é baseada nos atributos de segurança (SL).
+\end{flushleft}
+
+
+\subsection{Segurança Multinível}
+
+\begin{flushleft}
+  \textbf{Sujeitos (ou roles) atuam em diferentes níveis de segurança}. Este níveis não
+  se intersetão a si próprios, e possuem uma ordem parcial (hieraruquia, lattice).
+  \begin{center}
+    \includegraphics[scale=0.4]{21}
+  \end{center}
+
+  \vspace{2mm}
+
+  \textbf{Os níveis são usados como atributos dos sujeito e dos objetos}.
+  \begin{itemize}
+    \item \textbf{Sujeitos:} clearance a nível de segurança;
+    \item \textbf{Objetos:} classification a nível de segurança;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Flows de informação e níveis de segurança}
+  \begin{itemize}
+    \item Mesmo nível de segurança: atutorizado;
+    \item Nível de segurança diferente: controlado;
+  \end{itemize}
+
+  \pagebreak
+
+  \begin{center}
+    \includegraphics[scale=0.4]{22}
+  \end{center}
+\end{flushleft}
+
+\subsection{Categorias de segurança (ou compartimentos)}
+
+\begin{flushleft}
+  \textbf{Ambientes de self-contained information}, podem abrager
+  vários níveis de segurança.
+
+  \vspace{2mm}
+
+  \textbf{Ambientes militar}, ramos militares, unidades militares
+
+  \vspace{2mm}
+
+  \textbf{Ambientes civís}, departamentos, unidades de organização
+
+  \vspace{2mm}
+
+  \textbf{Um objeto pode pertencer a diferentes compartimentos e
+  ter diferentes classificações de segurança para cada um} ((top-secret, crypto),
+  (secret, weapon))
+
+  \begin{center}
+    \includegraphics[scale=0.4]{23}
+  \end{center}
+\end{flushleft}
+
+\subsection{Labels de segurança}
+
+\begin{center}
+  \includegraphics[scale=0.4]{24}
+\end{center}
+
+\pagebreak
+
+\subsection{Modelos MLS Bell-La Padula}
+
+\begin{flushleft}
+  \textbf{Política de controlo de acesso para controlar flows de informação}.
+  Aborda a confidencialidade dos dados e o acesso a informação classificada. Aborda
+  a divulgação de informação classificada (controlo de acesso dos objetos não é suficiente).
+
+  \vspace{2mm}
+
+  \textbf{Usa um modelo de transação de estados}. Em cada estado há sujeitos, objetos,
+  uma matrix de acesso e a informação atual de acesso. Regras de transação de estados.
+\end{flushleft}
+\begin{center}
+  \includegraphics[scale=0.4]{25}
+\end{center}
+
+\subsection{Modelo de Integridade Biba}
+
+\begin{flushleft}
+  \textbf{Política de controlo de acesso para controlar flows de informação}.
+  \begin{itemize}
+    \item Para reforçar o controlo da integridade dos dados;
+    \item Usa níveis de integridade, não níveis de segurança;
+    \item Parecido com \textbf{Bell-La Padula} com regras invertidas;
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{26}
+  \end{center}
+\end{flushleft}
+
+\subsection{Controlo de Integridade obrigatório Windows}
+
+\begin{flushleft}
+  \textbf{Permite controlo de acesso obrigatório antes de avaliar DACLs}
+  \begin{itemize}
+    \item Se não for permitido, DACLs não são avaliadas;
+    \item Se for permitido, DACLs são avaliadas;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Labels de integridade}
+  \begin{itemize}
+    \item Não confiável;
+    \item Baixo (ou AppContainer);
+    \item Médio;
+    \item Médio Plus;
+    \item Alto;
+    \item Sistema;
+    \item Processo Protegido;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Users}
+  \begin{itemize}
+    \item \uline{Médios}: users normais;
+    \item \uline{Altos}: users elevados;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Processos de nível de integridade}
+  \begin{itemize}
+    \item O minímo associado ao owner e ao ficheiro executável;
+    \item Processos de um user normalmente são \textbf{médio} ou \textbf{alto} (exceto
+    ao executar ficheiros executáveis \textbf{Low}-labeled);
+    \item Processos de serviço: \textbf{alto};
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{27}
+\end{center}
+
+
 \end{document}
