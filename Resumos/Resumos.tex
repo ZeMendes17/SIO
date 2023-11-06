@@ -1556,6 +1556,162 @@ barreiras intrespassáveis, enquanto que mais privilégios criam Vulnerabilidade
 
 \subsection{Identificadores de Grupo (GID)}
 
+\begin{flushleft}
+  \textbf{OS também têm group identifiers}. Um grupo é composto por 0 ou mais
+  users e pode ser composto por outros grupos. Group ID: inteiro (Linux,
+  Android, macOS), UUID (Windows).
 
+  \vspace{2mm}
+
+  \textbf{Um user pode pertener a vários grupos}. Os direitos de um user são
+  o direito do seu UID e dos seus GID's.
+
+  \vspace{2mm}
+
+  \textbf{Em Linux, as atividades executam sempre por baixo do scope de um
+  conjunto de grupos}. 1 grupo primário (ownership dos ficheiros criados),
+  múltiplos secundários (condicionam o acesso aos recursos).
+\end{flushleft}
+
+\subsection{Processos}
+
+\begin{flushleft}
+  \textbf{Um processo define o contexto da atividade}, para tomar decisões
+  relacionadas com segurança ou outros propósitos (e.g scheduling).
+
+  \vspace{2mm}
+
+  \textbf{Contexto relacionado à segurança}. Identidade efetiva (eUID e eGID),
+  fundamental para controlo de acesso, pode ser o mesmo que a identificação
+  do user que lança o processo. Os recursos usados são ficheiros abertos,
+  areas reservadas de memória virtual, \dots
+\end{flushleft}
+
+\subsection{Memória Virtual}
+
+\begin{flushleft}
+  \textbf{O espaço de endereçamento onde a atividade acontece}, tem o tamanho
+  máximo definido pela arquitetura do sistema (32 bits $\rightarrow$ $2^{32}$,
+  64 bits $\rightarrow$ $2^{64}$). Gere em pequenos blocos de memória, páginas
+  (4KiB).
+
+  \vspace{2mm}
+
+  \textbf{Memória virtual pode ser escassa}, uma vez que, apenas as páginas
+  usadas devem ser alocadas.
+
+  \pagebreak
+
+  \textbf{Memória virtual é mapeada a RAM quando usada}. A escolha de como
+  gerir estes espaços é muito importante (evitar fragmentação, \dots).
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{30}
+\end{center}
+
+\subsection{Sistema de Ficheiros}
+
+\begin{center}
+  \includegraphics[scale=0.4]{31}
+  \includegraphics[scale=0.4]{32}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Sistema de Ficheiros: Mecânismos de Segurança}
+
+\begin{flushleft}
+  \textbf{Mecânismos de proteção obrigatórios}, para o owner,
+  users e grupos são permitidos. Permissões são Read, Write e Run.
+
+  \vspace{2mm}
+
+  \textbf{Mecânismos de proteção discricionários}, regras específicas
+  para users.
+
+  \vspace{2mm}
+
+  \textbf{Mecânismos adicionais}, como implicit compression,
+  signature, encryption, \dots
+\end{flushleft}
+
+\subsection{Canais de Comunicação}
+
+\begin{flushleft}
+  \textbf{Permitem a troca de dados entre atividades distintas mas cooperativas}.
+
+  \vspace{2mm}
+
+  \textbf{Esta presente em qualquer sistema}, todas as aplicações usam estes
+  mecânismos.
+
+  \vspace{2mm}
+
+  \textbf{Processos no mesmo SO/máquina}, através de pipes, UNIX sockets,
+  streams, \dots Comunicação entre processos e kernel, através de system calls, sockets.
+
+  \vspace{2mm}
+
+  \textbf{Processos em máquinas diferentes}, TCP/IP e UDP/IP sockets.
+\end{flushleft}
+
+\subsection{Controlo de Acesso}
+
+\begin{flushleft}
+  \textbf{O kernel do OS é um monitor de controlo de acesso}, controla
+  todas as interações com o hardware. As alicações nunca usam recursos
+  diretamente e também controla todas as interações entre computational model
+  entities.
+
+  \vspace{2mm}
+
+  \textbf{Sujeitos} são tipicamente processos locais, mas também mensagens de outras
+  máquinas.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{33}
+  \includegraphics[scale=0.3]{34}
+\end{center}
+
+\subsection{Controlo de Acesso Obrigatório}
+
+\begin{flushleft}
+  \textbf{Há muitos casos de controlo de acesso obrigatório no OS},
+  parte dá lógica do modelo computacional, não são moldáveis por users ou
+  administradores.
+
+  \vspace{2mm}
+
+  \textbf{Exemplos em Linux:} A root pode fazer tudo, os sinais para processos
+  são enviados apenas pela root ou pleo owner.
+
+  \textbf{Exemplos em macOS:} A root faz quase tudo, mas não pode alterar binários
+  e dirétorias da Apple.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Controlo de Acesso Discricionário}
+
+\begin{flushleft}
+  \textbf{Users podem criar um conjunto de regras de controlo de acesso},
+  podem ser definidas apenas pelo owner/user.
+
+  \vspace{2mm}
+
+  \textbf{Exemplo:}
+
+  \begin{itemize}
+    \item \textbf{Discretionary Access Control Lists (ACL)}, listas expressivas que
+    limitam o acesso a recursos em Linux;
+    \item \textbf{Linux Apparmor}, guarda settings em /etc/apparmor.d com limites de
+    aplicações. As regras aplicam-se automaticamente aos processos, independentemente
+    do user;
+    \item \textbf{macOS sandboxd}, aplicações são lançadas em contextos isolados (sandbox),
+    esta sandbox contém informação sobre o que entra/sai;
+  \end{itemize}
+\end{flushleft}
 
 \end{document}
