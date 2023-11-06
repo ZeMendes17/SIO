@@ -1463,5 +1463,99 @@ barreiras intrespassáveis, enquanto que mais privilégios criam Vulnerabilidade
   \includegraphics[scale=0.4]{27}
 \end{center}
 
+\pagebreak
+
+\section{Sistemas Operativos}
+
+\begin{center}
+  \includegraphics[scale=0.4]{28}
+\end{center}
+
+\subsection{Objetivos do Kernel}
+
+\begin{flushleft}
+  \begin{itemize}
+    \item Inicia os dispositivos (boot time);
+    \item Virtualiza o hardware, modelo computacional;
+    \item Reforça políticas de proteção e fornece mecânismos de proteção. Contra
+    erros involuntários e atividades não autorizadas;
+    \item Fornece o sistema de ficheiros, independente dos dispositivos de armazenamento usados;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Anéis de Execução}
+
+\begin{flushleft}
+  \textbf{Diferentes níveis de privilégio}, formando um conjunto de anéis. Usado
+  pelos CPUs para prevenir código não priveligiado de correr opcodes privilegiados.
+
+  \vspace{2mm}
+
+  \textbf{Hoje em dia, os processadores têm 4 anéis}, mas apenas 2 são usados pelo OS,
+  o 0 e o 3. O 0 é o mais privilegiado (supervisor/kernel mode) e o 3 o menos privilegiado (user-mode).
+
+  \vspace{2mm}
+
+  \textbf{Transferência de controlo entre anéis requer gates especiais}, os usados por system calls, syscalls (traps)
+  e interrupções (interrupt gates).
+\end{flushleft}
+
+\subsection{Executar Máquinas Virtuais}
+
+\begin{flushleft}
+  \textbf{Técnica comum:} Virtualização baseada em software, com execução direta
+  de código em user-mode (ring 3).Tradução binária de código privilegiado,
+  os kernels do OS permanecem inalterados, mas não correm diretamente na host machine.
+
+  \vspace{2mm}
+
+  \textbf{Virtualização assistida por hardware:} Virtualização completa, pelo que existe
+  um anel -1 por baixo do anel 0, que é usado pelo hypervisor.Esta forma pode
+  virtualizar hardware para muitos anéis kernel 0. Não há necessidade de traduções
+  binárias, o OS é mais rápido (quase performance nativa).
+
+  \vspace{2mm}
+
+  \textbf{As máquinas virtuais implementam um mecânismo de segurança essencial: confinamento/isolamento}.
+  Implementam um domínio de segurança restrito para usar num pequeno conjunto
+  de aplicações. Também fornece uma abstração comum com hardware comum (mesmo
+  se for modificado).
+
+  \vspace{2mm}
+
+  \textbf{Fornece mecânismos adicionais} como, controlo de recursos,
+  prioritização de acesso a recursos, criação de imagens para análise e
+  recuperação rápida para um estado conhecido.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Modelo Computacional}
+
+\begin{flushleft}
+  \textbf{Conjunto de entidades (objetos) geridos pelo kernel do OS}. Define
+  a forma como as aplicações interagem com o kernel. Exemplos:
+  Identificadores de user, processos, memória virtual, ficheiros e sistemas
+  de ficheiros, \dots 
+\end{flushleft}
+
+\subsection{Identificadores de User (UID)}
+
+\begin{flushleft}
+  \textbf{Para o kernel do OS, um user é um número}, estabelecido no login, o User ID (UID).
+
+  \vspace{2mm}
+
+  \textbf{Todas as atividades são executadas num computador em nome de um UID}. Os UID's
+  permitem ao kernel saber o que é permitido ou não a um user.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{29}
+\end{center}
+
+\subsection{Identificadores de Grupo (GID)}
+
+
 
 \end{document}
