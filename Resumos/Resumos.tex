@@ -2449,4 +2449,234 @@ barreiras intrespassáveis, enquanto que mais privilégios criam Vulnerabilidade
 
 \section{Firewalls}
 
+\subsection{Objetivos}
+
+\begin{flushleft}
+  \textbf{Elemento idespenável na conecção com um domínio de rede},
+  controla o acesso, flow e conteúdo.
+
+  \vspace{2mm}
+
+  \textbf{Implementação centralizada de políticas de segurança}. Minimiza o impacto
+  de variabilidades locais (conhecidas ou não), tornando mais fácil tomar prosições
+  mais drásticas. Centraliza a deteção de problemas (e os tratamentos).
+\end{flushleft}
+
+\subsection{Definição (Cheswick \& Bellovin)}
+
+\begin{flushleft}
+  \textbf{Link entre redes} de perímetro protegido (conjunto de redes e
+  máquinas) para uma rede insegura (Internet).
+
+  \vspace{2mm}
+
+  \textbf{Conjunto de componentes}, hardware e software.
+
+  \vspace{2mm}  
+
+  \textbf{Propriedades:}
+  \begin{itemize}
+    \item Entre todos os caminhos de tráfego in/out;
+    \item Controla o tráfego que passa por ele;
+    \item Imune a penetração (por definição); 
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{51}
+  \end{center}
+\end{flushleft}
+
+\subsection{Funcionalidades}
+
+\begin{flushleft}
+  \textbf{Supervisão entre todas as comunicações in/out}. Controla o uso de recursos
+  internos/externos por hosts/requests externas/internas. Defende contra ataques de fora
+  o domínio protegido para os seus recursos e do domínio protegido contra recursos esternos.
+
+  \vspace{2mm}
+
+  \textbf{Ativação de mecanismos gateway}. Para esconder a estrutura do
+  parametro protegido, NAT (Network Address Translation), Masquerading e
+  Port Forwarding. Para extender o perimetro seguro, secure tunneling (VPN).
+\end{flushleft}
+
+\pagebreak
+\subsection{Importância das Firewalls (EXTREMA)}
+
+\begin{flushleft}
+  \textbf{Ataques em sistemas públicos são frequentes}, seja por atacantes specializados
+  ou até mesmo aplicações.
+
+  \vspace{2mm}
+
+  \textbf{Os sistemas nem sempre têm os mecânismos de segurança adequados}, bloqueando
+  depois de muitas tentativas falhadas, validaçãod e comunicações, controlo de acesso.
+
+  \vspace{2mm}
+
+  \textbf{É necessáio aplicar mecânismos definidos pela administrador,
+  de acordo com as políticas do domínio}, Um programador de aplicações não
+  sabe disto.
+\end{flushleft}
+
+\subsection{Estrutura Genérica}
+
+\begin{center}
+  \includegraphics[scale=0.4]{52}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Prímetro de defesa (do domínio)}, pode ser parte de uma defesa numa
+  estratégia em profundidade.
+
+  \vspace{2mm}
+
+  \textbf{Considere um ambiente não seguro e um seguro}:
+  \begin{itemize}
+    \item \textbf{Fora:} outros domínios e a Internet;
+    \item \textbf{Dentro:} rede interna;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Apenas um server: Bastion}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{53}
+\end{center}
+
+\begin{flushleft}
+  \textbf{DMZ: DeMiliterized Network ou Perimeter Network}, rede insegura, que contém
+  servidores expostos ao mundo. Por vezes é necessário usar serviços/aplicações
+  específicas.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{54}
+\end{center}
+
+\begin{flushleft}
+  \textbf{DMZ pode oferecer alguma proteção}, sendo um sistema com 2 firewalls com
+  regras diferentes.
+
+  \vspace{2mm}
+
+  \textbf{Firewall externa: bastante permissiva}, controla o acesso a todas as redes.
+
+  \vspace{2mm}
+
+  \textbf{Firewall interna: mais restritiva}, controla o acesso à rede interna.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Tipos: Packet Filters}
+
+\begin{flushleft}
+  \textbf{Rejeitar interações não autorizadas baseadas no conteúdo dos
+  IP datagrams}. Endereço IP (origem e(ou destino)), protocolos de transporte e portas,
+  dados enviados via protocolos de transporte, \dots
+
+  \vspace{2mm}
+
+  \textbf{Pode analisar comportamento do flow}, exemplo: detect port
+  scans (with nmap).
+
+  \vspace{2mm}
+
+  \textbf{Tipicamnete suportado por componentes core do OS}, exemplo: iptables,
+  pf, ipfw, \dots
+\end{flushleft}
+
+\subsection{Tipos: Applicational gateways}
+
+\begin{flushleft}
+  \textbf{Controla interações ao nível da aplicação}. Mas transparente
+  para interagir com aplicações. Normalmente há uma firewall diferente para
+  cada protocolo (protocolo proxy).
+
+  \vspace{2mm}
+
+  \textbf{Cliente $\rightarrow$ Proxy (server) $\rightarrow$ Server (server)}.
+
+  \vspace{2mm}
+
+  \textbf{Aspetos de operar um proxy:} Controlo de acesso dos users, análise e modificação do conteúdo log detalhado,
+  impersonificação (proxying).
+\end{flushleft}
+
+\subsection{Tipos: Circuit Gateways}
+
+\begin{flushleft}
+  \textbf{Tipo de gateway de aplicações}, contactado diretamente pelo cliente.
+
+  \vspace{2mm}
+
+  \textbf{Interposição não transparente}. Para usar políticas e mecânismos específicos de
+  autorização e autenticação.
+  
+  \vspace{2mm}
+
+  \textbf{Tipicamente requer mudar aplicações cliente}. Exemplo: SOCKS e HTTP Proxy.
+\end{flushleft}
+
+
+\subsection{Tipos: SOCKS4 circuit gateway}
+
+\begin{center}
+  \includegraphics[scale=0.4]{55}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.4]{56}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.4]{57}
+\end{center}
+
+\pagebreak
+
+\subsection{Bastion}
+
+\begin{flushleft}
+  \textbf{Deve correr versões seguras de sistemas operativos}, com configurações seguras,
+  apenas serviços essenciais instalados, Telnet, DNS, FTP, \dots
+
+  \vspace{2mm}
+
+  \textbf{Servers públicos não devem correr num bastion}, devem correr
+  em máquinas isoladas com DMZs. Bastion apenas dá forward ao tráfego
+  até ao DMZ.
+
+  \vspace{2mm}
+
+  \textbf{É normalmente uma plataforma para gateway de aplicações}, mas quantos mais proxies
+  tem num bastion, menos performance ele tem. Proxies podem correr em máquinas
+  específicas.
+
+  \vspace{2mm}
+
+  \textbf{Execução segura de gateways de aplicações}, independente, sem previlégios
+  especiais.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{58}
+\end{center}
+
+\subsection{Serviços de segurança}
+
+\begin{flushleft}
+  \textbf{Autorização}, por parte de data streams (packet filters) ou
+  users (application gateways / circuitos).
+
+  \vspace{2mm}
+
+  \textbf{Redirecionamento de tráfego}. Para hosts dedicados, seviços locais
+  (e.g mail, www, ftp, \dots). Proxying, explicito (e.g circuit gateways) ou
+  transparente (e.g NAT address translations).
+\end{flushleft}
+
 \end{document}
