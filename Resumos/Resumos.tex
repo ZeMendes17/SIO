@@ -2696,8 +2696,628 @@ barreiras intrespassáveis, enquanto que mais privilégios criam Vulnerabilidade
 
   \vspace{2mm}
 
-  \textbf{Defesa contra leaks de informação}, deteção de tráfeco estranha e
+  \textbf{Defesa contra leaks de informação}, deteção de tráfego estranha e
   controlo de comportamentos contra modelos conhecidos.
 \end{flushleft}
 
+\pagebreak
+
+\subsection{Limitações}
+
+\begin{flushleft}
+  \begin{flushleft}
+    \textbf{Não resolvem o problema de os atacantes estarem dentro da rede interna}. A não ser
+    que a rede interna esteja segmantada em sub-redes, com firewalls entre elas.
+    Os switches normalmente não suportam operações de firewalls.
+
+    \vspace{2mm}
+
+    \textbf{Eficiência no controlo de conecções externas}
+
+    \vspace{2mm}
+
+    \textbf{Falta de controlo sobre interações camufladas/escondidas}
+
+    \vspace{2mm}
+
+    \textbf{Dificil de gerirem ambientescom interesses heterogéneos} como
+    universidades.
+  \end{flushleft}
+\end{flushleft}
+
+\subsection{Firewalls pessoais}
+
+\begin{flushleft}
+  \textbf{Adotado para proteção de individuos(hosts pessoais)}.
+
+  \vspace{2mm}
+
+  \textbf{Owners podem definir um conjunto adicional de políticas}. Quais aplicações
+  são autorizadas a acessar a rede, quais protocolos que as aplicações podem usar,
+  os host/redes que os protocolos/aplicações podem comunicar com.
+
+  \vspace{2mm}
+
+  \textbf{Reduzir o risco de compromisso entre hists e a rede}. Permite
+  à máquina se proteger a si própria independentemente da proteção fornecida
+  pela rede, útil para máquinas que migram entre redes.
+\end{flushleft}
+
+
+
+\subsubsection{Firewalls pessoais: Problemas}
+
+\begin{flushleft}
+  \textbf{Users normais não são experts em segurança}, não sabem como
+  a rede IP funciona, não sabem se uma interação é normal ou não e não
+  sabem as políticas de sugurança base que devem aplicar.
+
+  \vspace{2mm}
+
+  \textbf{Bloquear interações suspeitas pode nulificar funcionalidades}.
+  Rede de comunicações é um commonplace, as aplicações não infromam os users
+  sobre as necessidades de comunicação.
+
+  \vspace{2mm}
+
+  \textbf{Complexidade das operações}. Ambientes de operações diferentes ou
+  interfaces de rede diferentes resultam em políticas diferentes.
+
+  \vspace{2mm}
+
+  \textbf{A combinação de cenários operacionais, interfaces de rede e
+  interações aceitáveis para cada caso resultam em um enorme número de
+  regras}.
+\end{flushleft}
+
+\subsection{IPTables}
+
+\begin{center}
+  \includegraphics[scale=0.35]{59}
+  \includegraphics[scale=0.35]{60}
+\end{center}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.35]{61}
+  \includegraphics[scale=0.35]{62}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.35]{63}
+  \includegraphics[scale=0.35]{64}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.35]{65}
+  \includegraphics[scale=0.35]{66}
+\end{center}
+
+\pagebreak
+
+\section{Criptografia Moderna} 
+
+\subsection{Cifras Simétricas}
+
+\subsubsection{Terminologia}
+
+\begin{flushleft}
+  \textbf{Criptografia -} Arte ou ciencia de escrever as escondidas
+  (escrita confidencial). Inicialmente era usada para manter a confidencialidade
+  de informação.
+
+  \vspace{2mm}
+
+  \textbf{Steganografia -} Arte de esconder dados.
+
+  \vspace{2mm}
+
+  \textbf{Criptoanálise -} Arte ou ciencia de quebrar sistemas
+  criptográficos ou informação encryptada.
+
+  \vspace{2mm}
+
+  \textbf{Criptologia -} Criptografia + Criptoanálise.
+
+  \vspace{2mm}
+
+  \textbf{Cifra -} Técnica especifica de criptografia.
+
+  \vspace{2mm}
+
+  \textbf{Operação de cifra:}
+  \begin{itemize}
+    \item \textbf{Encryption:} Informação original $\rightarrow$ Criptograma;
+    \item \textbf{Decryption:} Criptograma $\rightarrow$ Informação original;
+    
+    \vspace{2mm}
+
+    Informação original aka plaintext ou cleartext.
+
+    Criptograma aka ciphertext.
+
+    \vspace{2mm}
+
+    \item \textbf{Algoritomo:} Forma de transformar dados.
+    \item \textbf{Chave:} Parâmetro(s) para o algoritmo (influencia
+    o algoritmo executado).
+  \end{itemize}
+
+  \subsubsection{Operações de cifra}
+
+  \begin{center}
+    \includegraphics[scale=0.3]{67}
+  \end{center}
+
+  \pagebreak
+
+  \subsubsection{Casos de Uso (Cifras Simétricas)}
+
+  \begin{center}
+    \includegraphics[scale=0.3]{68}
+  \end{center}
+
+  \subsubsection{Griptoanálise: objetivos}
+
+  \begin{flushleft}
+    \textbf{Descobrir o plaintext original}, qual cifra originou um dado chiphertext.
+
+    \vspace{2mm}
+
+    \textbf{Descobrir a cipher key}: Permite a decriptação de ciphertexts criados
+    com a mesma chave.
+
+    \vspace{2mm}
+
+    \textbf{Descobrir o algoritmo de cifra}, ou um algoritmo equivalente. Normalmente,
+    os algoritmos não são secretos, mas há exceções (e..g Lorenz, A5 (GSM), \dots). Usando
+    engenharia reversa.
+  \end{flushleft}
+\end{flushleft}
+
+\subsubsection{Ataques de Criptoanálise: Abordagens}
+
+\begin{center}
+  \includegraphics[scale=0.3]{69}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Brute Force -} Procura exaustiva pelo espaço de chaves até encontar
+  um match. Normalmente, não é possível para um espaço de chaves grande. Ser
+  aleatório é fundamental!
+
+  \vspace{2mm}
+
+  \textbf{Clever Attacks -} Reduz o espaço de procura para um conjunto mais pequeno
+  de potenciais candidatos: palavras, números, tamanho restrito ou alfabético.
+  Identifica padrões em diferentes operações, \dots
+\end{flushleft}
+
+\subsubsection{Cifras de Computador}
+
+\begin{flushleft}
+  \textbf{Operam fazendo substituições}. A informação original é uma sequência de
+  \uline{símbolos}, cada símbolo é trocado por um \uline{símbolo de substituição} (normalmente do mesmo tamanho (
+    substituição polipófica)). Simbolos de substituição são escolhidos de um \uline{alfabeto
+    de substituição}.
+
+  \vspace{2mm}
+
+  \textbf{Simbolos habituais:} Bit ou bloco de bits.
+
+  \vspace{2mm}
+
+  \textbf{Estratégias:}
+  \begin{itemize}
+    \item Substituição \uline{Monoalfabética}: Chave $\rightarrow$ Um alfabeto de substituição;
+    \item Substituição \uline{Polialfabética}: Chave $\rightarrow$ Um conjunto de alfabetos de substituição; 
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Stream Ciphers}
+
+\begin{flushleft}
+  \textbf{Encriptação/decriptação misturando streams}. Consideram
+  um stream de bits. Cada plaintext/ciphertext bit é \textbf{XORed}
+  com cada bit do keystream.
+  
+  \begin{center}
+    \includegraphics[scale=0.3]{70}
+  \end{center}
+
+  \vspace{2mm}
+
+  \textbf{São cifras polialfabéticas}
+
+  \vspace{2mm}
+
+  \textbf{Keystream:} Produzido de forma aleatória, tão maior quanto o dado
+  processado, única cifra perfeita, raramente usada. Pseudo-aleatória, produzida
+  de uma chave limitada (stream ciphers normais).
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Block Ciphers}
+
+\begin{flushright}
+  \textbf{Ecripta/decripta uma sequência de blocos}. Os simbolos são blocos de bits
+  de tamanho fixo. Normalmente usam blocos de bytes como simbolos.
+
+  \vspace{2mm}
+
+  \textbf{Cifras de bloco são cifras monoalfabéticas}. Algumas podem ser
+  cifras polipóficas.
+\end{flushright}
+
+\subsubsection{Cifras de Computador: Simétricas}
+
+\begin{flushleft}
+  \textbf{Encriptação/decriptação usando a mesma chave}. Estratégia mais velha.
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Assimétricas}
+
+\begin{flushleft}
+  \textbf{Encriptação/decriptação com chaves diferentes, relacionadas}.
+  Par de chaves: Componente pública e privada.
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Combinações}
+
+\begin{flushleft}
+  \textbf{Stream ciphers (simétricas):} Cifras polialfabéticas, keystream
+  definida pela chave, keystream e XOR implmentam uma transformação polialfabética.
+
+  \vspace{2mm}
+
+  \textbf{Block ciphers (simétricas):} Cifras monoalfabéticas, alfabeto de substituição
+  é definido pela chave.
+
+  \vspace{2mm}
+
+  \textbf{Block ciphers (assimétricas):} Cifras Polialfabética (não por natureza,
+  mas para razões de segurança), as funcionalidades destas cifras não são
+  homogéneas.
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Técnicas usadas pelas cifras}
+
+\begin{flushleft}
+  \textbf{Confusão:} Relação complexa entre a chave, plaintext e ciphertext.
+  O ciphertext (output bits) deve depender do plaintext + chave (input bits) de forma complexa.
+
+  \vspace{2mm}
+  
+  \textbf{Difusão:} Estatisticas de plaintext são dissipadas no ciphertext, deste modo
+  caso um bit do plaintext seja alterado, vários bits do ciphertext são alterados,
+  é uma maneira imprevisível e pseudo-aleatória. Efeito avalanche.
+\end{flushleft}
+
+\subsubsection{Exemplos de stream ciphers (simétricas)}
+
+\begin{center}
+  \includegraphics[scale=0.3]{71}
+\end{center}
+
+\subsubsection{Abordagem de stream ciphers (simétricas)}
+
+\begin{flushleft}
+  \textbf{Usa criptografia segura, geração de bits pseudo-aleatórios}.
+  O gerador produz um keystream, impementa o stado da máquina e é controlado por
+  dois valores: \textbf{Initialisation Vector (IV)} (define o
+  estado inicial da máquina de estados) e \textbf{Key} (define como um
+  state avança para o próximo para produzir a keystream).
+
+  \vspace{2mm}
+
+  \textbf{Criptografia segura, pseudo-aleatória significa:} O
+  keystream parece uma sequência aleatória de 0s e 1s. Se um atacante
+  aprender parte do keystream, não consegue interferir: valores do keystream
+  antigos e futuros.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{72}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Stream ciphers (simétricas): Exploitation considerations}
+
+\begin{flushleft}
+  \textbf{Duas mensagens nunca devem ser encriptadas com a mesma chavee IV}.
+  Uma vez que serão encriptadas com a mesma keystream, sendo que o conhecimento
+  de uma mensagem pode levar ao conhecimento da outra.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{73}
+  \end{center} 
+
+  \vspace{2mm}
+
+  \textbf{Keystreams podem ser períodicos (ter um ciclo)}: depende no gerador, possui
+  os mesmo problemas de cima. Plaintext deve ser mais curto que o período do keystream.
+
+
+  \vspace{2mm}
+
+  \textbf{Ciphertexts podem ser manipulados}: cada cipher bit depende apenas em um
+  bit plaintext
+
+  \begin{center}
+    \includegraphics[scale=0.3]{74}
+  \end{center}
+
+  É fundamental ter integridade do controlo de elementos (ciphertext e plaintext).
+\end{flushleft}
+
+\subsubsection{Block ciphers (simétricas): Exemplos}
+
+\begin{center}
+  \includegraphics[scale=0.3]{75}
+\end{center}
+
+\subsubsection{Block ciphers (simétricas): Abordagem}
+
+\begin{flushleft}
+  \textbf{Usa um pipline de rondas de transformação}. Cada ronda adiciona
+  confusão e difusão. Cada ronda é normalmente controlada por uma sub-chaves
+  (uma chave derivada de uma chave dada para encriptação/decriptação).
+  
+  \vspace{2mm}
+
+  \textbf{Rondas têm de ser reversíveis}, de modo a permitir a decriptação.
+  Redes de Feistel ou Substituição-Permutação são as abordagens mais comuns.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{76}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Redes de Feistel}
+
+\begin{center}
+  \includegraphics[scale=0.3]{77}
+\end{center}
+
+\subsubsection{Rede Substituição-Permutação}
+
+\begin{flushleft}
+  \textbf{SBox -} Tabela com um output para cada input (index, output = SBox[input]).
+  Sboxes podem ser contantes ou key-dependent (DES e AES são Sboxes constantes,
+  Blowfish e Twofish usam SBoxes variáveis, key-dependent).
+
+  \vspace{2mm}
+
+  \textbf{PBox -} Muda posições do input de bits.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{78}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.3]{79}
+  \includegraphics[scale=0.3]{80}
+  \includegraphics[scale=0.3]{81}
+\end{center}
+
+\subsubsection{Modos de Cifra: Eletronic Code Book (ECB)}
+
+\begin{flushleft}
+  \textbf{Encriptação direta para cada bloco:} $C_i = E_k(P_i)$
+
+  \vspace{2mm}
+
+  \textbf{Decriptação direta para cada bloco:} $P_i = D_k(C_i)$
+
+  \vspace{2mm}
+
+  \textbf{Blocos são processados independentemente}. Paralelismo é muito
+  possível. Existe acesso aleatório uniform
+
+  \vspace{2mm}
+
+  \textbf{Problema:} Exposição de Padrões. Se $P_1 = P_2$ então $C_1 = C_2$.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{82}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Modos de Cifra: Cipher Block Chaining (CBC)}
+
+\begin{flushleft}
+  \textbf{Encriptar cada bloco $T_i$ com feedback de $C_{i-1}$}. $C_i = E_k(P_i \oplus C_{i-1})$
+
+  \vspace{2mm}
+
+  \textbf{Decriptar cada bloco $C_i$ com feedback de $C_{i-1}$}. $P_i = D_k(C_i) \oplus C_{i-1}$
+
+  \vspace{2mm}
+
+  \textbf{O primeiro bloco usa IV}. É melhor não usar amemsa chave. Pode ser
+  vazia. 
+  
+  \vspace{2mm}
+
+  \textbf{Transformação polialfabética}, em que o feedback previne blocos iguais
+  de serem igualmente processados. Parece que temos uma key diferente em cada bloco.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{83}
+  \end{center}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{84}
+\end{center}
+
+\subsubsection{Modos de Cifra ECB/CBC: Conteúdos not block-aligned}
+
+\begin{flushleft}
+  \textbf{ECB e CBC reuqerem inputs block-aligned}. Sub-blocos finais precisam de
+  tratamento especial.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{85}
+  \end{center}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Modos Stream Cipher}
+
+\begin{flushleft}
+  \textbf{Stream ciphers usam geradores pseudo-aleatórios}. Múltiplas tecnicas para
+  os implementar. Algumas técnicas são melhores para hardware implementations
+  outras nelhores para CPU-based implementations.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{86}
+  \end{center}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{87}
+  \includegraphics[scale=0.3]{88}
+  \includegraphics[scale=0.3]{89}
+  \includegraphics[scale=0.3]{90}
+  \includegraphics[scale=0.3]{91}
+  \includegraphics[scale=0.3]{92}
+  \includegraphics[scale=0.3]{93}
+\end{center}
+
+\subsection{Digest Functions}
+
+\begin{flushleft}
+  \textbf{Dá um valor de tamanho fixo a a partir de um texto de tamanho variável} (fingerprint).
+
+  \vspace{2mm}
+
+  \textbf{Produz valores muito diferentes para textos parecidos}. Criptografia
+  one-way hash functions.
+
+  \vspace{2mm}
+
+  \textbf{Propriedades relavantes:}
+  \begin{itemize}
+    \item \textbf{Resistência Preimage:} Dada uma digest, é inviável encontrar um texto original que o produza.
+    \item \textbf{Resistência 2nd-preimage:} Dado um texto, é inviável encontrar
+    outro com o mesmo digest.
+    \item \textbf{Resistência de Colisões:} É inviável encontrar dois textos
+    com o mesmo digest (Paradoxo do Aniversário).
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Digest Functions: Tamanhos}
+
+\begin{center}
+  \includegraphics[scale=0.4]{94}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Digest Functions: Conteúdo}
+
+\begin{center}
+  \includegraphics[scale=0.4]{95}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Abordagens:}
+  \begin{itemize}
+    \item Merkle-Damgård Construction (resistente a colisões, funções
+    de compressão one-way, compressão iterativa, length padding)
+    \item Sponge functions.
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{96}
+  \end{center}
+
+  \vspace{2mm}
+
+  \textbf{Algorimos mais comuns}
+  \begin{itemize}
+    \item MD5 (128 bits, já não é seguro, muito fácil de encontrar colisões)
+    \item SHA-1 (Secure Hash Algorithm, 160 bits, colisão encontrada em 2017)
+    \item SHA-2, aka SHA-256/SHA-512
+    \item SHA-3 (função de compressão sponge)
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Message Integrity Code (MIC)}
+
+\begin{flushleft}
+    \textbf{Fornece a capacidade de detetar mudanças por dispositivos}.
+    Comunicação e storage de erros, de um processo aleatório ou sem controlo.
+
+    \vspace{2mm}
+
+    \textbf{Send: Calcula MIC e envia T + MIC}. T é o texto original, MIC é o
+    digest do texto original.
+
+    \vspace{2mm}
+
+    \textbf{Receive dados (T') e verifica se H(T) = MIC}. Calcular
+    MIC' = digest(T') e validar MIC' = MIC.
+
+    \vspace{2mm}
+
+    \textbf{Não protege de mudanças planeadas para o texto}.
+    Atacante pode manipular T em T'' e calcular um novo MIC''
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Message Authentication Code (MAC)}
+
+\begin{flushleft}
+  \textbf{MIC computado com uma chave}. Apenas quem possui a chave pode
+  gerar/validar o MAC.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{97}
+\end{center}
+
+
+\subsubsection{MAC: Abordagens}
+
+\begin{flushleft}
+  \textbf{Encriptação de um digest normal}, usando, por exemplo, uma
+  cifra de bloco simétrico.
+
+  \vspace{2mm}
+
+  \textbf{Usando encriptaçãoo com feedback e error propagation} (CBC-MAC).
+
+  \textbf{Adicionando uma chave para os dados hashed}.
+  \begin{itemize}
+    \item Keyed-MD5 (128-bits). $MD5(K, keyfill, text, L, MD5fill)$
+    \item HMAC (output length depends on the function H used).
+    $HMAC(K, opad, H(K, ipad, text))$
+
+    $ipad = 0x36 \times blocksize$
+
+    $opad = 0x5C \times blocksize$
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Encriptação + Autenticação}
+
+\begin{center}
+  \includegraphics[scale=0.4]{98}
+
+  \vspace{1mm}
+
+  \includegraphics[scale=0.4]{99}
+\end{center}
 \end{document}
