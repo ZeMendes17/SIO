@@ -1714,4 +1714,739 @@ barreiras intrespassáveis, enquanto que mais privilégios criam Vulnerabilidade
   \end{itemize}
 \end{flushleft}
 
+\subsection{Proteção com ACLs}
+
+\begin{flushleft}
+  \textbf{Cada objeto tem uma lista de controlo de acesso (ACL)}, que diz
+  "tell me who can do what".
+
+  \vspace{2mm}
+
+  \textbf{A ACL pode ser discricionária ou obrigatória}, quando é obrigatória
+  não pode ser alterada, quando é discricionária pode ser alterada.
+
+  \vspace{2mm}
+
+  \textbf{É verificada quando a atividade pretende manipular
+  o objeto}, se a manipulação não for permitida é negada. O kernel do OS
+  faz as verificações do ACL, atuando como um Reference Monitor.
+\end{flushleft}
+
+\subsubsection{Unix ACLs de proteção de ficheiros: ACL discricionária e de estrutura fixa}
+
+\begin{flushleft}
+  \textbf{Cada objeto de sistema de ficheiros tem um ACL},
+  que liga 3 direitos a 3 sujeitos, sendo que apenas o owner pode
+  alterar o ACL.
+
+  \vspace{2mm}
+
+  \textbf{Direitos: \uline{R} \uline{W} \uline{X}}
+  \begin{itemize}
+    \item Direito de leitura/listagem;
+    \item Direito de escrita/criação ou remoção de ficheiros ou subdiretórios;
+    \item Direito de execução;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Sujeitos}
+  \begin{itemize}
+    \item Um UID (owner);
+    \item Um GID (group);
+    \item Outros (others);
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{35}
+  \end{center}
+\end{flushleft}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.4]{36}
+\end{center}
+
+\subsubsection{Windows ACLs de proteção de ficheiros: ACL discricionária e de estrutura flexivel}
+
+\begin{flushleft}
+  \textbf{Cada objeto de sistema de ficheiros tem um ACL e um owner}.
+  O ACL dá 14 tipos de direitos de acesso a uma lista de sujeitos de
+  tamanho variável. O owner pode ser um UID ou um GID, e não possui
+  direitos especiais sobre o ACL.
+
+  \vspace{2mm}
+
+  \textbf{Sujeitos}
+  \begin{itemize}
+    \item Users (UIDs);
+    \item Grupos (GIDs), "Everyone" significa qualquer um;
+  \end{itemize}
+
+  \textbf{Direitos:}
+
+  \vspace{2mm}
+
+  \includegraphics[scale=0.5]{37}
+
+\end{flushleft}
+
+\subsubsection{Elevação de Privilégio: Set-UID}
+
+\begin{flushleft}
+  \textbf{É usado para mudar o UID de um processo a correr um programa guardado num
+  ficheiro Set-UID}. Se o ficheiro de um programa pertencer a um UID X e o bit ACL
+  set-UID estiver ativo, então será executado num processo com o UID X,
+  independentemente do UID do subject que executou o programa.
+
+  \pagebreak
+
+  \textbf{É usado para dar programas privilegiados para correr
+  uma tarefa administrativa invocada por users normais, não confiáveis}.
+  \begin{itemize}
+    \item Mudar a password do user (passwd);
+    \item Mudar para modo de super-user (su, sudo);
+    \item Montar dispositivos (mount);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Administração pela root não é aconselhado}, uma vez que, é
+  uma "entidade" e muitas pessoas, quem fez o quê?
+
+  \vspace{2mm}
+
+  \textbf{Maneira preferivel}, usar um role de administrador
+  (uid = 0), muitos users assumem-no: sudoers, definido por um
+  ficheiro de configuração usado pelo comando sudo.
+
+  \vspace{2mm}
+
+  \textbf{sudo é uma aplicação Set-UID com UID = 0}, logging apropriado
+  pode ser feito em cada comando run pelo sudo.
+
+  \begin{center}
+    \includegraphics[scale=0.4]{38}
+  \end{center}
+\end{flushleft}
+
+\subsection{Login em Linux: Não é uma operação do OS kernel}
+
+\begin{flushleft}
+  \textbf{Uma aplicação privilegiada de login apresenta uma interface de login
+  para obter credenciais de users}, como username/passward,
+  dados biométricos, smartcards e PIN de ativação.
+
+  \vspace{2mm}
+
+  \textbf{A aplicação de login verifica as credenciais e vai buscar
+  as credenciais de UID e GIDs para o user}, a aplicação começa
+  num processo com esses identifiers e quando acaba a aplicação
+  de login reaparece.
+
+  \vspace{2mm}
+
+  \textbf{Pelo que todos os processos criados pelo user têm os seus identifiers},
+  herdados por forks.
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Linux: do processo de login para o de sessão}
+
+\begin{flushleft}
+  \textbf{O processo de login deve ser um processo priveligiado}, tendo de
+  criar processos com UID e GIDs arbitrários.
+
+  \begin{center}
+    \includegraphics[scale=0.4]{39}
+  \end{center}
+\end{flushleft}
+
+\subsubsection{Login em Linux: Processo de verificação de Password}
+
+\begin{center}
+  \includegraphics[scale=0.5]{40}
+\end{center}
+
+\subsection{Mecânismo chroot}
+
+\begin{flushleft}
+  \textbf{Usado para reduzir a visibilidade de um sistema de ficheiros}.
+  Cada descritor de processo tem um número root i-node. O chroot
+  altera o para um diretório arbitrário, reduzindo a visibilidade
+  do sistema de ficheiros para o processo.
+  
+  \vspace{2mm}
+
+  \textbf{Usado para proteger o sistema de ficheiros de aplicações
+  que podem ser problemáticas}, como servidores publicos,
+  aplicações transferidas, \dots Mas não é à prova de bala.
+\end{flushleft}
+
+\subsection{Confinamento: AppArmor}
+
+\begin{flushleft}
+  \textbf{Mecanismo para restringir aplicações baseado num modelo comportamental}.
+  Precisa de ajuda do kernel, focado em syscalls e os seus argumentos e
+  gera entradas no sistema de registo para auditar o comportamento
+\end{flushleft}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.35]{41}
+  \includegraphics[scale=0.35]{42}
+\end{center}
+
+\subsection{Confinamento: Namespaces}
+
+\begin{flushleft}
+  \textbf{Permitem a partição de recursos em views (namespaces)}.
+  Processos num determinado namespace têm uma view restrita do sistema.
+  São ativados por syscalls por um processo simples:
+  \begin{itemize}
+    \item clone: define um novo namespace para migrar um processo;
+    \item unshare: desassocia um processo do seu contexto atual;
+    \item setns: mete um processo num namespace;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Tipos de namespaces:}
+  \begin{itemize}
+    \item Mount: aplicados para mounting points;
+    \item Process ID: O primeiro tem o PID 1;
+    \item Network: Stack de rede "independente";
+    \item IPC: Métodos de comunicação inter-processos;
+    \item UTS: Independencia de nome (DNS);
+    \item User ID: Segregação das permissões;
+    \item Cgroup: Limitação de recursos usados (CPU, memória, \dots); 
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Confinamento: Containers}
+
+\begin{flushleft}
+  \textbf{Explora namespaces para dar uma view virtual ao sistema}.
+
+  \vspace{2mm}
+
+  \textbf{Processos são executados dentro de um container}, que é uma contrução
+  aplicacional e não um objeto do kernel. Consiste de um ambiente
+  de namespaces e cgroups. Necessita de pontes de ligação com o sistema de interface
+  de redes real, processos proxy.
+
+  \vspace{2mm}
+
+  \textbf{Abordagens relevantes:} \textbf{Linux Containers (LXC)}, focadas num ambiente completamente
+  virtual, \textbf{Docker}, focada em aplicações isoladas baseado em pacotes portáveis
+  entre sistemas, \textbf{Singularity}, similar a Docker mas focada em HPC e partilha
+  multi-user.
+\end{flushleft}
+
+\pagebreak
+
+\section{Defesa de uma organização}
+
+\subsection{O cenário organizacional atual}
+
+\begin{flushleft}
+  As organizações são complexas e devem chegar a toda a gente. No \textbf{espaço físico}
+  no qual vivems, é lento e involve mover matéria sendo que existem leis que cobrem
+  a maior parte das interações, já num \textbf{espaço virtual}, no qual as
+  organizações existem à pouco tempo, não tão conhecido, é muito rápido e não possui
+  barreiras, mas tudo pode estar escondido, sendo que as leis são limitadas.
+
+  \vspace{2mm}
+
+  \textbf{Deve estar em conformidade com os novos marcos regulatórios}
+  \begin{itemize}
+    \item 2016: NIS - Define requisitos de cybersec básicos;
+    \item 2018: GDPR - Define requisitos para dados privados, introduzindo
+    multas por falta de gestão de dados;
+    \item 2021: DL65 - Define processos para inventário, relatório e
+    formalização de estratégia;
+    \item 2024: NIS 2 - Define cyberteams e processos, introduzindo
+    multas por falha de segurança;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Stratégias são baseadas em risco e maturidade}
+  \begin{itemize}
+    \item \textbf{Risco:} Identificar ameaças e determinar o risco;
+    \item \textbf{Maturidade:} Determinar a maturidade de uma organização sobre
+    múltiplas áreas.
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Requisitos atuais}
+\begin{flushleft}
+  \begin{itemize}
+    \item Identificar o individuo responsável pela segurança, responsável
+    pela estratégia de segurança normalmente chamado de CISO (Chief Information Security Officer),
+    vai ser pessoalmente responsável;
+    \item Identificar os pontos de contacto para a organização;
+    \item Identificar e rastrear os ativos críticos (Crown Jewels);
+    \item Ter um plano de segurança;
+    \item Avisar sobre incidentes relevantes e cooperar;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Ativos: Abordagem Crown Jewels}
+
+\begin{flushleft}
+  \textbf{Focado em identificar e proteger os ativos mais críticos}.
+
+  \vspace{2mm}
+
+  \textbf{O que é uma crown jewel?} São dados sensiveis, servidores, sistemas
+  de software, qualuer outro equipamento (HVAC, geradores, \dots)
+
+  \vspace{2mm}
+
+  \textbf{Algum problema com as crown jewels representa um impacto para a
+  missão da organização}.
+
+  \vspace{2mm}
+
+  \textbf{Objetivo: Proteger as crown jewels}, e a partir dai para toda a aplicação,
+  sendo baseado em risco.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Plano de Segurança}
+
+\begin{flushleft}
+  \textbf{Documento que descreve a postura de segurança}. Permite a organizações
+  saberem \uline{onde estão} e \uline{onde querem ir}. Considera autenticação,
+  backups, risco, controlo de acesso, políticas, \dots
+
+  \vspace{2mm}
+
+  \textbf{Aceite pela organização, assinado pelo Security Principal}, sendo periodicamente
+  revisto e aprovado.
+
+  \vspace{2mm}
+
+  \textbf{Políticas escritas e aceites significam maturidade maior}. As organizações
+  frequentemente só têm word of mouth ou práticas frequentes informais.
+\end{flushleft}
+
+\subsection{Resposta e Coordenação de Incidentes}
+
+\begin{flushleft}
+  \textbf{Resposta coordenada de incidentes por CERT.pt}, em que incidentes
+  relevantes têm de ser reportados.
+
+  \vspace{2mm}
+
+  \textbf{Rede CSIRT nacional facilita colaboração entre entidades}.
+
+  \vspace{2mm}
+
+  \textbf{Incidentes de Fraude/Crime são reportados às autoridades}.
+\end{flushleft}
+
+\subsection{Equipas de Segurança}
+
+\begin{flushleft}
+  \textbf{As operações de segurança são frequentemente organizadas em equipas:}
+  \begin{itemize}
+    \item \textbf{Blue Team:} Defende a organização de atores maliciosos;
+    \item \textbf{Red Team:} Ataca a organização para ajudar a encontrar pontos fracos;
+    \item \textbf{Purple Team:} Combina as duas anteriores (ataque e defesa); 
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Blue Teams}
+
+\begin{flushleft}
+  \textbf{Defende a organização de atores maliciosos} e de falhas gerais também.
+
+  \vspace{2mm}
+
+  \textbf{Tarefas fundamentais para indereçar:}
+  \begin{itemize}
+    \item \uline{Pessoas}: treinar, criar consciência, cultura;
+    \item \uline{Processos}: análise, investigação, dados, relatórios;
+    \item \uline{Tecnologia}: monitorizar, detetar, acripting, automação;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Obrigatório para todas as organizações!}, muito emprego.
+
+  \vspace{2mm}
+
+  \textbf{Muito desafiante decido à elevada assimetria}. Ataquantes têm
+  de ter sucesso \textbf{uma vez}, usando os seus TTPs (Tactics, Techniques and Procedures) preferidos,
+  enquanto que os defensores têm de ter sucesso \textbf{continuo} de todos os ataques.
+
+  \vspace{2mm}
+
+  \textbf{Desafiante e interessante}.
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Tecnicas de defesa de Blue Teams}
+
+\begin{flushleft}
+  \textbf{Everything Everywhere All at Once?} Nem pensar, priorizar de acordo
+  com a missão da organização.
+
+  \vspace{2mm}
+
+  \textbf{Abordagens atuais focam em:} CIA triad, as crown jewels (risco ativo),
+  que tenha menos "dor", plano de segurança.
+\end{flushleft}
+
+\subsection{SOC - Security Operations Center}
+
+\begin{flushleft}
+  \textbf{Responsável por monotorização continua} (infrastrutura digital da
+  organização).
+
+  \vspace{2mm}
+
+  \textbf{Monitorizar, detetar e responder} (a ameaças de cibersegurança).
+
+  \vspace{2mm}
+
+  \textbf{Capacitado com analistas e tecnologia qualificados}, proteção de dados
+  e resposta de incidentes.
+\end{flushleft}
+
+\subsection{Conceitos Principais}
+
+\begin{flushleft}
+  \textbf{Defensive Security Engineering:} Firewalls, backups, logs. Manter o
+  lifecycle de Software Development, requisitos reacionados com segurança
+  (e.g OWASP ASVS)
+
+  \vspace{2mm}
+
+  \textbf{Resposta a Incidentes}, para tal ter um processo que trate destes
+  incidentes, involver stakeholders e comunicar.
+
+  \vspace{2mm}
+
+  \textbf{Detection Engineering} - designing, developing, testing,
+  and maintaining threat detection logic.
+\end{flushleft}
+
+\subsubsection{Detection Engineering}
+
+\begin{center}
+  \includegraphics[scale=0.4]{43}
+\end{center}
+
+\pagebreak
+
+\subsection{Direção: CTI}
+
+\begin{flushleft}
+  \textbf{Acessa as ameaças atuais por parte de CTI (Cyber Threat Intelligence)}.
+
+  \vspace{2mm}
+
+  \textbf{CTI ajuda a perceber as dinâmicas:}
+  \begin{itemize}
+    \item A "Dark Web": Tor forums, discords, telegrams, IRC, twitter, pastebins
+    \item Relatórios oficiais: Security Researchers (Reversing, analysis)
+    \item Como os atores se posicionam (hacktivistas, crime)
+    \item Ataques a organizações semelhantes
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Threat Intelligence de researchers fornecem análise e previsões}, entidades
+  oficiais, orgs privadas.
+\end{flushleft}
+
+\subsection{Direção: Alertas e Incidentes}
+
+\begin{flushleft}
+  \textbf{Alertas atuais vão tecer regras futuras}. Identificar ameaças populares,
+  reduzir falsos positivos e manter a capacidade de detetar ameaças (isto inclui
+  conduzir ataques controlados para validar regras).
+
+  \vspace{2mm}
+
+  Se uma ameaça for encontrada, o que pode a organização fazer? A resposta define
+  melhorias futuras.
+\end{flushleft}
+
+\subsection{Coleção: Data Harvesting}
+
+\begin{flushleft}
+  \textbf{Focar em fontes de dados relevantes para indereçar ameaças}. Não pode
+  obter todos os dados, a visibilidade será limitada.
+
+  \vspace{2mm}
+
+  \textbf{Potenciais Alvos}
+  \begin{itemize}
+    \item Servers: Ad, email, HTTP, DB;
+    \item Wireless Controllers;
+    \item Acesso a VPN;
+    \item Firewalls;
+    \item Endpoints: Laptops, Vms, IoT devices;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{As abordagens atuais concentram-se em um grande data lake}.
+  Algorithms match rules, ML models, signatures, behavior.
+
+  \begin{center}
+    \includegraphics[scale=0.4]{44}
+  \end{center}
+\end{flushleft}
+
+\subsection{A Pirâmide da Dor}
+
+\begin{center}
+  \includegraphics[scale=0.4]{45}
+\end{center}
+
+\begin{flushleft}
+  Aumentar as capacidades de defesa de baixo para cima, porquê? Detetar dicheiros/emails
+  através de hashes é \textbf{trivial}, mas perceber o comportamento de um ator é \textbf{muito dificil}.
+\end{flushleft}
+
+\subsection{Triagem}
+
+\begin{flushleft}
+  \textbf{Uma das tarefas mais importantes de um analista}, quase nunca se tem apenas uma opção.
+
+  \vspace{2mm}
+
+  Temos recusos limitados e múltiplos problemas, por onde começamos? Temos de escolher
+  o alerta mais perigoso (objetivo principal embora seja dificil de escolher).
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Definição de Perigo}
+
+\begin{flushleft}
+  Pode ser uma de muitas definições:
+  \begin{itemize}
+    \item Ataque quase completo;
+    \item Esta a afetar items valiosos (critical hosts, processos, users, dados)
+    \item Advanced or targeted attackers
+    \item Unique, never fired before or lowest count
+  \end{itemize}
+
+  \vspace{2mm}
+
+  Vai \uline{depender da organização}, qualquer coisa vai causar danos se tiver um custo elevado ou
+  ser dificil de remediar.
+\end{flushleft}
+
+\subsection{Como encontrar ameaças?}
+
+\begin{flushleft}
+  \textbf{Correspondência de comportamento, maior parte ML }. Padrões conhecidos,
+  deteção de anomalias
+
+  \vspace{2mm}
+
+  \textbf{Correspondência de assinaturas: YARA}, assinaturas para malware são
+  criadas e disseminadas.
+
+  \vspace{2mm}
+
+  \textbf{Avaliação de reputação: endereço IP/domains}. Endereçamento de baixa reputação
+  pode gerar alertas ou ser bloqueado.
+
+  \vspace{2mm}
+
+  \textbf{Ameaças conhecidas são identificadas pelo vendendor de software}.
+
+  \vspace{2mm}
+
+  \textbf{E se não soubermos que algo é malicioso?}
+
+  \vspace{2mm}
+
+  \textbf{Malware novo tem potencial de ter um grande impacto}, não é detetado
+  por Anti-virus, explora vulnerabilidades desconhecidas ou falhas (0-days).
+
+  \vspace{2mm}
+
+  \textbf{Um novo ativo malicioso é apenas um novo programa/website}, pode ser
+  uma variação de malware já existente, pode apenas passar por assinaturas
+  existentes. Existe um mercado robusto vendendo malware.
+\end{flushleft}
+
+\subsection{Procura por Ameaças}
+
+\begin{flushleft}
+  \begin{flushleft}
+    \textbf{Permite deteção de ameaças desconhecidas}. Pega num indicador
+    e determina o seu risco.
+
+    \vspace{2mm}
+
+    \textbf{Inclui várias áreas de conhcecimento:} reverse engineering,
+    conceitos de rede, cryptography, machine learning, \dots
+  \end{flushleft}
+\end{flushleft}
+
+\subsection{Pensar como um hacker}
+
+\begin{flushleft}
+  \textbf{Lockheed Martin Cyber Kill Chain}. Permite perceber e combater ransomware,
+  security breaches, e advanced persistent attacks/threats (APTs).
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{46}
+\end{center}
+
+\begin{flushleft}
+  \begin{enumerate}
+    \item Enumerar empregados, serviços, entre outros;
+    \item Criar um ficheiro com um exploit;
+    \item Transferir o exploit para a vítima;
+    \item Ativo comprometido, código não autorizado é exectuado;
+    \item Código malicioso é executado/instalado;
+    \item Acesso remoto é estabelecido;
+    \item Destruir dados, comprometer processos, \dots
+  \end{enumerate}
+
+  \vspace{2mm}
+
+  Parecido com o Lockheed Martin Cyber Kill Chain, dá ênfase à natureza iterativa
+  do compromisso (more like steps).
+
+  \begin{center}
+    \includegraphics[scale=0.3]{47}
+  \end{center}
+\end{flushleft}
+
+\subsection{MITRE Att\&ck Matrix}
+
+\begin{flushleft}
+  \textbf{Uma base de conhecimento globalmente acessível sobre táticas e técnicas
+  de adversários}. Baseado em observações do mundo real.
+
+  \vspace{2mm}
+
+  \textbf{Permite organizações mapearem ações à kill chain}. Também facilita o
+  rastreamento do ator e como ele evolui. Os atores reusam ferramentas,
+  táticas e técnicas.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Pistas de exfiltração de dados}
+
+\begin{flushleft}
+  \textbf{Grande volume de tráfego}: DNS tunneling, a partir de uma fonte estranha,
+  conecção longa para destinatário estranho.
+
+  \vspace{2mm}
+
+  \textbf{Questionável criação de arquivo comprimido}
+
+  \vspace{2mm}
+  
+  \textbf{Recusa de múltiplas portas firewall de uma única fonte}
+
+  \vspace{2mm}
+
+  \textbf{URLs com parâmetros longos inexplicáveis}
+
+  \vspace{2mm}
+
+  \textbf{Alertas DLP (Data Loss Prevention tools)}
+
+  \vspace{2mm}
+
+  \textbf{Alertas UEBA (User and Entity Behavior Analytics)}
+\end{flushleft}
+
+\subsection{Pistas de destruição de dados}
+
+\begin{flushleft}
+  \begin{itemize}
+    \item Compromisso de patching servers;
+    \item Deleção estranha de ficheiros;
+    \item Sistema lento ou crasha derepente;
+    \item Sistema e comportamento da rede anormais.
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Identificação de ataques}
+
+\begin{flushleft}
+  \textbf{Domínios, endereços IP ou URLs}, Correspondência a APT, domínios estranhos
+  (a todas as fontes (OSINT))
+
+  \vspace{2mm}
+
+  \textbf{Email feito para uma pessoa específica}
+
+  \vspace{2mm}
+
+  \textbf{Informação suspeita de informação sobre negócio}
+
+  \vspace{2mm}
+
+  \textbf{Novos executáveis}, nunca antes vistos, ficheiros de ataque costumizados.
+\end{flushleft}
+
+\subsection{Exploit alert triage}
+
+
+\includegraphics[scale=0.3]{48}
+
+\pagebreak
+
+\subsection{Disseminação}
+
+\begin{flushleft}
+  \textbf{Quando uma ameaça é encontrada, infromação é disseminada}.
+  Dentro de comunidades fechadas (MISP), ao público (Virustotal,
+  AbuseCH, OTX, MISP, \dots)
+
+  \vspace{2mm}
+
+  \begin{flushleft}
+    \textbf{Segurança de Software inclui informação sobre como proteger organizações}.
+    Sistemas atuais alteram signatures/regras dinamicamente (várias vezes ao dia)
+
+    \vspace{2mm}
+
+    \textbf{Regra de ouro:} \uline{Update!}
+  \end{flushleft}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.35]{49}
+\end{center}
+
+\subsection{SOAR}
+
+\begin{flushleft}
+  \textbf{Security Orchestration, Automation and Response}. Software que
+  permite às equipas de segurança integrarem e coordenarem ferramentas separadas
+  em streamlined threat response workflows.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{50}
+\end{center}
+
+\pagebreak
+
+\section{Firewalls}
+
 \end{document}
