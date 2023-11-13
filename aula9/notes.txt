@@ -1,0 +1,18 @@
+# Ex 2.1
+
+```
+real	0m5.184s
+user	0m5.115s
+sys	0m0.048s
+
+```
+
+## Questions
+
+###  What do you think of using 4096 bit keys by default in relation to speed?
+
+It is a little bit slow, as we see above it took 5s to complete.
+
+### How the actual key size varies with the number of bits?
+
+The number of bits defines the size of the public and private keys.
