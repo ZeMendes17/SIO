@@ -1714,4 +1714,1610 @@ barreiras intrespassáveis, enquanto que mais privilégios criam Vulnerabilidade
   \end{itemize}
 \end{flushleft}
 
+\subsection{Proteção com ACLs}
+
+\begin{flushleft}
+  \textbf{Cada objeto tem uma lista de controlo de acesso (ACL)}, que diz
+  "tell me who can do what".
+
+  \vspace{2mm}
+
+  \textbf{A ACL pode ser discricionária ou obrigatória}, quando é obrigatória
+  não pode ser alterada, quando é discricionária pode ser alterada.
+
+  \vspace{2mm}
+
+  \textbf{É verificada quando a atividade pretende manipular
+  o objeto}, se a manipulação não for permitida é negada. O kernel do OS
+  faz as verificações do ACL, atuando como um Reference Monitor.
+\end{flushleft}
+
+\subsubsection{Unix ACLs de proteção de ficheiros: ACL discricionária e de estrutura fixa}
+
+\begin{flushleft}
+  \textbf{Cada objeto de sistema de ficheiros tem um ACL},
+  que liga 3 direitos a 3 sujeitos, sendo que apenas o owner pode
+  alterar o ACL.
+
+  \vspace{2mm}
+
+  \textbf{Direitos: \uline{R} \uline{W} \uline{X}}
+  \begin{itemize}
+    \item Direito de leitura/listagem;
+    \item Direito de escrita/criação ou remoção de ficheiros ou subdiretórios;
+    \item Direito de execução;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Sujeitos}
+  \begin{itemize}
+    \item Um UID (owner);
+    \item Um GID (group);
+    \item Outros (others);
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{35}
+  \end{center}
+\end{flushleft}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.4]{36}
+\end{center}
+
+\subsubsection{Windows ACLs de proteção de ficheiros: ACL discricionária e de estrutura flexivel}
+
+\begin{flushleft}
+  \textbf{Cada objeto de sistema de ficheiros tem um ACL e um owner}.
+  O ACL dá 14 tipos de direitos de acesso a uma lista de sujeitos de
+  tamanho variável. O owner pode ser um UID ou um GID, e não possui
+  direitos especiais sobre o ACL.
+
+  \vspace{2mm}
+
+  \textbf{Sujeitos}
+  \begin{itemize}
+    \item Users (UIDs);
+    \item Grupos (GIDs), "Everyone" significa qualquer um;
+  \end{itemize}
+
+  \textbf{Direitos:}
+
+  \vspace{2mm}
+
+  \includegraphics[scale=0.5]{37}
+
+\end{flushleft}
+
+\subsubsection{Elevação de Privilégio: Set-UID}
+
+\begin{flushleft}
+  \textbf{É usado para mudar o UID de um processo a correr um programa guardado num
+  ficheiro Set-UID}. Se o ficheiro de um programa pertencer a um UID X e o bit ACL
+  set-UID estiver ativo, então será executado num processo com o UID X,
+  independentemente do UID do subject que executou o programa.
+
+  \pagebreak
+
+  \textbf{É usado para dar programas privilegiados para correr
+  uma tarefa administrativa invocada por users normais, não confiáveis}.
+  \begin{itemize}
+    \item Mudar a password do user (passwd);
+    \item Mudar para modo de super-user (su, sudo);
+    \item Montar dispositivos (mount);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Administração pela root não é aconselhado}, uma vez que, é
+  uma "entidade" e muitas pessoas, quem fez o quê?
+
+  \vspace{2mm}
+
+  \textbf{Maneira preferivel}, usar um role de administrador
+  (uid = 0), muitos users assumem-no: sudoers, definido por um
+  ficheiro de configuração usado pelo comando sudo.
+
+  \vspace{2mm}
+
+  \textbf{sudo é uma aplicação Set-UID com UID = 0}, logging apropriado
+  pode ser feito em cada comando run pelo sudo.
+
+  \begin{center}
+    \includegraphics[scale=0.4]{38}
+  \end{center}
+\end{flushleft}
+
+\subsection{Login em Linux: Não é uma operação do OS kernel}
+
+\begin{flushleft}
+  \textbf{Uma aplicação privilegiada de login apresenta uma interface de login
+  para obter credenciais de users}, como username/passward,
+  dados biométricos, smartcards e PIN de ativação.
+
+  \vspace{2mm}
+
+  \textbf{A aplicação de login verifica as credenciais e vai buscar
+  as credenciais de UID e GIDs para o user}, a aplicação começa
+  num processo com esses identifiers e quando acaba a aplicação
+  de login reaparece.
+
+  \vspace{2mm}
+
+  \textbf{Pelo que todos os processos criados pelo user têm os seus identifiers},
+  herdados por forks.
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Linux: do processo de login para o de sessão}
+
+\begin{flushleft}
+  \textbf{O processo de login deve ser um processo priveligiado}, tendo de
+  criar processos com UID e GIDs arbitrários.
+
+  \begin{center}
+    \includegraphics[scale=0.4]{39}
+  \end{center}
+\end{flushleft}
+
+\subsubsection{Login em Linux: Processo de verificação de Password}
+
+\begin{center}
+  \includegraphics[scale=0.5]{40}
+\end{center}
+
+\subsection{Mecânismo chroot}
+
+\begin{flushleft}
+  \textbf{Usado para reduzir a visibilidade de um sistema de ficheiros}.
+  Cada descritor de processo tem um número root i-node. O chroot
+  altera o para um diretório arbitrário, reduzindo a visibilidade
+  do sistema de ficheiros para o processo.
+  
+  \vspace{2mm}
+
+  \textbf{Usado para proteger o sistema de ficheiros de aplicações
+  que podem ser problemáticas}, como servidores publicos,
+  aplicações transferidas, \dots Mas não é à prova de bala.
+\end{flushleft}
+
+\subsection{Confinamento: AppArmor}
+
+\begin{flushleft}
+  \textbf{Mecanismo para restringir aplicações baseado num modelo comportamental}.
+  Precisa de ajuda do kernel, focado em syscalls e os seus argumentos e
+  gera entradas no sistema de registo para auditar o comportamento
+\end{flushleft}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.35]{41}
+  \includegraphics[scale=0.35]{42}
+\end{center}
+
+\subsection{Confinamento: Namespaces}
+
+\begin{flushleft}
+  \textbf{Permitem a partição de recursos em views (namespaces)}.
+  Processos num determinado namespace têm uma view restrita do sistema.
+  São ativados por syscalls por um processo simples:
+  \begin{itemize}
+    \item clone: define um novo namespace para migrar um processo;
+    \item unshare: desassocia um processo do seu contexto atual;
+    \item setns: mete um processo num namespace;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Tipos de namespaces:}
+  \begin{itemize}
+    \item Mount: aplicados para mounting points;
+    \item Process ID: O primeiro tem o PID 1;
+    \item Network: Stack de rede "independente";
+    \item IPC: Métodos de comunicação inter-processos;
+    \item UTS: Independencia de nome (DNS);
+    \item User ID: Segregação das permissões;
+    \item Cgroup: Limitação de recursos usados (CPU, memória, \dots); 
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Confinamento: Containers}
+
+\begin{flushleft}
+  \textbf{Explora namespaces para dar uma view virtual ao sistema}.
+
+  \vspace{2mm}
+
+  \textbf{Processos são executados dentro de um container}, que é uma contrução
+  aplicacional e não um objeto do kernel. Consiste de um ambiente
+  de namespaces e cgroups. Necessita de pontes de ligação com o sistema de interface
+  de redes real, processos proxy.
+
+  \vspace{2mm}
+
+  \textbf{Abordagens relevantes:} \textbf{Linux Containers (LXC)}, focadas num ambiente completamente
+  virtual, \textbf{Docker}, focada em aplicações isoladas baseado em pacotes portáveis
+  entre sistemas, \textbf{Singularity}, similar a Docker mas focada em HPC e partilha
+  multi-user.
+\end{flushleft}
+
+\pagebreak
+
+\section{Defesa de uma organização}
+
+\subsection{O cenário organizacional atual}
+
+\begin{flushleft}
+  As organizações são complexas e devem chegar a toda a gente. No \textbf{espaço físico}
+  no qual vivems, é lento e involve mover matéria sendo que existem leis que cobrem
+  a maior parte das interações, já num \textbf{espaço virtual}, no qual as
+  organizações existem à pouco tempo, não tão conhecido, é muito rápido e não possui
+  barreiras, mas tudo pode estar escondido, sendo que as leis são limitadas.
+
+  \vspace{2mm}
+
+  \textbf{Deve estar em conformidade com os novos marcos regulatórios}
+  \begin{itemize}
+    \item 2016: NIS - Define requisitos de cybersec básicos;
+    \item 2018: GDPR - Define requisitos para dados privados, introduzindo
+    multas por falta de gestão de dados;
+    \item 2021: DL65 - Define processos para inventário, relatório e
+    formalização de estratégia;
+    \item 2024: NIS 2 - Define cyberteams e processos, introduzindo
+    multas por falha de segurança;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Stratégias são baseadas em risco e maturidade}
+  \begin{itemize}
+    \item \textbf{Risco:} Identificar ameaças e determinar o risco;
+    \item \textbf{Maturidade:} Determinar a maturidade de uma organização sobre
+    múltiplas áreas.
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Requisitos atuais}
+\begin{flushleft}
+  \begin{itemize}
+    \item Identificar o individuo responsável pela segurança, responsável
+    pela estratégia de segurança normalmente chamado de CISO (Chief Information Security Officer),
+    vai ser pessoalmente responsável;
+    \item Identificar os pontos de contacto para a organização;
+    \item Identificar e rastrear os ativos críticos (Crown Jewels);
+    \item Ter um plano de segurança;
+    \item Avisar sobre incidentes relevantes e cooperar;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Ativos: Abordagem Crown Jewels}
+
+\begin{flushleft}
+  \textbf{Focado em identificar e proteger os ativos mais críticos}.
+
+  \vspace{2mm}
+
+  \textbf{O que é uma crown jewel?} São dados sensiveis, servidores, sistemas
+  de software, qualuer outro equipamento (HVAC, geradores, \dots)
+
+  \vspace{2mm}
+
+  \textbf{Algum problema com as crown jewels representa um impacto para a
+  missão da organização}.
+
+  \vspace{2mm}
+
+  \textbf{Objetivo: Proteger as crown jewels}, e a partir dai para toda a aplicação,
+  sendo baseado em risco.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Plano de Segurança}
+
+\begin{flushleft}
+  \textbf{Documento que descreve a postura de segurança}. Permite a organizações
+  saberem \uline{onde estão} e \uline{onde querem ir}. Considera autenticação,
+  backups, risco, controlo de acesso, políticas, \dots
+
+  \vspace{2mm}
+
+  \textbf{Aceite pela organização, assinado pelo Security Principal}, sendo periodicamente
+  revisto e aprovado.
+
+  \vspace{2mm}
+
+  \textbf{Políticas escritas e aceites significam maturidade maior}. As organizações
+  frequentemente só têm word of mouth ou práticas frequentes informais.
+\end{flushleft}
+
+\subsection{Resposta e Coordenação de Incidentes}
+
+\begin{flushleft}
+  \textbf{Resposta coordenada de incidentes por CERT.pt}, em que incidentes
+  relevantes têm de ser reportados.
+
+  \vspace{2mm}
+
+  \textbf{Rede CSIRT nacional facilita colaboração entre entidades}.
+
+  \vspace{2mm}
+
+  \textbf{Incidentes de Fraude/Crime são reportados às autoridades}.
+\end{flushleft}
+
+\subsection{Equipas de Segurança}
+
+\begin{flushleft}
+  \textbf{As operações de segurança são frequentemente organizadas em equipas:}
+  \begin{itemize}
+    \item \textbf{Blue Team:} Defende a organização de atores maliciosos;
+    \item \textbf{Red Team:} Ataca a organização para ajudar a encontrar pontos fracos;
+    \item \textbf{Purple Team:} Combina as duas anteriores (ataque e defesa); 
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Blue Teams}
+
+\begin{flushleft}
+  \textbf{Defende a organização de atores maliciosos} e de falhas gerais também.
+
+  \vspace{2mm}
+
+  \textbf{Tarefas fundamentais para indereçar:}
+  \begin{itemize}
+    \item \uline{Pessoas}: treinar, criar consciência, cultura;
+    \item \uline{Processos}: análise, investigação, dados, relatórios;
+    \item \uline{Tecnologia}: monitorizar, detetar, acripting, automação;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Obrigatório para todas as organizações!}, muito emprego.
+
+  \vspace{2mm}
+
+  \textbf{Muito desafiante decido à elevada assimetria}. Ataquantes têm
+  de ter sucesso \textbf{uma vez}, usando os seus TTPs (Tactics, Techniques and Procedures) preferidos,
+  enquanto que os defensores têm de ter sucesso \textbf{continuo} de todos os ataques.
+
+  \vspace{2mm}
+
+  \textbf{Desafiante e interessante}.
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Tecnicas de defesa de Blue Teams}
+
+\begin{flushleft}
+  \textbf{Everything Everywhere All at Once?} Nem pensar, priorizar de acordo
+  com a missão da organização.
+
+  \vspace{2mm}
+
+  \textbf{Abordagens atuais focam em:} CIA triad, as crown jewels (risco ativo),
+  que tenha menos "dor", plano de segurança.
+\end{flushleft}
+
+\subsection{SOC - Security Operations Center}
+
+\begin{flushleft}
+  \textbf{Responsável por monotorização continua} (infrastrutura digital da
+  organização).
+
+  \vspace{2mm}
+
+  \textbf{Monitorizar, detetar e responder} (a ameaças de cibersegurança).
+
+  \vspace{2mm}
+
+  \textbf{Capacitado com analistas e tecnologia qualificados}, proteção de dados
+  e resposta de incidentes.
+\end{flushleft}
+
+\subsection{Conceitos Principais}
+
+\begin{flushleft}
+  \textbf{Defensive Security Engineering:} Firewalls, backups, logs. Manter o
+  lifecycle de Software Development, requisitos reacionados com segurança
+  (e.g OWASP ASVS)
+
+  \vspace{2mm}
+
+  \textbf{Resposta a Incidentes}, para tal ter um processo que trate destes
+  incidentes, involver stakeholders e comunicar.
+
+  \vspace{2mm}
+
+  \textbf{Detection Engineering} - designing, developing, testing,
+  and maintaining threat detection logic.
+\end{flushleft}
+
+\subsubsection{Detection Engineering}
+
+\begin{center}
+  \includegraphics[scale=0.4]{43}
+\end{center}
+
+\pagebreak
+
+\subsection{Direção: CTI}
+
+\begin{flushleft}
+  \textbf{Acessa as ameaças atuais por parte de CTI (Cyber Threat Intelligence)}.
+
+  \vspace{2mm}
+
+  \textbf{CTI ajuda a perceber as dinâmicas:}
+  \begin{itemize}
+    \item A "Dark Web": Tor forums, discords, telegrams, IRC, twitter, pastebins
+    \item Relatórios oficiais: Security Researchers (Reversing, analysis)
+    \item Como os atores se posicionam (hacktivistas, crime)
+    \item Ataques a organizações semelhantes
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Threat Intelligence de researchers fornecem análise e previsões}, entidades
+  oficiais, orgs privadas.
+\end{flushleft}
+
+\subsection{Direção: Alertas e Incidentes}
+
+\begin{flushleft}
+  \textbf{Alertas atuais vão tecer regras futuras}. Identificar ameaças populares,
+  reduzir falsos positivos e manter a capacidade de detetar ameaças (isto inclui
+  conduzir ataques controlados para validar regras).
+
+  \vspace{2mm}
+
+  Se uma ameaça for encontrada, o que pode a organização fazer? A resposta define
+  melhorias futuras.
+\end{flushleft}
+
+\subsection{Coleção: Data Harvesting}
+
+\begin{flushleft}
+  \textbf{Focar em fontes de dados relevantes para indereçar ameaças}. Não pode
+  obter todos os dados, a visibilidade será limitada.
+
+  \vspace{2mm}
+
+  \textbf{Potenciais Alvos}
+  \begin{itemize}
+    \item Servers: Ad, email, HTTP, DB;
+    \item Wireless Controllers;
+    \item Acesso a VPN;
+    \item Firewalls;
+    \item Endpoints: Laptops, Vms, IoT devices;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{As abordagens atuais concentram-se em um grande data lake}.
+  Algorithms match rules, ML models, signatures, behavior.
+
+  \begin{center}
+    \includegraphics[scale=0.4]{44}
+  \end{center}
+\end{flushleft}
+
+\subsection{A Pirâmide da Dor}
+
+\begin{center}
+  \includegraphics[scale=0.4]{45}
+\end{center}
+
+\begin{flushleft}
+  Aumentar as capacidades de defesa de baixo para cima, porquê? Detetar dicheiros/emails
+  através de hashes é \textbf{trivial}, mas perceber o comportamento de um ator é \textbf{muito dificil}.
+\end{flushleft}
+
+\subsection{Triagem}
+
+\begin{flushleft}
+  \textbf{Uma das tarefas mais importantes de um analista}, quase nunca se tem apenas uma opção.
+
+  \vspace{2mm}
+
+  Temos recusos limitados e múltiplos problemas, por onde começamos? Temos de escolher
+  o alerta mais perigoso (objetivo principal embora seja dificil de escolher).
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Definição de Perigo}
+
+\begin{flushleft}
+  Pode ser uma de muitas definições:
+  \begin{itemize}
+    \item Ataque quase completo;
+    \item Esta a afetar items valiosos (critical hosts, processos, users, dados)
+    \item Advanced or targeted attackers
+    \item Unique, never fired before or lowest count
+  \end{itemize}
+
+  \vspace{2mm}
+
+  Vai \uline{depender da organização}, qualquer coisa vai causar danos se tiver um custo elevado ou
+  ser dificil de remediar.
+\end{flushleft}
+
+\subsection{Como encontrar ameaças?}
+
+\begin{flushleft}
+  \textbf{Correspondência de comportamento, maior parte ML }. Padrões conhecidos,
+  deteção de anomalias
+
+  \vspace{2mm}
+
+  \textbf{Correspondência de assinaturas: YARA}, assinaturas para malware são
+  criadas e disseminadas.
+
+  \vspace{2mm}
+
+  \textbf{Avaliação de reputação: endereço IP/domains}. Endereçamento de baixa reputação
+  pode gerar alertas ou ser bloqueado.
+
+  \vspace{2mm}
+
+  \textbf{Ameaças conhecidas são identificadas pelo vendendor de software}.
+
+  \vspace{2mm}
+
+  \textbf{E se não soubermos que algo é malicioso?}
+
+  \vspace{2mm}
+
+  \textbf{Malware novo tem potencial de ter um grande impacto}, não é detetado
+  por Anti-virus, explora vulnerabilidades desconhecidas ou falhas (0-days).
+
+  \vspace{2mm}
+
+  \textbf{Um novo ativo malicioso é apenas um novo programa/website}, pode ser
+  uma variação de malware já existente, pode apenas passar por assinaturas
+  existentes. Existe um mercado robusto vendendo malware.
+\end{flushleft}
+
+\subsection{Procura por Ameaças}
+
+\begin{flushleft}
+  \begin{flushleft}
+    \textbf{Permite deteção de ameaças desconhecidas}. Pega num indicador
+    e determina o seu risco.
+
+    \vspace{2mm}
+
+    \textbf{Inclui várias áreas de conhcecimento:} reverse engineering,
+    conceitos de rede, cryptography, machine learning, \dots
+  \end{flushleft}
+\end{flushleft}
+
+\subsection{Pensar como um hacker}
+
+\begin{flushleft}
+  \textbf{Lockheed Martin Cyber Kill Chain}. Permite perceber e combater ransomware,
+  security breaches, e advanced persistent attacks/threats (APTs).
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{46}
+\end{center}
+
+\begin{flushleft}
+  \begin{enumerate}
+    \item Enumerar empregados, serviços, entre outros;
+    \item Criar um ficheiro com um exploit;
+    \item Transferir o exploit para a vítima;
+    \item Ativo comprometido, código não autorizado é exectuado;
+    \item Código malicioso é executado/instalado;
+    \item Acesso remoto é estabelecido;
+    \item Destruir dados, comprometer processos, \dots
+  \end{enumerate}
+
+  \vspace{2mm}
+
+  Parecido com o Lockheed Martin Cyber Kill Chain, dá ênfase à natureza iterativa
+  do compromisso (more like steps).
+
+  \begin{center}
+    \includegraphics[scale=0.3]{47}
+  \end{center}
+\end{flushleft}
+
+\subsection{MITRE Att\&ck Matrix}
+
+\begin{flushleft}
+  \textbf{Uma base de conhecimento globalmente acessível sobre táticas e técnicas
+  de adversários}. Baseado em observações do mundo real.
+
+  \vspace{2mm}
+
+  \textbf{Permite organizações mapearem ações à kill chain}. Também facilita o
+  rastreamento do ator e como ele evolui. Os atores reusam ferramentas,
+  táticas e técnicas.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Pistas de exfiltração de dados}
+
+\begin{flushleft}
+  \textbf{Grande volume de tráfego}: DNS tunneling, a partir de uma fonte estranha,
+  conecção longa para destinatário estranho.
+
+  \vspace{2mm}
+
+  \textbf{Questionável criação de arquivo comprimido}
+
+  \vspace{2mm}
+  
+  \textbf{Recusa de múltiplas portas firewall de uma única fonte}
+
+  \vspace{2mm}
+
+  \textbf{URLs com parâmetros longos inexplicáveis}
+
+  \vspace{2mm}
+
+  \textbf{Alertas DLP (Data Loss Prevention tools)}
+
+  \vspace{2mm}
+
+  \textbf{Alertas UEBA (User and Entity Behavior Analytics)}
+\end{flushleft}
+
+\subsection{Pistas de destruição de dados}
+
+\begin{flushleft}
+  \begin{itemize}
+    \item Compromisso de patching servers;
+    \item Deleção estranha de ficheiros;
+    \item Sistema lento ou crasha derepente;
+    \item Sistema e comportamento da rede anormais.
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Identificação de ataques}
+
+\begin{flushleft}
+  \textbf{Domínios, endereços IP ou URLs}, Correspondência a APT, domínios estranhos
+  (a todas as fontes (OSINT))
+
+  \vspace{2mm}
+
+  \textbf{Email feito para uma pessoa específica}
+
+  \vspace{2mm}
+
+  \textbf{Informação suspeita de informação sobre negócio}
+
+  \vspace{2mm}
+
+  \textbf{Novos executáveis}, nunca antes vistos, ficheiros de ataque costumizados.
+\end{flushleft}
+
+\subsection{Exploit alert triage}
+
+
+\includegraphics[scale=0.3]{48}
+
+\pagebreak
+
+\subsection{Disseminação}
+
+\begin{flushleft}
+  \textbf{Quando uma ameaça é encontrada, infromação é disseminada}.
+  Dentro de comunidades fechadas (MISP), ao público (Virustotal,
+  AbuseCH, OTX, MISP, \dots)
+
+  \vspace{2mm}
+
+  \begin{flushleft}
+    \textbf{Segurança de Software inclui informação sobre como proteger organizações}.
+    Sistemas atuais alteram signatures/regras dinamicamente (várias vezes ao dia)
+
+    \vspace{2mm}
+
+    \textbf{Regra de ouro:} \uline{Update!}
+  \end{flushleft}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.35]{49}
+\end{center}
+
+\subsection{SOAR}
+
+\begin{flushleft}
+  \textbf{Security Orchestration, Automation and Response}. Software que
+  permite às equipas de segurança integrarem e coordenarem ferramentas separadas
+  em streamlined threat response workflows.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{50}
+\end{center}
+
+\pagebreak
+
+\section{Firewalls}
+
+\subsection{Objetivos}
+
+\begin{flushleft}
+  \textbf{Elemento idespenável na conecção com um domínio de rede},
+  controla o acesso, flow e conteúdo.
+
+  \vspace{2mm}
+
+  \textbf{Implementação centralizada de políticas de segurança}. Minimiza o impacto
+  de variabilidades locais (conhecidas ou não), tornando mais fácil tomar prosições
+  mais drásticas. Centraliza a deteção de problemas (e os tratamentos).
+\end{flushleft}
+
+\subsection{Definição (Cheswick \& Bellovin)}
+
+\begin{flushleft}
+  \textbf{Link entre redes} de perímetro protegido (conjunto de redes e
+  máquinas) para uma rede insegura (Internet).
+
+  \vspace{2mm}
+
+  \textbf{Conjunto de componentes}, hardware e software.
+
+  \vspace{2mm}  
+
+  \textbf{Propriedades:}
+  \begin{itemize}
+    \item Entre todos os caminhos de tráfego in/out;
+    \item Controla o tráfego que passa por ele;
+    \item Imune a penetração (por definição); 
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{51}
+  \end{center}
+\end{flushleft}
+
+\subsection{Funcionalidades}
+
+\begin{flushleft}
+  \textbf{Supervisão entre todas as comunicações in/out}. Controla o uso de recursos
+  internos/externos por hosts/requests externas/internas. Defende contra ataques de fora
+  o domínio protegido para os seus recursos e do domínio protegido contra recursos esternos.
+
+  \vspace{2mm}
+
+  \textbf{Ativação de mecanismos gateway}. Para esconder a estrutura do
+  parametro protegido, NAT (Network Address Translation), Masquerading e
+  Port Forwarding. Para extender o perimetro seguro, secure tunneling (VPN).
+\end{flushleft}
+
+\pagebreak
+\subsection{Importância das Firewalls (EXTREMA)}
+
+\begin{flushleft}
+  \textbf{Ataques em sistemas públicos são frequentes}, seja por atacantes specializados
+  ou até mesmo aplicações.
+
+  \vspace{2mm}
+
+  \textbf{Os sistemas nem sempre têm os mecânismos de segurança adequados}, bloqueando
+  depois de muitas tentativas falhadas, validaçãod e comunicações, controlo de acesso.
+
+  \vspace{2mm}
+
+  \textbf{É necessáio aplicar mecânismos definidos pela administrador,
+  de acordo com as políticas do domínio}, Um programador de aplicações não
+  sabe disto.
+\end{flushleft}
+
+\subsection{Estrutura Genérica}
+
+\begin{center}
+  \includegraphics[scale=0.4]{52}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Prímetro de defesa (do domínio)}, pode ser parte de uma defesa numa
+  estratégia em profundidade.
+
+  \vspace{2mm}
+
+  \textbf{Considere um ambiente não seguro e um seguro}:
+  \begin{itemize}
+    \item \textbf{Fora:} outros domínios e a Internet;
+    \item \textbf{Dentro:} rede interna;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Apenas um server: Bastion}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{53}
+\end{center}
+
+\begin{flushleft}
+  \textbf{DMZ: DeMiliterized Network ou Perimeter Network}, rede insegura, que contém
+  servidores expostos ao mundo. Por vezes é necessário usar serviços/aplicações
+  específicas.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{54}
+\end{center}
+
+\begin{flushleft}
+  \textbf{DMZ pode oferecer alguma proteção}, sendo um sistema com 2 firewalls com
+  regras diferentes.
+
+  \vspace{2mm}
+
+  \textbf{Firewall externa: bastante permissiva}, controla o acesso a todas as redes.
+
+  \vspace{2mm}
+
+  \textbf{Firewall interna: mais restritiva}, controla o acesso à rede interna.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Tipos: Packet Filters}
+
+\begin{flushleft}
+  \textbf{Rejeitar interações não autorizadas baseadas no conteúdo dos
+  IP datagrams}. Endereço IP (origem e(ou destino)), protocolos de transporte e portas,
+  dados enviados via protocolos de transporte, \dots
+
+  \vspace{2mm}
+
+  \textbf{Pode analisar comportamento do flow}, exemplo: detect port
+  scans (with nmap).
+
+  \vspace{2mm}
+
+  \textbf{Tipicamnete suportado por componentes core do OS}, exemplo: iptables,
+  pf, ipfw, \dots
+\end{flushleft}
+
+\subsection{Tipos: Applicational gateways}
+
+\begin{flushleft}
+  \textbf{Controla interações ao nível da aplicação}. Mas transparente
+  para interagir com aplicações. Normalmente há uma firewall diferente para
+  cada protocolo (protocolo proxy).
+
+  \vspace{2mm}
+
+  \textbf{Cliente $\rightarrow$ Proxy (server) $\rightarrow$ Server (server)}.
+
+  \vspace{2mm}
+
+  \textbf{Aspetos de operar um proxy:} Controlo de acesso dos users, análise e modificação do conteúdo log detalhado,
+  impersonificação (proxying).
+\end{flushleft}
+
+\subsection{Tipos: Circuit Gateways}
+
+\begin{flushleft}
+  \textbf{Tipo de gateway de aplicações}, contactado diretamente pelo cliente.
+
+  \vspace{2mm}
+
+  \textbf{Interposição não transparente}. Para usar políticas e mecânismos específicos de
+  autorização e autenticação.
+  
+  \vspace{2mm}
+
+  \textbf{Tipicamente requer mudar aplicações cliente}. Exemplo: SOCKS e HTTP Proxy.
+\end{flushleft}
+
+
+\subsection{Tipos: SOCKS4 circuit gateway}
+
+\begin{center}
+  \includegraphics[scale=0.4]{55}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.4]{56}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.4]{57}
+\end{center}
+
+\pagebreak
+
+\subsection{Bastion}
+
+\begin{flushleft}
+  \textbf{Deve correr versões seguras de sistemas operativos}, com configurações seguras,
+  apenas serviços essenciais instalados, Telnet, DNS, FTP, \dots
+
+  \vspace{2mm}
+
+  \textbf{Servers públicos não devem correr num bastion}, devem correr
+  em máquinas isoladas com DMZs. Bastion apenas dá forward ao tráfego
+  até ao DMZ.
+
+  \vspace{2mm}
+
+  \textbf{É normalmente uma plataforma para gateway de aplicações}, mas quantos mais proxies
+  tem num bastion, menos performance ele tem. Proxies podem correr em máquinas
+  específicas.
+
+  \vspace{2mm}
+
+  \textbf{Execução segura de gateways de aplicações}, independente, sem previlégios
+  especiais.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{58}
+\end{center}
+
+\subsection{Serviços de segurança}
+
+\begin{flushleft}
+  \textbf{Autorização}, por parte de data streams (packet filters) ou
+  users (application gateways / circuitos).
+
+  \vspace{2mm}
+
+  \textbf{Redirecionamento de tráfego}. Para hosts dedicados, seviços locais
+  (e.g mail, www, ftp, \dots). Proxying, explicito (e.g circuit gateways) ou
+  transparente (e.g NAT address translations).
+
+  \vspace{2mm}
+
+  \textbf{Processamento de conteúdo de uma aplicação}. Analise de conteúdo (deteção de
+  virus), mudar o nível mais alto dos protocolos (remoção de virus).
+
+  \vspace{2mm}
+
+  \textbf{Comunicação segura}. Através de Virtual Private Networks (VPNs) (encriptação
+  e controlo de integridade do flow dos dados sobre público (inseguro)). Tunneling ou seja,
+  extensões de domínios IP para nós distante.
+  
+  \vspace{2mm}
+
+  \textbf{Defesa contra tentativas de DoS}, usa deteção de ataques,
+  ou seja, volumes de tráfego estranho, volume elevado, datagrams mal formados.
+
+  \vspace{2mm}
+
+  \textbf{Defesa contra leaks de informação}, deteção de tráfego estranha e
+  controlo de comportamentos contra modelos conhecidos.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Limitações}
+
+\begin{flushleft}
+  \begin{flushleft}
+    \textbf{Não resolvem o problema de os atacantes estarem dentro da rede interna}. A não ser
+    que a rede interna esteja segmantada em sub-redes, com firewalls entre elas.
+    Os switches normalmente não suportam operações de firewalls.
+
+    \vspace{2mm}
+
+    \textbf{Eficiência no controlo de conecções externas}
+
+    \vspace{2mm}
+
+    \textbf{Falta de controlo sobre interações camufladas/escondidas}
+
+    \vspace{2mm}
+
+    \textbf{Dificil de gerirem ambientescom interesses heterogéneos} como
+    universidades.
+  \end{flushleft}
+\end{flushleft}
+
+\subsection{Firewalls pessoais}
+
+\begin{flushleft}
+  \textbf{Adotado para proteção de individuos(hosts pessoais)}.
+
+  \vspace{2mm}
+
+  \textbf{Owners podem definir um conjunto adicional de políticas}. Quais aplicações
+  são autorizadas a acessar a rede, quais protocolos que as aplicações podem usar,
+  os host/redes que os protocolos/aplicações podem comunicar com.
+
+  \vspace{2mm}
+
+  \textbf{Reduzir o risco de compromisso entre hists e a rede}. Permite
+  à máquina se proteger a si própria independentemente da proteção fornecida
+  pela rede, útil para máquinas que migram entre redes.
+\end{flushleft}
+
+
+
+\subsubsection{Firewalls pessoais: Problemas}
+
+\begin{flushleft}
+  \textbf{Users normais não são experts em segurança}, não sabem como
+  a rede IP funciona, não sabem se uma interação é normal ou não e não
+  sabem as políticas de sugurança base que devem aplicar.
+
+  \vspace{2mm}
+
+  \textbf{Bloquear interações suspeitas pode nulificar funcionalidades}.
+  Rede de comunicações é um commonplace, as aplicações não infromam os users
+  sobre as necessidades de comunicação.
+
+  \vspace{2mm}
+
+  \textbf{Complexidade das operações}. Ambientes de operações diferentes ou
+  interfaces de rede diferentes resultam em políticas diferentes.
+
+  \vspace{2mm}
+
+  \textbf{A combinação de cenários operacionais, interfaces de rede e
+  interações aceitáveis para cada caso resultam em um enorme número de
+  regras}.
+\end{flushleft}
+
+\subsection{IPTables}
+
+\begin{center}
+  \includegraphics[scale=0.35]{59}
+  \includegraphics[scale=0.35]{60}
+\end{center}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.35]{61}
+  \includegraphics[scale=0.35]{62}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.35]{63}
+  \includegraphics[scale=0.35]{64}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.35]{65}
+  \includegraphics[scale=0.35]{66}
+\end{center}
+
+\pagebreak
+
+\section{Criptografia Moderna} 
+
+\subsection{Cifras Simétricas}
+
+\subsubsection{Terminologia}
+
+\begin{flushleft}
+  \textbf{Criptografia -} Arte ou ciencia de escrever as escondidas
+  (escrita confidencial). Inicialmente era usada para manter a confidencialidade
+  de informação.
+
+  \vspace{2mm}
+
+  \textbf{Steganografia -} Arte de esconder dados.
+
+  \vspace{2mm}
+
+  \textbf{Criptoanálise -} Arte ou ciencia de quebrar sistemas
+  criptográficos ou informação encryptada.
+
+  \vspace{2mm}
+
+  \textbf{Criptologia -} Criptografia + Criptoanálise.
+
+  \vspace{2mm}
+
+  \textbf{Cifra -} Técnica especifica de criptografia.
+
+  \vspace{2mm}
+
+  \textbf{Operação de cifra:}
+  \begin{itemize}
+    \item \textbf{Encryption:} Informação original $\rightarrow$ Criptograma;
+    \item \textbf{Decryption:} Criptograma $\rightarrow$ Informação original;
+    
+    \vspace{2mm}
+
+    Informação original aka plaintext ou cleartext.
+
+    Criptograma aka ciphertext.
+
+    \vspace{2mm}
+
+    \item \textbf{Algoritomo:} Forma de transformar dados.
+    \item \textbf{Chave:} Parâmetro(s) para o algoritmo (influencia
+    o algoritmo executado).
+  \end{itemize}
+
+  \subsubsection{Operações de cifra}
+
+  \begin{center}
+    \includegraphics[scale=0.3]{67}
+  \end{center}
+
+  \pagebreak
+
+  \subsubsection{Casos de Uso (Cifras Simétricas)}
+
+  \begin{center}
+    \includegraphics[scale=0.3]{68}
+  \end{center}
+
+  \subsubsection{Griptoanálise: objetivos}
+
+  \begin{flushleft}
+    \textbf{Descobrir o plaintext original}, qual cifra originou um dado chiphertext.
+
+    \vspace{2mm}
+
+    \textbf{Descobrir a cipher key}: Permite a decriptação de ciphertexts criados
+    com a mesma chave.
+
+    \vspace{2mm}
+
+    \textbf{Descobrir o algoritmo de cifra}, ou um algoritmo equivalente. Normalmente,
+    os algoritmos não são secretos, mas há exceções (e..g Lorenz, A5 (GSM), \dots). Usando
+    engenharia reversa.
+  \end{flushleft}
+\end{flushleft}
+
+\subsubsection{Ataques de Criptoanálise: Abordagens}
+
+\begin{center}
+  \includegraphics[scale=0.3]{69}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Brute Force -} Procura exaustiva pelo espaço de chaves até encontar
+  um match. Normalmente, não é possível para um espaço de chaves grande. Ser
+  aleatório é fundamental!
+
+  \vspace{2mm}
+
+  \textbf{Clever Attacks -} Reduz o espaço de procura para um conjunto mais pequeno
+  de potenciais candidatos: palavras, números, tamanho restrito ou alfabético.
+  Identifica padrões em diferentes operações, \dots
+\end{flushleft}
+
+\subsubsection{Cifras de Computador}
+
+\begin{flushleft}
+  \textbf{Operam fazendo substituições}. A informação original é uma sequência de
+  \uline{símbolos}, cada símbolo é trocado por um \uline{símbolo de substituição} (normalmente do mesmo tamanho (
+    substituição polipófica)). Simbolos de substituição são escolhidos de um \uline{alfabeto
+    de substituição}.
+
+  \vspace{2mm}
+
+  \textbf{Simbolos habituais:} Bit ou bloco de bits.
+
+  \vspace{2mm}
+
+  \textbf{Estratégias:}
+  \begin{itemize}
+    \item Substituição \uline{Monoalfabética}: Chave $\rightarrow$ Um alfabeto de substituição;
+    \item Substituição \uline{Polialfabética}: Chave $\rightarrow$ Um conjunto de alfabetos de substituição; 
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Stream Ciphers}
+
+\begin{flushleft}
+  \textbf{Encriptação/decriptação misturando streams}. Consideram
+  um stream de bits. Cada plaintext/ciphertext bit é \textbf{XORed}
+  com cada bit do keystream.
+  
+  \begin{center}
+    \includegraphics[scale=0.3]{70}
+  \end{center}
+
+  \vspace{2mm}
+
+  \textbf{São cifras polialfabéticas}
+
+  \vspace{2mm}
+
+  \textbf{Keystream:} Produzido de forma aleatória, tão maior quanto o dado
+  processado, única cifra perfeita, raramente usada. Pseudo-aleatória, produzida
+  de uma chave limitada (stream ciphers normais).
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Block Ciphers}
+
+\begin{flushright}
+  \textbf{Ecripta/decripta uma sequência de blocos}. Os simbolos são blocos de bits
+  de tamanho fixo. Normalmente usam blocos de bytes como simbolos.
+
+  \vspace{2mm}
+
+  \textbf{Cifras de bloco são cifras monoalfabéticas}. Algumas podem ser
+  cifras polipóficas.
+\end{flushright}
+
+\subsubsection{Cifras de Computador: Simétricas}
+
+\begin{flushleft}
+  \textbf{Encriptação/decriptação usando a mesma chave}. Estratégia mais velha.
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Assimétricas}
+
+\begin{flushleft}
+  \textbf{Encriptação/decriptação com chaves diferentes, relacionadas}.
+  Par de chaves: Componente pública e privada.
+\end{flushleft}
+
+\subsubsection{Cifras de Computador: Combinações}
+
+\begin{flushleft}
+  \textbf{Stream ciphers (simétricas):} Cifras polialfabéticas, keystream
+  definida pela chave, keystream e XOR implmentam uma transformação polialfabética.
+
+  \vspace{2mm}
+
+  \textbf{Block ciphers (simétricas):} Cifras monoalfabéticas, alfabeto de substituição
+  é definido pela chave.
+
+  \vspace{2mm}
+
+  \textbf{Block ciphers (assimétricas):} Cifras Polialfabética (não por natureza,
+  mas para razões de segurança), as funcionalidades destas cifras não são
+  homogéneas.
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Técnicas usadas pelas cifras}
+
+\begin{flushleft}
+  \textbf{Confusão:} Relação complexa entre a chave, plaintext e ciphertext.
+  O ciphertext (output bits) deve depender do plaintext + chave (input bits) de forma complexa.
+
+  \vspace{2mm}
+  
+  \textbf{Difusão:} Estatisticas de plaintext são dissipadas no ciphertext, deste modo
+  caso um bit do plaintext seja alterado, vários bits do ciphertext são alterados,
+  é uma maneira imprevisível e pseudo-aleatória. Efeito avalanche.
+\end{flushleft}
+
+\subsubsection{Exemplos de stream ciphers (simétricas)}
+
+\begin{center}
+  \includegraphics[scale=0.3]{71}
+\end{center}
+
+\subsubsection{Abordagem de stream ciphers (simétricas)}
+
+\begin{flushleft}
+  \textbf{Usa criptografia segura, geração de bits pseudo-aleatórios}.
+  O gerador produz um keystream, impementa o stado da máquina e é controlado por
+  dois valores: \textbf{Initialisation Vector (IV)} (define o
+  estado inicial da máquina de estados) e \textbf{Key} (define como um
+  state avança para o próximo para produzir a keystream).
+
+  \vspace{2mm}
+
+  \textbf{Criptografia segura, pseudo-aleatória significa:} O
+  keystream parece uma sequência aleatória de 0s e 1s. Se um atacante
+  aprender parte do keystream, não consegue interferir: valores do keystream
+  antigos e futuros.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{72}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Stream ciphers (simétricas): Exploitation considerations}
+
+\begin{flushleft}
+  \textbf{Duas mensagens nunca devem ser encriptadas com a mesma chavee IV}.
+  Uma vez que serão encriptadas com a mesma keystream, sendo que o conhecimento
+  de uma mensagem pode levar ao conhecimento da outra.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{73}
+  \end{center} 
+
+  \vspace{2mm}
+
+  \textbf{Keystreams podem ser períodicos (ter um ciclo)}: depende no gerador, possui
+  os mesmo problemas de cima. Plaintext deve ser mais curto que o período do keystream.
+
+
+  \vspace{2mm}
+
+  \textbf{Ciphertexts podem ser manipulados}: cada cipher bit depende apenas em um
+  bit plaintext
+
+  \begin{center}
+    \includegraphics[scale=0.3]{74}
+  \end{center}
+
+  É fundamental ter integridade do controlo de elementos (ciphertext e plaintext).
+\end{flushleft}
+
+\subsubsection{Block ciphers (simétricas): Exemplos}
+
+\begin{center}
+  \includegraphics[scale=0.3]{75}
+\end{center}
+
+\subsubsection{Block ciphers (simétricas): Abordagem}
+
+\begin{flushleft}
+  \textbf{Usa um pipline de rondas de transformação}. Cada ronda adiciona
+  confusão e difusão. Cada ronda é normalmente controlada por uma sub-chaves
+  (uma chave derivada de uma chave dada para encriptação/decriptação).
+  
+  \vspace{2mm}
+
+  \textbf{Rondas têm de ser reversíveis}, de modo a permitir a decriptação.
+  Redes de Feistel ou Substituição-Permutação são as abordagens mais comuns.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{76}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Redes de Feistel}
+
+\begin{center}
+  \includegraphics[scale=0.3]{77}
+\end{center}
+
+\subsubsection{Rede Substituição-Permutação}
+
+\begin{flushleft}
+  \textbf{SBox -} Tabela com um output para cada input (index, output = SBox[input]).
+  Sboxes podem ser contantes ou key-dependent (DES e AES são Sboxes constantes,
+  Blowfish e Twofish usam SBoxes variáveis, key-dependent).
+
+  \vspace{2mm}
+
+  \textbf{PBox -} Muda posições do input de bits.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{78}
+\end{center}
+
+\begin{center}
+  \includegraphics[scale=0.3]{79}
+  \includegraphics[scale=0.3]{80}
+  \includegraphics[scale=0.3]{81}
+\end{center}
+
+\subsubsection{Modos de Cifra: Eletronic Code Book (ECB)}
+
+\begin{flushleft}
+  \textbf{Encriptação direta para cada bloco:} $C_i = E_k(P_i)$
+
+  \vspace{2mm}
+
+  \textbf{Decriptação direta para cada bloco:} $P_i = D_k(C_i)$
+
+  \vspace{2mm}
+
+  \textbf{Blocos são processados independentemente}. Paralelismo é muito
+  possível. Existe acesso aleatório uniform
+
+  \vspace{2mm}
+
+  \textbf{Problema:} Exposição de Padrões. Se $P_1 = P_2$ então $C_1 = C_2$.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{82}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Modos de Cifra: Cipher Block Chaining (CBC)}
+
+\begin{flushleft}
+  \textbf{Encriptar cada bloco $T_i$ com feedback de $C_{i-1}$}. $C_i = E_k(P_i \oplus C_{i-1})$
+
+  \vspace{2mm}
+
+  \textbf{Decriptar cada bloco $C_i$ com feedback de $C_{i-1}$}. $P_i = D_k(C_i) \oplus C_{i-1}$
+
+  \vspace{2mm}
+
+  \textbf{O primeiro bloco usa IV}. É melhor não usar amemsa chave. Pode ser
+  vazia. 
+  
+  \vspace{2mm}
+
+  \textbf{Transformação polialfabética}, em que o feedback previne blocos iguais
+  de serem igualmente processados. Parece que temos uma key diferente em cada bloco.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{83}
+  \end{center}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{84}
+\end{center}
+
+\subsubsection{Modos de Cifra ECB/CBC: Conteúdos not block-aligned}
+
+\begin{flushleft}
+  \textbf{ECB e CBC reuqerem inputs block-aligned}. Sub-blocos finais precisam de
+  tratamento especial.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{85}
+  \end{center}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Modos Stream Cipher}
+
+\begin{flushleft}
+  \textbf{Stream ciphers usam geradores pseudo-aleatórios}. Múltiplas tecnicas para
+  os implementar. Algumas técnicas são melhores para hardware implementations
+  outras nelhores para CPU-based implementations.
+
+  \begin{center}
+    \includegraphics[scale=0.3]{86}
+  \end{center}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{87}
+  \includegraphics[scale=0.3]{88}
+  \includegraphics[scale=0.3]{89}
+  \includegraphics[scale=0.3]{90}
+  \includegraphics[scale=0.3]{91}
+  \includegraphics[scale=0.3]{92}
+  \includegraphics[scale=0.3]{93}
+\end{center}
+
+\subsection{Digest Functions}
+
+\begin{flushleft}
+  \textbf{Dá um valor de tamanho fixo a a partir de um texto de tamanho variável} (fingerprint).
+
+  \vspace{2mm}
+
+  \textbf{Produz valores muito diferentes para textos parecidos}. Criptografia
+  one-way hash functions.
+
+  \vspace{2mm}
+
+  \textbf{Propriedades relavantes:}
+  \begin{itemize}
+    \item \textbf{Resistência Preimage:} Dada uma digest, é inviável encontrar um texto original que o produza.
+    \item \textbf{Resistência 2nd-preimage:} Dado um texto, é inviável encontrar
+    outro com o mesmo digest.
+    \item \textbf{Resistência de Colisões:} É inviável encontrar dois textos
+    com o mesmo digest (Paradoxo do Aniversário).
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Digest Functions: Tamanhos}
+
+\begin{center}
+  \includegraphics[scale=0.4]{94}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Digest Functions: Conteúdo}
+
+\begin{center}
+  \includegraphics[scale=0.4]{95}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Abordagens:}
+  \begin{itemize}
+    \item Merkle-Damgård Construction (resistente a colisões, funções
+    de compressão one-way, compressão iterativa, length padding)
+    \item Sponge functions.
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{96}
+  \end{center}
+
+  \vspace{2mm}
+
+  \textbf{Algorimos mais comuns}
+  \begin{itemize}
+    \item MD5 (128 bits, já não é seguro, muito fácil de encontrar colisões)
+    \item SHA-1 (Secure Hash Algorithm, 160 bits, colisão encontrada em 2017)
+    \item SHA-2, aka SHA-256/SHA-512
+    \item SHA-3 (função de compressão sponge)
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Message Integrity Code (MIC)}
+
+\begin{flushleft}
+    \textbf{Fornece a capacidade de detetar mudanças por dispositivos}.
+    Comunicação e storage de erros, de um processo aleatório ou sem controlo.
+
+    \vspace{2mm}
+
+    \textbf{Send: Calcula MIC e envia T + MIC}. T é o texto original, MIC é o
+    digest do texto original.
+
+    \vspace{2mm}
+
+    \textbf{Receive dados (T') e verifica se H(T) = MIC}. Calcular
+    MIC' = digest(T') e validar MIC' = MIC.
+
+    \vspace{2mm}
+
+    \textbf{Não protege de mudanças planeadas para o texto}.
+    Atacante pode manipular T em T'' e calcular um novo MIC''
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Message Authentication Code (MAC)}
+
+\begin{flushleft}
+  \textbf{MIC computado com uma chave}. Apenas quem possui a chave pode
+  gerar/validar o MAC.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{97}
+\end{center}
+
+
+\subsubsection{MAC: Abordagens}
+
+\begin{flushleft}
+  \textbf{Encriptação de um digest normal}, usando, por exemplo, uma
+  cifra de bloco simétrico.
+
+  \vspace{2mm}
+
+  \textbf{Usando encriptaçãoo com feedback e error propagation} (CBC-MAC).
+
+  \textbf{Adicionando uma chave para os dados hashed}.
+  \begin{itemize}
+    \item Keyed-MD5 (128-bits). $MD5(K, keyfill, text, L, MD5fill)$
+    \item HMAC (output length depends on the function H used).
+    $HMAC(K, opad, H(K, ipad, text))$
+
+    $ipad = 0x36 \times blocksize$
+
+    $opad = 0x5C \times blocksize$
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Encriptação + Autenticação}
+
+\begin{center}
+  \includegraphics[scale=0.4]{98}
+
+  \vspace{1mm}
+
+  \includegraphics[scale=0.4]{99}
+\end{center}
 \end{document}
