@@ -1,0 +1,4 @@
+asn1crypto==1.5.1
+cached-property==1.5.2
+PyKCS11==1.4.4
+python-pkcs11==0.7.0
