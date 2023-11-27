@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1700183253 "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" "Resumos.pdf" "Resumos" 1700183253
+["pdflatex"] 1701092560 "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" "Resumos.pdf" "Resumos" 1701092560
   "/etc/texmf/web2c/texmf.cnf" 1697307530 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/mendes/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1697311057 11524 270ea80aaa0cabf6b47122c0c5a9462f ""
-  "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" 1700183252 9196 85d71b9fe0deca28dccf00643020ec9f ""
+  "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" 1701092539 10985 3ce6c102a32f5e5df61f84219f7e2c39 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -74,6 +74,10 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1697307535 128028 f533b797fba58d231669ea19e894e23e ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1697307541 1405655 b624b60f560ba141ec7f017791cb7ed1 ""
   "Images//1.png" 1700179243 27771 f9bd7b89a8f46d6c2a0b62c75fa5cfc6 ""
+  "Images//10.png" 1701091540 70647 8e0ed66c32abfd7b0a279f2a36845548 ""
+  "Images//11.png" 1701092311 45312 3fb431ebeef5e783ceea40581cf8019d ""
+  "Images//12.png" 1701092367 99807 cfe53c9a8824930f40e8667c6bf1918f ""
+  "Images//13.png" 1701092551 128180 1e0092bbbc77870ccb1d850698aa7f08 ""
   "Images//2.png" 1700179808 14370 be0f354670f3a443a298eebd7b1362b3 ""
   "Images//3.png" 1700180892 1852 83b845cd5640c8a400bf0c682f6f3638 ""
   "Images//4.png" 1700181661 28095 4f46104d43544734b64dddfa86c67a52 ""
@@ -82,8 +86,8 @@
   "Images//7.png" 1700182503 91991 9a4429b70de83306bd1b3676e6f51fab ""
   "Images//8.png" 1700182526 61319 475ae1664fede66009f3c456477e3223 ""
   "Images//9.png" 1700182846 21172 2939719f429dd3c90b54f376b47e2761 ""
-  "Resumos.aux" 1700183253 2008 0a735cb0ec795c34ae73af686c4baa6e "pdflatex"
-  "Resumos.tex" 1700183252 9196 85d71b9fe0deca28dccf00643020ec9f ""
+  "Resumos.aux" 1701092560 2553 4b6126bb8f4e4bf6f5d2514058e93650 "pdflatex"
+  "Resumos.tex" 1701092539 10985 3ce6c102a32f5e5df61f84219f7e2c39 ""
   "UA.jpg" 1700178712 24745 bb294df60b1949399db2c463a4c9dbd7 ""
   "UA.png" 1700178712 4155 29baef92e33889c7f171c7001cfe64ba ""
   (generated)

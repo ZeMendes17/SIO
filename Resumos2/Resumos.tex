@@ -338,5 +338,78 @@
 
 \section{Assinaturas digitais}
 
+\subsection{Cifras Assimétricas (de blocos)}
+
+\begin{flushleft}
+  \textbf{Usa pares de chaves:}
+  \begin{itemize}
+    \item Uma \textbf{chave privada} (pessoal, não transmissível);
+    \item Uma \textbf{chave pública} (disponível a todos);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Permite:}
+  \begin{itemize}
+    \item Confidencialidade sem qualquer exchange of secrets prévia;
+    \item Autenticação
+    \begin{itemize}
+      \item De conteúdos (integridade dos dados);
+      \item De origem (atenticação da source, ou assinatura digital);
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Assinaturas Digitais}
+
+\begin{center}
+  \includegraphics[scale=0.4]{10}
+\end{center}
+
+\pagebreak
+
+\begin{flushleft}
+  \textbf{Autenticação de conteúdos de um documento} - Garante a sua integridade
+  (não se alterou);
+
+  \vspace{2mm}
+
+  \textbf{Autenticação do autor} - Garante que a identidade do criador/origem;
+
+  \vspace{2mm}
+
+  \textbf{Previnir repudiação de assinaturas}
+  \begin{itemize}
+    \item Non-repudiation (o autor não pode negar a autoria);
+    \item Autores genuínos não podem negar a autoria (apenas a identidade
+    do autor pode gerar uma dada assinatura);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Aboradgens}
+  \begin{itemize}
+    \item Encriptação/Decifração assimétrica ou assinatura/verificação;
+    \item Funções digest (apenas para performance);
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.4]{11}
+\end{center}
+
+\subsubsection{Encriptação/Decifração signatures}
+
+\begin{center}
+  \includegraphics[scale=0.5]{12}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Assinatura digital num email: Multipart content, signature w/ certificate}
+
+\begin{center}
+  \includegraphics[scale=0.5]{13}
+\end{center}
 
 \end{document}
