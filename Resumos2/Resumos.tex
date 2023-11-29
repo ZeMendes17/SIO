@@ -412,4 +412,185 @@
   \includegraphics[scale=0.5]{13}
 \end{center}
 
+\pagebreak
+
+\section{Derivação de chaves}
+
+\begin{flushleft}
+  \textbf{Algotitmos de cifras requerem chaves de tamanho fixo} - 56, 128, 256,\dots bits;
+
+  \vspace{2mm}
+
+  \textbf{Podemos derivar chaves de múltiplas origens}- shared secrets, passwords
+  geradas por humanos, PIN codes e secrets de tamanho pequeno;
+
+  \vspace{2mm}
+
+  \textbf{Origem original pode ter baixa entropia} - reduz a dificuldade de
+  ataques de força bruta, no entanto, devemos ter uma relação forte
+  para uma chave útil;
+
+  \vspace{2mm}
+
+  \textbf{Por vezes percisamos de múltiplas chaves do mesmo material} -
+  enquanto não permite encontrar o material (a password, outra chave)
+  de uma chave nova;
+\end{flushleft}
+
+\subsection{Prepósitos de derivação de chaves}
+
+\begin{flushleft}
+  \textbf{Refroço de chaves: aumenta a segurança de uma password}
+  \begin{itemize}
+    \item Nomralmente definido por humanos;
+    \item Tornando ataques de dicionário nada práticos;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Expansão de chaves: aumenta o tamanho de uma chave}
+  \begin{itemize}
+    \item Expande o tamanho que serve o algoritmo;
+    \item Eventualmente deriva outras chaves relacionadas para outros algoritmos (ex: MAC);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Derivação de chaves}
+
+\begin{flushleft}
+  \textbf{Derivação de chaves requer a existência de:}
+  \begin{itemize}
+    \item Um \textbf{salt} que trona a derivação única;
+    \item Um problema difícil;
+    \item Um nível de complexidade escolhido;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Dificuldade de Computação}
+  \begin{itemize}
+    \item A transformação requer recursos computacionais relevantes;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Dificuldade de Memória}
+  \begin{itemize}
+    \item A transformação requer recursos de armazenamento relevantes;
+    \item Limita os ataques usando aceleração de hardware;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Derivação de chaves: PKBDF2}
+
+\begin{flushleft}
+  \textbf{Password Based Key Derivation Function 2}
+
+  \vspace{2mm}
+
+  \textbf{Produz uma chave a partir de uma password, com uma dificuldade escolhida}
+
+  \[ K = PBKDF2(PRF, Salt, rounds, dim, password) \]
+
+  \begin{itemize}
+    \item \textbf{PRF} - Pseudo-Random-Function: função digest;
+    \item \textbf{Salt} - Valor aleatório;
+    \item \textbf{Rounds} - O custo computacional (dezenas ou centenas de milhares);
+    \item \textbf{Dim} - Tamanho do resultado pretendido;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Operação: calcula operações ROUNDS x DIM a partir do PRF utilizando
+  o SALT e a PASSWORD} - um tamanho maior de rounds aumenta a custo;
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{14}
+\end{center}
+
+\pagebreak
+
+\subsection{Derivação de chaves: Scrypt}
+
+\begin{flushleft}
+  \textbf{Produz uma chave com um custo de armazenamento escolhido}
+
+  \vspace{2mm}
+
+  \[ K = scrypt(password, salt, n, p, dim, r, hLen, Mflen) \]
+
+  \begin{itemize}
+    \item \textbf{Password} - Um segredo;
+    \item \textbf{Salt} - Valor aleatório;
+    \item \textbf{n} - Parâmetro de custo;
+    \item \textbf{p} - Parâmetro de paralelismo $p \le (2^{32} -1) \times hLen / Mflen$;
+    \item \textbf{dim} - Tamanho do resultado pretendido;
+    \item \textbf{r} - Tamanho do bloco a usar (default: 8);
+    \item \textbf{hLen} - Tamanho do da função digest (32 para SHA256);
+    \item \textbf{Mflen} - Bytes na internal mix (default: $8 \times r$);
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.3]{15}
+\end{center}
+
+\pagebreak
+
+\section{Gestão de chaves assimétricas}
+
+\subsection{Problemas a resolver}
+
+\begin{flushleft}
+  \textbf{Garante um uso correto do par de chaves assimétricas}
+
+  \begin{itemize}
+     
+  
+
+    \item \textbf{Privacidade das chaves privadas}
+    \begin{itemize}
+      \item Garante a autenticidade;
+      \item Previne a repudiação de assinaturas digitais;
+    \end{itemize}
+
+    \item \textbf{Distribuição correta de chaves públicas}
+    \begin{itemize}
+      \item Garante confidencialidade;
+      \item Garante a correta validação de assinaturas digitais;
+    \end{itemize}
+
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Evolução temporal da entidade $\longleftrightarrow$ mapeamento de pares chave}
+
+  \begin{itemize}
+  
+    \item \textbf{Para combater ocurrência catastróficas} (ex: perda de chaves privadas)
+
+    \item \textbf{Para combater os requisitos de exploitations normais}
+    (ex: refresh do par de chaves para reduzir riscos personificação)
+
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Garante a correta geração de pares de chaves}
+  \begin{itemize}
+    \item \textbf{Geração aleatória de valores secretos}, de forma a poderem ser facilmente previstos;
+    \item \textbf{Aumentar a eficiência sem reduzir a segurança}
+    \begin{itemize}
+      \item Tornar mecânismos de segurança mais eficientes;
+      \item Aumentar a performance;
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Objetivos}
+
 \end{document}
