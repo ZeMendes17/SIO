@@ -593,4 +593,388 @@
 
 \subsection{Objetivos}
 
+\begin{flushleft}
+  \begin{itemize}
+    \item \textbf{Geração do par de chaves} - quando e como gerar;
+    \item \textbf{Lidar com a chave privada} - como manter a chave privada;
+    \item \textbf{Distribuição da chave pública} - como ditribuir corretamente as chaves públicas world-wide;
+    \item \textbf{Tempo de vida do par de chaves} - quando vão expirar, até quando as usar e como verificar
+    se esse par de chaves está obsuleto;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Geração de pares de chaves: Principais Designs}
+
+\textbf{Usar bons geradores de números aleatórios para produzir segredos}
+
+\begin{flushleft}
+  \textbf{O resultado é indestinguível de noise}, isto é,
+  todos os valores possíveis são igualmente prováveis e,
+  não existem padrões resultantes do número da iteração ou de valores prévios;
+
+  \vspace{2mm}
+
+  \textbf{Exemplo: Bernoulli 1/2 Generator}
+  \begin{itemize}
+    \item Gerador sem memória;
+    \item $P(b=1) = P(b=0) = 1/2$;
+    \item Coin toss (atirar uma moeda ao ar);
+  \end{itemize}
+\end{flushleft}
+
+\textbf{Facilidade sem comprometer a segurança}
+
+\begin{flushleft}
+  \textbf{Chaves públicas eficientes}
+  \begin{itemize}
+    \item Algumas são 1 bits, tipicamente $2k + 1$ valores (3, 17, 65537);
+    \item Acelerar o processo com chaves públicas (o custo é proporcional ao número de bits 1);
+    \item Sem security issues;
+  \end{itemize}
+\end{flushleft}
+
+\textbf{Self-generation de chaves privadas}
+
+\begin{flushleft}
+  \textbf{Maximiza a privacidade, uma vez que outros nunca vão conseguir usar
+  a dada chave privada}. Apenas o dono tem a chave, melhor ainda,
+  o dono não tem a chave, mas pode usá-la;
+
+  \vspace{2mm}
+
+  \textbf{Principio pode ser relaxado quando não involve a geração de assinaturas}.
+  Quando não existem issues relacionados com non-repudiation.
+\end{flushleft}
+
+\subsection{Lidar com chaves privadas}
+
+\begin{itemize}
+  \item \textbf{Correctness}
+  
+  \begin{itemize}
+    \item \textbf{A chave privada representa o sujeito} (i.e., um cidadão, um servidor, etc.).
+    O seu compromise deve ser minimizado. Cópias físicas seguras (backups) podem existir em alguns casos;
+
+    \item \textbf{O caminho de acesso à chave privada deve ser controlado}.
+    Proteção de acesso com password ou PIN code. Correctness das aplicações que usam;
+  \end{itemize}
+
+  \item \textbf{Confinement}
+  \begin{itemize}
+    \item \textbf{Proteção da chave privada dentro de um domínio seguro (reduzido) (ex: cryptographic token)}.
+    O Token gera pares de chaves, exporta a chave pública mas nunca a privada, e, este Token
+    encripta/decifra internamente com a chave privada.
+
+    \item \textbf{Exemplo: SmartCards}, podemos pedir ao cartão para cifrar/decifrar
+    algo. A chave privada nunca sai do SmartCard.
+  \end{itemize}
+\end{itemize}
+
+\pagebreak
+
+\subsection{Distribuição de chaves públicas}
+
+\begin{flushleft}
+  \textbf{Distribuição a todos os \uline{senders} de dados confidenciais}.
+  Processo manual, usando um shared secret. Ad-hoc usando certificados digitais;
+
+  \vspace{2mm}
+
+  \textbf{Distribuição a todos os \uline{receivers} de assinaturas digitais}.
+  Processo manual. Ad-hoc usando certificados digitais;
+\end{flushleft}
+
+\subsubsection{Problema}
+
+\textbf{Como garantir a Correctness de uma chave pública?}
+
+\vspace{2mm}
+
+\textbf{Disseminação confiável de chaves públicas} - Paths/Graphs confiáveis.
+Se \textbf{A confia em $K_X^+$} e \textbf{B confia em A}, então
+\textbf{B confia em $K_X^+$}.
+
+Hierarquias de certificação/grafos com as relações de confiança
+expressas entre entidades. Certificação é unidirecional!
+
+\subsection{Public key (digital) certificates}
+
+É um \textbf{documento digital issued por uma autoridade de certificação (CA)}
+
+\begin{itemize}
+  \item \textbf{Liga a chave pública a uma entidade} (ex: pessoa, servidor ou serviço);
+  \item \textbf{São documentos públicos}, não contêm informação privada,
+  apenas pública. Pode ter informação adicional (ex: URL, nome, email, etc.);
+  \item \textbf{São seguros criptograficamente},
+  digitalmente assinados pelo issuer, não podem ser alterados;
+\end{itemize}
+
+\textbf{Pode ser usado para ditribuir chaves públicas de uma forma confiável}
+
+\begin{flushleft}
+  \textbf{O certificate receiver pode ser validade de várias formas}
+  \begin{itemize}
+    \item Com a chave pública do CA;
+    \item Pode também validar a identificação;
+    \item Validar a validade;
+    \item Validar se a chave está a ser usada para o propósito correto;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{O certificate receiver confia no comportamento do CA}, pelo que
+  confia os documentos que este assina. Quando o CA associa um certificado a A,
+  se o receicer confiar no CA, então confia que a associação de A é correta.
+\end{flushleft}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.6]{16}
+\end{center}
+
+\subsection{Key pair usage}
+
+\textbf{O certificado publico conecta o par de chaves a um perfil de utilização}.
+As chaves privadas raramente são multifuncionais.
+
+\vspace{2mm}
+
+\textbf{Perfil de utilização tipico}
+\begin{itemize}
+  \item Autenticação/distribuição de chaves
+  (Digital signature, Key encipherment, Data encipherment, Key agreement)
+  \item Assinar documentos (Assinatura digital não repudiável)
+  \item Certificate issuing (exclusivo de CAs). Assinar certificados,
+  assinar CRLs (Certificate Revocation Lists)
+  \item Timestamping (exclusivo de Time Stamping Authorities TSAs)
+\end{itemize}
+
+\textbf{Certificados de chaves públicas têm uma extensão para isto},
+key usage (critical) que indica o perfil de utilização da chave pública.
+
+\subsection{Assinatura de Certificados (CA)}
+
+\begin{flushleft}
+  \textbf{Organizações que gerem certificados de chaves públicas}.
+  Companhias, não por lucro, governamentais, etc.;
+
+  \vspace{2mm}
+
+  \textbf{Define politicas e mecanismos para}:
+  \begin{itemize}
+    \item Issuing de certificados;
+    \item Revoking de certificados;
+    \item Distribuição de certificados;
+    \item Issuing e distribuição das correspondentes chaves privadas;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Gerir a lista de certificados revogados} (CRLs), interfaces
+  programaticas para verificar o estado atual de um certificado;
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Trusted Certification Authorities}
+
+\begin{flushleft}
+  \textbf{CAs intermediários} - CAs certificados por outras CAs confiaveis.
+  Usando um certificado, permitindo a criação de uma hierarquia de certificação;
+
+  \vspace{2mm}
+
+  \textbf{Anchor confiavel (ou root CA)} - Um tem uma chave pública
+  confiavel, normalmente implementada por certificados self-certified, ou seja,
+  issuer e subject são o mesmo.
+
+  Distribuição manual (ex: dentro do código do browser, OS, distribuição, etc.).
+\end{flushleft}
+
+Ver Exemplo de certificado nos slides 19-23.
+
+\subsection{Refreshing of asymmetric key
+pairs}
+
+\begin{flushleft}
+  \textbf{O par de chaves deve ter um tempo de vida limitado} - uma vez que,
+  as chaves privadas podem ser perdidas ou descobertas, e para implementar
+  uma politica de update;
+
+  \vspace{2mm}
+
+  \textbf{Problema} - Os certificados podem ser copiados e distribuidos.
+  O universo de donos de certificados é desconhecido, pelo que, não podemos
+  contactá-los para eliminar certificas específicos;
+
+  \vspace{2mm}
+
+  \textbf{Solução} - Certificados com um periodo de validade (nem antes, nem depois).
+  Listas de certificados revogados, para revogar certificados
+  antes da validade expirar;
+\end{flushleft}
+
+\subsection{Certificate Revocation Lists (CRLs)}
+
+\begin{flushleft}
+  \textbf{Base ou delta} - Completa / diferenças
+
+  \vspace{2mm}
+
+  \textbf{Listas de certificados assinados (identifiers) prematuramente
+  invalidados} 
+  \begin{itemize}
+    \item Devem ser regularmente visitado por donos de certificados
+    \item Protocolo OCSP para verificar a validade de um certificado (RFC 2560)
+    \item Pode dizer a razão da revogação (slide 31)
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Publicação e distribuição de CRLs} - Cada CA mantém
+  a sua CRL e permite o acesso publico da mesma.
+\end{flushleft}
+
+\subsection{CRL e Delta CRL}
+
+\begin{center}
+  \includegraphics[scale=0.55]{17}
+\end{center}
+
+\pagebreak
+
+\subsection{Online Certificate Status Protocol (OCSP)}
+
+\begin{flushleft}
+  \textbf{Protocolo baseado em HTTP para dar assert ao estado de um certificado}
+  \begin{itemize}
+    \item \textbf{Request} - Inclui o serial number do certificado;
+    \item \textbf{Response} - Inclui se o certificado está revoked,
+    é enviado pela CA e não possui validade;
+    \item Uma verificação por certificado;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Requer menor largura de banda para clientes} -
+  uma verificação por certificado em vez que fazer
+  download de uma lista de certificados revogados (CRL);
+
+  \vspace{2mm}
+
+  \textbf{Involve maior largura de bannda para CAs} -
+  uma verificação por certificado, problemas de privacidade
+  uma vez que um CA saberá que um certificado está a ser usado;
+  
+  \vspace{2mm}
+
+  \textbf{OOCSP stapling} - Inclui um timestamp recentemente assinado
+  na resposta do servidor para dar assert à validade. Reduz a demora
+  da verificação e carregamento no CA. Previne problemas de privacidade.
+\end{flushleft}
+
+\subsection{Distribuição de certificados de chaves públicas}
+
+\begin{flushleft}
+  \textbf{Transparente (integrado com sistemas ou aplicações)}
+  \begin{itemize}
+    \item Direcory systems, larga escala (ex: X.500 através de LDAP),
+    organizacional (ex: Windows 2000 Active Directory), etc.;
+    \item On-line: sem protocolos que usam certificados
+    para autenticação peer (ex: protocolos de comunicação segura
+    (TLS, IPSec, etc.), assinaturas digitais, dentro de MIME
+    mail messages ou dentro de documentos);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Explicito (voluntáriamente ativado pelos users)}
+  \begin{itemize}
+    \item User faz request de um serviço para obter um certificado
+    necessário (ex: pedido mandado por email, acesso a uma página HTTP pessoal).
+  \end{itemize}
+\end{flushleft}
+
+\subsection{PKI (Public Key Infrastructure)}
+
+\textbf{Infrastrutura para permitir um uso correto de chaves assimétricas e
+de certificados de chave pública}.
+
+\begin{flushleft}
+  \textbf{Criação do par de chaves assimétricas para cada entidade que participa}.
+  Politicas de participação, ploiticas de geração do par de chaves.
+
+  \vspace{2mm}
+
+  \textbf{Criação e distribuição de certificados de chaves públicas}.
+  Politicas de participação, definição de atributos de certificados.
+
+  \pagebreak
+
+  \textbf{Definição e uso de certification chains (ou paths)}.
+  Inserção numa hierarquia de certificação,
+  certificação de outros CAs.
+
+  \vspace{2mm}
+
+  \textbf{Atualização, publicação e consulta de CRLs}.
+  Politicas de revogação de certificados,
+  serviços de distribuição de CRL, serviços OCSP.
+
+  \vspace{2mm}
+
+  \textbf{Usa estruturas de dados e protocolos permitindo inter-operabilidade
+  entre componentes/serviços/pessoas}.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.6]{18}
+\end{center}
+
+\subsection{Certificate Pinning}
+
+\begin{flushleft}
+  \textbf{Se um atacante tem acesso a uma Root confiavel, pode
+  fingir ser qualquer entidade}. Manipula um CA confiavel
+  em dar issue ao certificado (pouco provável).
+  Injetar um CA costumizado na base de dados da vitima (mais provável).
+
+  \vspace{2mm}
+
+  \textbf{Certificate Pinning: adiciona a fingerprint do PubK (public key)
+  ao \uline{código fonte}}. A fingerprint é uma hash (ex: SHA256).
+
+  \vspace{2mm}
+
+  \textbf{Validação do processo:} O certificado deve ser válido a regras locais,
+  deve possuir uma chave pública com a dada fingerprint.
+\end{flushleft}
+
+\subsection{Certificate Transparency (RFC 6962)}
+
+\begin{flushleft}
+  \textbf{Problemas}
+  \begin{itemize}
+    \item CAs podem ser comprometidos (ex: DigiNotar) por atacantes,
+    governo, etc.
+    \item Comprometer é dificil de detetar. Resulta na mudança de
+    suposições associadas com o comportamento do CA.
+    O proprietário saberá sozinho.
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Definição: um sistema global que regista todas as informações sobre
+  certificados públicos criados}
+  \begin{itemize}
+    \item Garante que apenas um certificado tem as roots corretas;
+    \item Guarda a chain de certificados inteira para cada certificado;
+    \item Apresenta esta informação para auditoria (organizações
+    ou ad-hoc por end users);
+  \end{itemize}
+\end{flushleft}
+
 \end{document}
