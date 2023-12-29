@@ -977,4 +977,95 @@ de certificados de chave pública}.
   \end{itemize}
 \end{flushleft}
 
+\pagebreak
+
+\section{Mecanismos e Protocolos de Autenticação}
+
+\subsection{Autenticação (Authn)}
+
+\textbf{Prova de que uma entidade tem um atributo que diz ter}
+
+\subsection{Authn: Tipos de Prova}
+
+\begin{itemize}
+  \item \textbf{Algo que a entidade sabe}: Um segredo memorizado (ou escrito \dots);
+  \item \textbf{Algo que a entidade tem}: Um objeto/token apenas possuído pela entidade;
+  \item \textbf{Algo que a entidade é}: A Biometria da entidade;
+\end{itemize}
+
+\subsubsection{Autenticação Multi-factor}
+
+Usar simultaneamente diferentes tipos de prova. 2FA = Two Factor Authentication.
+
+\subsubsection{Risk-based MFA}
+
+MFA variável. Maior risco de ataque, mais fatores ou menos fatores risky.
+Menor risco de ataque, menos fatores ou fatores mais simples.
+
+\subsection{Authn: Objetivos}
+
+\begin{itemize}
+  \item \textbf{Autenticar interactors}, pessoas, serviços, servidores,
+  hosts, redes, etc.;
+  \item \textbf{Permitir o reforço das politicas e mecanismos de autorização},
+  \begin{itemize}
+    \item Autorização $\neq$ Autenticação;
+    \item Autorização $\rightarrow$ Autenticação;
+  \end{itemize}
+
+  \item \textbf{Facilita o abuso (exploitation) de outros protocolos security-related}.
+  Ex: distribuição de chaves para comunicação segura.
+\end{itemize}
+
+\subsection{Authn: Requisitos}
+
+\begin{itemize}
+  \item \textbf{Confiança (Trustworthiness)}
+  \begin{itemize}
+    \item Quão bom é em provar a identidade de uma entidade?
+    \item Quão dificil é de ser enganada?
+    \item Level of assurance (LoA) - Nível de confiança;
+  \end{itemize}
+
+  \item \textbf{Segredos (Secrecy)} - Nenhuma divulgação de credenciais secretas usadas por entidades legítimas.
+\end{itemize}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.5]{19}
+\end{center}
+
+\begin{itemize}
+  \item \textbf{Robustez (Robustness)}
+  \begin{itemize}
+    \item Previnir ataques ao protocolo de troca de dados;
+    \item Previnir cenários de ataques on-line DoS;
+    \item Previnir ataques de off-line dictionary;
+  \end{itemize}
+
+  \item \textbf{Simplicidade (Simplicity)} - Deve ser o mais simples
+  possível para prevenir as entidades escolherem caminhos alternativos perigosos.
+
+  \item \textbf{Lidar com vulnerabilidades introduzidas por pessoas}
+  \begin{itemize}
+    \item Têm uma tendencia natural a facilitar ou escolher atalhos;
+    \item Lidar com phishing;
+  \end{itemize}
+\end{itemize}
+
+\subsection{Authn: Entidades e Modelo de Deployment}
+
+\vspace{2mm}
+
+\begin{center}
+  \includegraphics[scale=0.55]{20}
+\end{center}
+
+\pagebreak
+
+\subsection{Authn interactions: Aboradgens Básicas}
+
+
+
 \end{document}
