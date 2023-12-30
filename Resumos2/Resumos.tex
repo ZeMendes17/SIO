@@ -1066,6 +1066,582 @@ Menor risco de ataque, menos fatores ou fatores mais simples.
 
 \subsection{Authn interactions: Aboradgens Básicas}
 
+\begin{flushleft}
+  \textbf{Abordagem Direta}
+  \begin{itemize}
+    \item Fornecer credenciais;
+    \item Esperar o veredito;
+  \end{itemize}
+  A \uline{vantagem} desta abordagem: \textbf{não é preciso computação} por parte do presenter.
+  A \uline{desvantagem}: as credenciais podem ser \textbf{expostas} a validadores maliciosos.
+
+  \vspace{2mm}
+
+  \textbf{Abordagem Challenge-Response}
+  \begin{itemize}
+    \item Obter o desafio;
+    \item Fornecer uma resposta computada a partir do desafio e das credenciais;
+    \item Esperar o veredito;
+  \end{itemize}
+  A \uline{vantagem} desta abordagem: as credenciais \textbf{não são expostas} a validadores maliciosos.
+  A \uline{desvantagem}: requere \textbf{computação} por parte do presenter.
+\end{flushleft}
+
+\subsection{Authn of subjects: Direct Approach w/ known password}
+
+\textbf{Uma password é verificada comparando com valores previamnete armazenados},
+para uma dada identidade (ex: username).
+
+\vspace{2mm}
+
+\textbf{Valor pessoal armazenado}: É transformado por uma função unidirecional.
+Em Windows, uma digest function, em UNIX, DES hash + salt, em Linux,
+MD5 + salt (hash é configurável).
+
+\vspace{3mm}
+
+\textbf{Melhor: PBKDF2, Script with high complexity}.
+
+\begin{center}
+  \includegraphics[scale=0.55]{21}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Vantagem:} Simplicidade;
+
+  \vspace{2mm}
+
+  \textbf{Problemas:} 
+  
+  \begin{itemize}
+    \item A utilização de passwords fracas (permitindo dictionary attacks)
+    \item Transmissão da password atraves de canais de comunicação inseguros,
+    Eavesdroppers podem obter a password facilemnete (ex: Unix remote services, PAP);
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Authn of people: Direct Approach w/ biometrics}
+
+\begin{flushleft}
+  \textbf{As pessoas são autenticadas usando partes do corpo}, como
+  \uline{biometric samples}, fingerprints, iris, face geometry,
+  voice timber, manual writing, vein matching, etc.
+
+  \vspace{2mm}
+
+  \textbf{Estas medidas são comparadas com registos pessoais} (referencias biometricas (templates)),
+  registadas no sistema com um procedimento prévio de enrollment.
+
+  \vspace{2mm}
+
+  \textbf{Identificação vs Autenticação}
+  \begin{itemize}
+    \item \textbf{Identificação} - 1-to-many verificações para match;
+    \item \textbf{Autenticação} - 1-to-1 verificações para match;
+  \end{itemize}
+\end{flushleft}
+
+\begin{flushleft}
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item As pessoas não precisam de memorizar ou ter a password consigo;
+    \item As pessoas não podem escolher passwords fracas;
+    \item As credenciais de autenticação não podem ser transferidas a outros;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Problemas:}
+  \begin{itemize}
+    \item Métodos biométricos ainda são pouco fiáveis, em muitos casos
+    podem ser enganados facilmente (ex: fingerprint, face recognition, etc.);
+
+    \item As pessoas não podem mostrar as credenciais (em caso de roubo);
+    \item Credenciais não podem ser transferidas entre individuos (casos extraordiários);
+    \item Podem causar perigos a inidivuos, a integridade física pode ser comprometida para obter as credenciais;
+    \item Não é facil de ser implementada em sistemas remotos, pois é obrigatório ter dispositivos biométricos seguros e confiaveis;
+    \item Biometrias podem revelar segredos de outras pessoas (doenças);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Authn of subjects: Direct Approach w/ one-time passwords}
+
+\begin{flushleft}
+  \textbf{One-Time passwords = segredos que podem ser usados apenas uma vez}, pre-distribuidos diretamente,
+  ou o resultado de uma função geradora. Exemplo: Códigos do banco, Google Backup Codes, etc.
+
+
+  \vspace{2mm}
+
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item Podem ser eavesdropped, permitindo o seu uso em canais sem encriptação;
+    \item Podem ser escolhidas pelo authenticator, o que pode colocar uma dada complexidade;
+    \item Pode depender de uma password partilhada;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Problemas:}
+  \begin{itemize}
+    \item Entidades a interagir precisam de saber qual password usar em cada ocasião;
+    \item Individuos podem querer recursos adicionais para guardar/gerar passwords;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{YubiKey}
+
+\begin{flushleft}
+  \textbf{Dispositivo pessoal de autenticação}: USB, Bluetooth e/ou NFC.
+
+  \vspace{2mm}
+
+  \textbf{Ativação gera uma chave de 44 caracteres}, emula um teclado USB, suporta HOTP (events) ou TOTP (temporal).
+  Se um desafio é fornecido, o user toca no botão e obtem a resposta. Possui vários algorimos, incluindo AES 256.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.5]{22}
+\end{center}
+
+\subsection{Challenge-Response Approach}
+
+\begin{flushleft}
+  \textbf{O authenticator fornece um desafio}, um nonce (value not once used), normalmente random, pode ser um contador.
+
+  \vspace{2mm}
+
+  \textbf{A entidade autenticada transforma o desafio}, o método de transformação é partilhado pelo authenticator.
+
+  \vspace{2mm}
+
+  \textbf{O resultado é enviado de volta ao authenticator}
+
+  \vspace{2mm}
+
+  \textbf{O authenticator verifica o resultado}. Calcula o resultado utilizando
+  o mesmo método e desafio, ou produz um valor do resultado e avalia se é igual
+  ao desafio, ou a algum valor relacionado.
+
+  \vspace{2mm}
+
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item As credenciais de autenticação não são expostas;
+    \item Um Eavesdropper vai ver o desafio e a resposta, mas não consegue
+    calcular a resposta sem o método de transformação;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Problemas:}
+
+  \begin{itemize}
+    \item Entidades autenticadas devem ter a capacidade de calcular resultados de desafios
+    (hardware token ou software application);
+    \item O authenticator deve precisar de manyer segredos partilhados (em clear text). Estes
+    podem ser roubados, os users podem reutilizar segredos noutro sistema, permitindo ataques;
+    \item Pode ser possível calcular todos os resultados para um (ou todos) desafio(s) (revelando o segredo usado);
+    \item Pode ser vulneravel a dictionary attacks;
+    \item O authenticator NUNCA deve enviar um mesmo desafio a um mesmo user;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Authn of subjects: Challenge-Response w/ Smartcards}
+
+\begin{flushleft}
+  \textbf{Credenciais de autenticação}:
+  \begin{itemize}
+    \item Ter um smartcard (ex: cartão de cidadão);
+    \item A chave privada guardada no smartcard;
+    \item O PIN de acesso à chave;
+  \end{itemize}
+
+  \textbf{O authenticator sabe} a chave pública;
+
+  \vspace{2mm}
+
+  \textbf{Robusto contra:}
+  \begin{itemize}
+    \item Dictionary attacks;
+    \item Ataque offlince a uma base de dados;
+    \item Canais inseguros;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Prorocolo Challenge-Response}:
+  \begin{itemize}
+    \item O authenticator gera o desafio;
+    \item O dono do smartcard cifra o desafio com a chave privada
+    (guardada no smartcard, protegida pelo PIN). Em alternativa pode assinar o desafio;
+    \item O authenticator decifra o resultado com a chave pública.
+    Se o resultado da decifra corresponder ao desafio, a autenticação é bem sucedida. Em alternativa,
+    pode verificar a assinatura (que é o mesmo processo);
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Authn of subjects: Challenge-Response w/ Other Tokens}
+
+\begin{flushleft}
+  \textbf{Tokens FIDO2 (FIDO Alliance)}
+  \begin{itemize}
+    \item Para ambientes desktop e mobile;
+    \item WebAuthn, especificação para web authentication;
+    \item Client-to-Authenticator Protocol (CTAP);
+    \item Segurança
+    \begin{itemize}
+      \item Credenciais nunca deixam o dispositivo do user e unca são guardadas num servidor;
+      \item Sem risco de phishing, sem roubo de passwords (mesmo assim, o token pode ser roubado);
+      \item Sem ataques de replay;
+      \item Token certification levels;
+    \end{itemize}
+    \item Privacidade
+    \begin{itemize}
+      \item Credenciais são únicas por website;
+      \item Tracking não é ppossivel (diferentes web sites, diferentes chaves públicas para um mesmo token);
+      \item Dados biométricos, quando usados, nunca saem do dispositivo do user;
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.6]{23}
+\end{center}
+
+\subsection{Authn of subjects: Challenge-Response w/ Shared Secret}
+
+\begin{flushleft}
+  \textbf{Credenciais de autenticação}: Password selecionada pelo user;
+
+  \vspace{2mm}
+
+  \textbf{O authenticator sabe}:
+  \begin{itemize}
+    \item Péssima abordagem: a shared password;
+    \item Melhor abordagem: Uma transformação da shared password.
+    A transformação deve ser unidirecional;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Protocolo Básico Challenge-Response}:
+
+  \begin{center}
+    \includegraphics[scale=0.6]{24}
+  \end{center}
+\end{flushleft}
+
+\subsection{PAP e CHAP (RFC 1334, 1992, RFC 1994, 1996)}
+
+\begin{flushleft}
+  \textbf{Protocolos utilizados para PPP (Point-to-Point Protocol)}.
+  Autenticação unidirecional. O authenticator autentica users, \uline{mas
+  os users não autenticam o authenticator}.
+
+  \vspace{2mm}
+
+  \textbf{PAP (PPP Authentication Protocol)}: Representação simples de um par de UID/password.
+  Transmissão insegura (em clear text).
+
+  \vspace{2mm}
+
+  \textbf{CHAP (Challenge-response Authentication Protocol)}:
+  \begin{itemize}
+    \item Aut $\rightarrow$ U: authID, challenge;
+    \item U $\rightarrow$ Aut: authID, MD5(authID, secret, challenge), identity;
+    \item Aut $\rightarrow$ U: authID, OK/NOT OK;
+  \end{itemize}
+
+  O authenticator pode pedir mais autenticações a qualquer momento.
+\end{flushleft}
+
+\subsection{Authn of subjects: Challenge-Response w/ Shared Key}
+
+\begin{flushleft}
+  \textbf{Utiliza uma chave criptografica em vez de uma password}.
+  Robusto contra dictionary attacks. Requer um dispositivo para
+  armazenar a shared key.
+\end{flushleft}
+
+\subsection{GSM Subscriber Authentication}
+
+\begin{flushleft}
+  \textbf{Usa um segredo partilhado entre o HLR e o telemovel subscrito}
+  \begin{itemize}
+    \item Utiliza uma shared key de 128-bit (não é um par de chaves assimétricas);
+    \item A chave é armazenada no SIM card;
+    \item o SIM card é desbloqueado com um PIN;
+    \item O SIM card responde a desafios usando a shared key;
+  \end{itemize}
+
+  \textbf{Utiliza (initially unkonwn algorithms):} A3 (autenticação),
+  A8 (geração de session key), A5 (stream cipher para comunicação).
+
+  \vspace{2mm}
+
+  \textbf{A3 e A8 são executados pelo SIM, A5 é executado pela baseband}.
+  A3 e A8 podem ser escolhidos pelo operador.
+\end{flushleft}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.6]{25}
+\end{center}
+
+\subsection{Autenticação de Sistemas}
+
+\begin{flushleft}
+  \textbf{Por nome (DNS) ou MAC/IP address}: Muito fraco, sem prova
+  criptografica. Mesmo assim é usado em alguns serviços (ex: NFS, TCP wrappers).
+
+  \vspace{2mm}
+
+  \textbf{Com chaves criptograficas}: Secret keys partilhadas entre entidades que
+  comunicam frequentemente. Par assimétrico de chaves, um por host.
+  Chaves públicas pre-partilhadas com entidades que comunicam frequentemente.
+  Chaves públicas certificadas por umas third-party (um CA).
+
+  \vspace{2mm}
+
+  \textbf{Autenticação de um host}: Todos os serviços co-localizados num mesmo
+  host são automaticamente e indiretamente autenticados.
+
+  \vspace{2mm}
+
+  \textbf{Credenciais exclusivas para cada serviço}
+
+  \vspace{2mm}
+
+  \textbf{Autenticação}:
+  \begin{itemize}
+    \item Secret keys partilhadas com clientes (quando estas precisam
+    de autenticação dos clientes);
+    \item Par de chaves assimétricas por host/service (certificado por outros ou não);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{TLS (Transport Layer Security, RFC 2246)}
+
+\begin{flushleft}
+  \textbf{Protocolo de segurança para comunicação em TCP/IP}.
+  Evoluiu do SSL V3 (Secure Socket Layer). Gere sessões seguras sobre
+  TCP/IP, individuais a cada aplicação. Inicialmente usado para o trafego
+  de HTTP.
+
+  \vspace{2mm}
+
+  \textbf{Mecanismos de segurança}:
+  \begin{itemize}
+    \item Confidencialidade e integridade da comunicação entre entidades
+    (distribuição de chaves, negociação de cifras, digests e outros mecanismos);
+    \item Autenticação das entidades envolvidas
+    \begin{itemize}
+      \item Servers, serviços, etc.
+      \item Clients (não tão comum)
+      \item Ambos utilizando chaves assimétricas e certificados X.509;
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\begin{center}
+  \includegraphics[scale=0.6]{26}
+\end{center}
+
+\subsection{TLS Ciphersuites}
+
+\begin{flushleft}
+  \textbf{Se um servidor suporta um único algoritmo, não pode experar que
+  todos os clientes suportem o mesmo algoritmo} (mais poderoso/limitado, velho/novo).
+
+  \vspace{2mm}
+
+  \textbf{O conceito de ciphersuite permite a negociação de mecanismos
+  entre cliente e servidor}. Ambos mandam os seus ciphersuites suportados,
+  e escolhem um que ambos suportem. O servidor escolhe no caso.
+
+  \vspace{2mm}
+
+  \textbf{Exemplo:} ECDHE-RSA-AES128-GCM-SHA256
+
+  \begin{itemize}
+    \item \textbf{ECDHE} - Ephemeral Elliptic Curve Diffie-Hellman, é o algoritmo de negociação
+    \item \textbf{RSA} - Algoritmo de autenticação;
+    \item \textbf{AES-128 GCM} - Algoritmo de cifra e modo de cifra
+    \item \textbf{SHA256} - Algoritmo de controlo de integridade
+  \end{itemize}
+\end{flushleft}
+
+\subsection{SSH (Secure SHell)}
+
+\begin{flushleft}
+  \textbf{Gere sessões seguras da consola sobre TCP/IP}. Inicialmente desenhado
+  para substituir o Telnet application/protocol. Atualmente utilizado
+  em muitas outras aplicações\begin{itemize}
+    \item Execução de comandos remotos de forma segura (rsh/rexec);
+    \item Cópia segura de conteudos de/para hosts remotos (rcp);
+    \item Transferência segura de ficheiros (sftp) (Secure FTP);
+    \item Secure (Generic) communication tunnels (carry standard IP packets);
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Mecanismos de segurança}:
+  \begin{itemize}
+    \item Confidencialidade e integridade das comunicações (distribuição de chaves);
+    \item Autenticação das entidades envolvidas
+    \begin{itemize}
+      \item Servidor/Hosts;
+      \item Users;
+      \item Os dois atingidos através de vários mecanismos diferenciados;
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\subsection{SSH: Mecanismos de Autenticação}
+
+\begin{flushleft}
+  \textbf{Servidor: Par de chaves assimétricas}
+  \begin{itemize}
+    \item As chaves são distribuidas durante a interação (not certified!);
+    \item Os clientes guardam as chaves públicas de interações previas.
+    A chave deve ser guardada em ambientes confiados. Se a chave mudar o cliente
+    deve ser avisado (ex: servidor reinstalado, key regenerou, etc.).
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Clientes: Autenticação é configuravel}
+  \begin{itemize}
+    \item Default: username + password;
+    \item Outra: username + chave privada (a pública deve estar pré-instalada no servidor);
+    \item Outra: itegração com PAM para mecanismos de autenticação alternativos;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Centralized network authentication}
+
+\begin{flushleft}
+  \textbf{Usada para restringir o acesso à rede a clientes conhecidos}
+  \begin{itemize}
+    \item Redes de cabo;
+    \item Redes wireless;
+    \item Em VPNs (Virtual Private Networks);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Geralmente implementado por um serviço central}
+  \begin{itemize}
+    \item Servidor AAA (Authentication, Authorization, Accounting), ex: RADIUS e DIAMETER;
+    \item O servidor define quais serviços de rede o user pode usar;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Autenticação por um IdP}
+
+\begin{center}
+  \includegraphics[scale=0.5]{27}
+\end{center}
+
+\subsection{Autenticação Centralizada}
+
+\begin{flushleft}
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item Pode reutilizar as mesmas credenciais sobre múltiplos sistemas/serviços;
+    \item Repositório único e seguro para as credenciais (mais dificil de roubar Credenciais
+    quando utilizado em varios serviços);
+    \item Pode implementar restrições para serviços/sistemas;
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Requer servidores adicionais;
+    \item Single point of failure: sem sistemas de autenticação, ninguém
+    pode ser autenticado (importante deploy a credenciais para admins);
+    \item Introduz delays no processo de autenticação;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Single Sign-On}
+
+\begin{flushleft}
+  \textbf{Uma facilidade normalmente associada com IdP}. Ambos
+  não obrigatório e nem sempre apropriado.
+
+  \vspace{2mm}
+
+  \textbf{SSO existe para simplificar a vida dos users}. Eles fazem login
+  apenas uma vez para acessar vários serviços durante um periodo de tempo.
+\end{flushleft}
+
+\pagebreak
+
+\subsection{OAuth 2.0: delegação (RFC 6749)}
+
+\begin{flushleft}
+  \textbf{Uma framework para permitir aos users delegar acesso aos
+  seus recursos pela sua conta}.
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.6]{28}
+\end{center}
+
+\subsection{OAuth 2.0 roles}
+
+\begin{flushleft}
+  \textbf{Resource Owner}: Uma entidade capaz de conceder acesso
+  a um \textbf{recurso protegido}. \textbf{End-user}: um
+  Resource Owner que é uma pessoa.
+
+  \vspace{2mm}
+
+  \textbf{Resource Server}: O servidor que hospeda os recursos protegidos.
+  Responde a pedidos de acesso a recursos protegidos utilizando \textbf{tokens de acesso}.
+
+  \vspace{2mm}
+
+  \textbf{Client}: Uma \textbf{aplicação} que realiza requests por recursos protegidos
+  em nome do Resource Owner e com a sua autorização.
+
+  \vspace{2mm}
+
+  \textbf{Authorization Server}: O servidor que emite tokens de acesso
+  para os clientes após \textbf{autenticar o Resource Owner} com sucesso
+  e obter a sua \textbf{autorização} para os clientes acederem a um dos seus
+  (users) recursos.
+\end{flushleft}
+
+\subsection{Protocol Flow}
+
+\begin{center}
+  \includegraphics[scale=0.6]{29}
+\end{center}
+
+\subsection{OpenID Connect (OIDC)}
+
+\begin{flushleft}
+  \textbf{Uma camada de identificação em cima do OAuth 2.0}.
+  OAuth 2.0 fornece a autenticação centralizada fundamental.
+  Os recursos protegidos são os atributos da entidade,
+  empacotados em \textbf{scopes}, os atributos são designados
+  por (identity) \textbf{claims}.
+\end{flushleft}
 
 
 \end{document}
