@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1704197617 "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" "Resumos.pdf" "Resumos" 1704197618
+["pdflatex"] 1704222367 "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" "Resumos.pdf" "Resumos" 1704222369
   "/etc/texmf/web2c/texmf.cnf" 1703524893 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/mendes/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1703525194 11524 6deddaf5c79534458281f6cebbd7c0ac ""
-  "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" 1704197617 65401 595d8ef5f9dc5d157bf96c3ad17cf133 ""
+  "/home/mendes/Desktop/SIO/Resumos2/Resumos.tex" 1704222367 72830 1c7f24668a7ee1b53784491fb11fae38 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -106,14 +106,15 @@
   "Images//36.png" 1704162538 38327 4fb1bd97eb24fc19380b6d2d9b2d53b6 ""
   "Images//37.png" 1704196980 39793 ab1a873ff78f46cec508822f0d576ecc ""
   "Images//38.png" 1704197166 60669 639ebad13cecfc78a66f2ca6b06542fe ""
+  "Images//39.png" 1704219120 32723 caf4e5397705f6c7995aaec9786ca3bc ""
   "Images//4.png" 1703523348 28095 4f46104d43544734b64dddfa86c67a52 ""
   "Images//5.png" 1703523348 50330 368da6e69e84078a518943b62bac0cc6 ""
   "Images//6.png" 1703523348 73947 68dd01992aa5b49fef00bcd268e27870 ""
   "Images//7.png" 1703523348 91991 9a4429b70de83306bd1b3676e6f51fab ""
   "Images//8.png" 1703523348 61319 475ae1664fede66009f3c456477e3223 ""
   "Images//9.png" 1703523348 21172 2939719f429dd3c90b54f376b47e2761 ""
-  "Resumos.aux" 1704197618 11596 8e1957fae318c7cf31bae4537adbdc62 "pdflatex"
-  "Resumos.tex" 1704197617 65401 595d8ef5f9dc5d157bf96c3ad17cf133 ""
+  "Resumos.aux" 1704222369 12581 68bcb7cc34e15cd826aac9ed7df4c263 "pdflatex"
+  "Resumos.tex" 1704222367 72830 1c7f24668a7ee1b53784491fb11fae38 ""
   "UA.jpg" 1703523348 24745 bb294df60b1949399db2c463a4c9dbd7 ""
   "UA.png" 1703523348 4155 29baef92e33889c7f171c7001cfe64ba ""
   (generated)

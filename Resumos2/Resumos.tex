@@ -387,7 +387,7 @@
 
   \vspace{2mm}
 
-  \textbf{Aboradgens}
+  \textbf{Abordagens}
   \begin{itemize}
     \item Encriptação/Decifração assimétrica ou assinatura/verificação;
     \item Funções digest (apenas para performance);
@@ -1064,7 +1064,7 @@ Menor risco de ataque, menos fatores ou fatores mais simples.
 
 \pagebreak
 
-\subsection{Authn interactions: Aboradgens Básicas}
+\subsection{Authn interactions: Abordagens Básicas}
 
 \begin{flushleft}
   \textbf{Abordagem Direta}
@@ -2142,6 +2142,216 @@ a cópia, armazenamento e recuperação!
     \item Permite centralizar as politicas de armazenamento;
     \item Fornece uma interface normalizada, independente de armazenamento real;
     \item Pode ser usado para implementar backups distribuidos;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\section{Armazenamento confidencial}
+
+\subsection{Problemas}
+
+\textbf{As proteções fornecidas por sistema de ficheiros
+tradicional são limitadas}
+
+\begin{flushleft}
+  \textbf{Proteções Fisicas}
+  \begin{itemize}
+    \item O sistema de ficheiros é limitado a um dispositivo fisico;
+  \end{itemize}
+
+  \textbf{Proteções Lógicas}
+  \begin{itemize}
+    \item Controlo de acesso a ficheiros, controlado pelo sistema operativo;
+    \item Utilizando ACLs e outros mecanismos de confinamento;
+  \end{itemize}
+\end{flushleft}
+
+\textbf{Existe um número relevante de situações onde proteções
+tradicionais são irrelevantes}
+
+\begin{flushleft}
+  \textbf{Quando existem um acesso direto ou físico a dispositivos}
+  \begin{itemize}
+    \item Acesso a dispositivos host (laptopts, smartphones, servers);
+    \item Acesso a dispositivos de armazenamento  externos
+    (Tapes, CDs, DVDs, SSDs, NAS);
+  \end{itemize}
+
+  \textbf{Acesso pelo sistema com os direitos corretos}
+  \begin{itemize}
+    \item Acesso não-ético por administradores de sistemas;
+    \item Com ataques de impersonificação;
+  \end{itemize}
+\end{flushleft}
+
+\textbf{Existe uma prevalência de armazenamento distribuído.
+Impõe confiar em múltiplos administradores, por vezes desconhecidos}
+
+\begin{flushleft}
+  \textbf{Autenticação é feita remotamente}
+  \begin{itemize}
+    \item Por vezes não é claro qual é o nível da segurança
+    dos métodos;
+    \item O fornecedor de armazenamento pode ter integrações desconhecidas;
+    \item Modelos de interação são complexos, através de redes externas;
+    \item Múltiplas entidades envolvidas;
+  \end{itemize}
+
+  \textbf{A informação é transmitida através de canais de comunicação}
+  \begin{itemize}
+    \item Pode violar a confidencialidade, integridade
+    e criar problemas de privacidade;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsection{Solução: Encriptação de dados}
+
+\begin{flushleft}
+  \textbf{Encriptação/Decifração de conteúdos de ficheiros}
+  \begin{itemize}
+    \item Permite transferencia segura através de redes inseguras;
+    \item Permite armazenamento seguro em localizações inseguras
+    (gerido por entidades externas, ou armazenamentos partilhados);
+  \end{itemize}
+
+  \textbf{Problemas com a encriptação}
+  \begin{itemize}
+    \item Acesso à informação. O user pode perder as suas chaves (key loss = data loss),
+    o armazenamento das chaves pode reduzir a segurança num todo;
+    \item Partilha de ficheiros (partilhar dados implica partilhar chaves);
+    \item Pode interferir com a gestão tradicional e tarefas de recuperação
+    (content analysis, deduplication, indexing, \dots);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Abordagens}
+
+\begin{center}
+  \includegraphics[scale=0.6]{39}
+\end{center}
+
+\subsubsection{Encriptação nas Aplicações}
+
+\begin{flushleft}
+  \textbf{Informação é transformada por cada aplicação}
+  \begin{itemize}
+    \item Pouca ou nenhuma integração com outras aplicações;
+    \item Normalmente é claro o que é seguro e o que não é (ficheiros
+    especificos com extensão de ficheiros conhecida);
+  \end{itemize}
+
+  \textbf{Apresenta janelas de vulnerabilidade}
+  \begin{itemize}
+    \item Os dados devem ser desencriptados para outros ficheiros antes de serem acessados;
+  \end{itemize}
+
+  \textbf{Informação pode ser processada por diferentes algorimos/chaves}
+  \begin{itemize}
+    \item Adaptado a um sistema operativo especifico ou ao nível de segurança;
+    \item Pode complicar os processos de recuperação de dados;
+  \end{itemize}
+
+  \textbf{Pode dificultar a partilha de  dentro do mesmo pacote encriptado}
+  \begin{itemize}
+    \item Pode implicar extrair dados que estão guardados em clear format;
+  \end{itemize}
+
+  \textbf{Exemplos:} PGP, AxCrypt, TrueCrypt, VeraCrypt, RAR, ZIP,
+  7Zip, LZMA, \dots
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Encriptação nos Sistemas de Ficheiros}
+
+\begin{flushleft}
+  \textbf{Informação é transformada quando é enviada da memória para o
+  sistema de ficheiros}
+  \begin{itemize}
+    \item Pode ser amplo, desde todo o sistema de ficheiros até
+    o cache de memória global. Sem proteção em servidores partilhados
+    onde os dados estão disponíveis para todas as aplicações.
+    O mecanismo de segurança é dificil de implementar em ambientes distribuidos
+    (coordenação de ACLs);
+    \item Pode ser específico ao cache de um processo específico.
+    Proteção no caso de servidores partilhados, uma vez que o acesso aos dados
+    é context-bound. A API do cliente decifra os dados;
+  \end{itemize}
+
+  \textbf{Exemplos:} EncFS, EXT4, NTFS, CFS, \dots
+\end{flushleft}
+
+\subsubsection{Encriptação no nível do Volume}
+
+\begin{flushleft}
+  \textbf{Informação é transformada pelo driver do volume}
+  \begin{itemize}
+    \item Transparente para a aplicação e quase transparente para o OS (requer suporte através de uma driver específica);
+    \item O volume inteiro vai estar disponivel (partition);
+  \end{itemize}
+
+  \textbf{Politicas definidas através das aplicações ou do controller}
+  \begin{itemize}
+    \item Agnóstico ao sistema de ficheiros atual (protege tudo incluindo metadados);
+    \item Mas não diferencia entre users individuais;
+  \end{itemize}
+
+  \textbf{Não é capaz de resolver problemas relacionados com os sistemas
+  distribuidos, mas soluciona aqueles relacionados com dispositivos móveis}
+  \begin{itemize}
+    \item Sistemas distribuidos expõe o sistema de ficheiros depois da decifração;
+    \item Dispositivos móveis: dispositivos roubados ou perdidos vão manter os dados seguros;
+  \end{itemize}
+
+  \textbf{Exemplos:} LUKS, BitLocker, FileVault, PGPDisk, \dots
+\end{flushleft}
+
+\subsubsection{Encriptação no nível do Dispositivo}
+
+\begin{flushleft}
+  \textbf{Dispositivos de blocos aplicam politicas de segurança internamente}
+  \begin{itemize}
+    \item No boot, o dispositivo deve ser desbloqueado (depois de fornecer as credenciais corretas);
+    \item Encriptação é implementada no hardware/firmware;
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item Sem perda de performance;
+    \item Acesso aos dados não é trivial como as chaves são internas;
+    \item Pode ser coordenado com aplicações (ex: dispositivos USB);
+  \end{itemize}
+
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Depois do dispositivo ser desbloqueado, os dados estão disponíveis;
+    \item Segurança é limitada pelo algoritmo presente;
+    \item A possível existência de backdoors é dificil de encontrar e corrigir;
+  \end{itemize}
+
+  \textbf{Os dispositivos têm duas areas distintas}
+  \begin{itemize}
+    \item Shadow Disk: Read-only, ~100MB com software para desbloquear;
+    \item Real Disk: Read/Write. Contém os dados do user;
+  \end{itemize}
+
+  \textbf{Duas chaves são utilizadas}
+  \begin{itemize}
+    \item KEK: Key Encryption Key (Authentication Key) (fornecida
+    pelo user, e armazenada com digest no Shadow Disk);
+    \item MEK (ou DEK): Media (Data) Encryption Key (encriptada com o KEK);
+  \end{itemize}
+
+  \textbf{Processo de Boot:}
+  \begin{itemize}
+    \item BIOS vai acessar ao Shadow Disk e boots;
+    \item Aplicação no Shadow Disk requer password, decifra KEK e verifica hash(KEK);
+    \item Se corresponder, MEK é decifrado, e a geometria do disco é atualizada;
   \end{itemize}
 \end{flushleft}
 
