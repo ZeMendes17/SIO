@@ -2024,4 +2024,26 @@ a cópia, armazenamento e recuperação!
 
 \subsubsection{RAID 4}
 
+\begin{center}
+  \includegraphics[scale=0.6]{36}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Objetivos:}
+  \begin{itemize}
+    \item Ter alguma resiliência como RAID 1;
+    \item Com uma performance perto de RAID 0;
+  \end{itemize}
+
+  \textbf{Abordagem:}
+  \begin{itemize}
+    \item Guardar dados em N-1 discos;
+    \item Guardar dados de paridade num disco adicional
+    \begin{itemize}
+      \item Total waste é dependente da capacidade e número de discos;
+      \item Dados dos N-1 discos podem ser usados para recriar outro;
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
 \end{document}
