@@ -2044,6 +2044,107 @@ a cópia, armazenamento e recuperação!
       \item Dados dos N-1 discos podem ser usados para recriar outro;
     \end{itemize}
   \end{itemize}
+
+  \pagebreak
+  
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Necessita de pelo menos 3 discos;;
+    \item Das update aos dados de paridade é complexo e requer hardware específico;
+    \item Impõe a necessidade de ler antes de escrever
+    \begin{itemize}
+      \item Ler dados de blocos existentes (ex: C1) e do correspondente disco de paridade (Cp);
+      \item Compara os blocos de dados antigos com os novos, e alterando o bloco de paridade (Cp');
+      \item Escreve o novo bloco de dados (C1') e o novo bloco de paridade (Cp');
+    \end{itemize}
+    \item As escritas devem ser serializadas devido à existênciade um disco de paridade;
+    \item A recuperação é bem mais complexa do que RAID 1;
+  \end{itemize}
 \end{flushleft}
+
+\subsubsection{RAID 5}
+
+\begin{center}
+  \includegraphics[scale=0.6]{37}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Objetivos:}
+  \begin{itemize}
+    \item Parecido com RAID 4;
+    \item Mas com maior eficiência nas escritas;
+  \end{itemize}
+
+  \textbf{Abordagem:}
+  \begin{itemize}
+    \item Distribuir os blocos de paridade por todos os discos;
+    \item Desperdicio (waste) é parecido com RAID 4;
+    \item A concurrencia de escritas é melhorada
+  \end{itemize}
+
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Mais complexo de implementar;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{RAID 6}
+
+\begin{center}
+  \includegraphics[scale=0.6]{38}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Objetivos:}
+  \begin{itemize}
+    \item Melhorar a fiabilidade de RAID 5;
+  \end{itemize}
+
+  \textbf{Abordagem:}
+  \begin{itemize}
+    \item Usar 2 blocos de paridade, distribuidos por todos os discos;
+    \item Desperdicio (waste) de capacidade vai ser mais alto do que no RAID 5 (igual a 2 discos);
+    \item Concorrência é um bocado pior do que RAID 5;
+  \end{itemize}
+
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item Permite a falha de 2 discos sem perder dados;
+  \end{itemize}
+
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Ainda mais complexo do que RAID 5;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{NAS e SAN}
+
+\begin{flushleft}
+  \textbf{NAS: Network Attached Storage}
+  \begin{itemize}
+    \item Sistema de armazenamento disponível na rede;
+    \item Frequentemente criado com discos RAID;
+    \item Custo: centenas a milhares de euros;
+  \end{itemize}
+
+  \textbf{SAN: Storage Area Network}
+  \begin{itemize}
+    \item Conjunto de sistemas disponiveis na rede;
+    \item Implementa armazenamento distribuido com redundância;
+    \item Custo: milhares a milhões de euros;
+  \end{itemize}
+
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item Permite centralizar as politicas de armazenamento;
+    \item Fornece uma interface normalizada, independente de armazenamento real;
+    \item Pode ser usado para implementar backups distribuidos;
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
 
 \end{document}
