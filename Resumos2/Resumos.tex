@@ -1643,5 +1643,385 @@ MD5 + salt (hash é configurável).
   por (identity) \textbf{claims}.
 \end{flushleft}
 
+\pagebreak
+
+\section{Armazenamento confiável}
+
+\subsection{Problemas}
+
+\begin{flushleft}
+  \textbf{Os dispositivos de armazenamento desenvolvem falhas}
+  \begin{itemize}
+    \item As falhas devem ser minimizadas previnindo a perda de dados;
+    \item As falhas acontecem de certeza, não podendo ser ignoradas;
+  \end{itemize}
+
+  \textbf{Acesso a discos pmecânicos é lento (hard disks (discos rigidos))}
+  \begin{itemize}
+    \item Tempo de acesso = tempo de translação + tempo de rotação;
+    \item Mais informação $\rightarrow$ maior impacto na storage media;
+  \end{itemize}
+
+  \textbf{Solid State Devices (SSDs) têm um número limite de escritas}
+  \begin{itemize}
+    \item 2.000-3.000 escritas por MLC (2 bits por célula);
+  \end{itemize}
+
+  \textbf{Eventos especificos podem resultar na perda de dados}
+  \begin{itemize}
+    \item Incêndios, roubos, "picos de energia", inundações, erros
+    humanos, ataques, \dots
+  \end{itemize}
+
+  \textbf{Pode ser necessário distribuir dados de uma forma inteligente}
+  \begin{itemize}
+    \item Maximizar a perfornance;
+    \item Reduzir custos;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Soluções}
+
+\begin{flushleft}
+  \textbf{Backups de dados}
+  \begin{itemize}
+    \item Local
+    \item Remoto
+  \end{itemize}
+
+  \textbf{Armazenamento redundante}
+  \begin{itemize}
+    \item RAID (Redundant Array of Independent Disks)
+    \item Other: ZFS
+  \end{itemize}
+
+  \textbf{Melhores dispositivos de armazenamento, ambientes com maior controlo}
+  \begin{itemize}
+    \item SLED (Single Large Expensive Disk)
+    \item Enterprise Grade Devices
+    \item Temperature and humidity controlled environments
+  \end{itemize}
+
+  \textbf{Infrastruturas dedicadas para armazenamento}
+  \begin{itemize}
+    \item Single policy control point
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Backups}
+
+\begin{flushleft}
+  \textbf{Copiar os dados periodicamente}
+  \begin{itemize}
+    \item Snapshot do estado do armazenamento num momento específico;
+    \item Cópias vão permitir recuperar versões anteriores de ficheiros;
+    \item Podem ser encriptados;
+  \end{itemize}
+
+  \textbf{Full: Snapshot completo do volume de dados}
+  \begin{itemize}
+    \item Recuperação rápida;
+    \item Requer muito espaço;
+  \end{itemize}
+
+  \textbf{Diferencial: Diferenças desde o último backup completo (full)}
+  \begin{itemize}
+    \item Recuperação mais lenta, mas também requer menos espaço;
+    \item Este tipo de backups diariamente aumenta com o número de mudanças;
+  \end{itemize}
+
+  \textbf{Incremental: Diferenças desde o último backup}
+  \begin{itemize}
+    \item Recuperação ainda mais lenta;
+    \item Requer reconstrução de todos os backups intermédios desde o úçtimo full backup;
+    \item Mais eficiente em termos de espaço;
+  \end{itemize}
+\end{flushleft}
+
+\textbf{Um backup não é um disco adicional com dados}, externo ou remoto. 
+\textbf{Considera políticas, mecanismos e procedimentos para
+fazer, manter e recuperar cópias dos mesmos dados}.
+Deve resistir a situações especificas, deve ser usado apenas
+em situações de emergência. É importante considerar
+a cópia, armazenamento e recuperação!
+
+\textbf{Legal framework implies a special care}:
+\begin{itemize}
+  \item Quando lidamos com dados pessoais;
+  \item Impôr uma politica de retenção frequentemente, os backups
+  devem expirar após um certo tempo;
+\end{itemize}
+
+\subsubsection{Backups - Types}
+
+\begin{center}
+  \includegraphics[scale=0.5]{30}
+  \includegraphics[scale=0.5]{31}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Backups: Compressão}
+
+\begin{flushleft}
+  \textbf{Usa algoritmos e soluções de compressão sem perdas}
+  \begin{itemize}
+    \item Ex: ZIP
+  \end{itemize}
+
+  \textbf{Copiar algumas partes da informação}
+  \begin{itemize}
+    \item Apenas ficheiros modificados;
+  \end{itemize}
+
+  \textbf{Deduplicação (deduplication)}
+  \begin{itemize}
+    \item Apenas guarda ficheiros/blocos únicos;
+    \item Normalmente utiilizando full copy with deduplicação offline;
+    \begin{itemize}
+      \item De blocos do disco utilizando formatos de imagem especificos;
+      \item De ficheiros utilizando hard links;
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Backups: Níveis}
+
+\begin{flushleft}
+  \textbf{Aplicações}
+  \begin{itemize}
+    \item Extrair dados de aplicações (ex: mysqldump);
+    \item Representar uma vista consistente da aplicação.
+    Pode ser necessário bloquear o estado da aplicação (ex: mudanças na BD);
+    \item Pode ser repetido para cada aplicação individual;
+  \end{itemize}
+
+  \textbf{Ficheiros}
+  \begin{itemize}
+    \item Copia de ficheiros individuais;
+    \item Pode dar backup a qualquer sistema de ficheiro das aplicações;
+    \item Estado pode ser inconsistente (ex: ficheiros abertos
+    sem dados escritos, ou as aplicações mudam vários ficheiros de uma vez);  
+  \end{itemize}
+
+  \textbf{Sistema de Ficheiros}
+  \begin{itemize}
+    \item Funcionalidades internas fornecidas pelo sistema de ficheiros de cada individuo;
+    \item Criação de snapshots periodicos com registos de todas as mudanças ou estado atual;
+    \item Pode permitir a recuperação de ficheiros individuais, ou do sistema de ficheiros por completo;
+  \end{itemize}
+
+  \textbf{Blocos do Dispositivo}
+  \begin{itemize}
+    \item Copia de todos os blocos de um storage medium;
+    \item Independente do sistema de ficheiros ou de sistema de operações me uso;
+    \item Pode ser implementado pela Infrastrutura de Armazenamento (transparente e sem qualquer impacto para as aplicações);
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{Backups: Localização dos dados}
+
+\begin{flushleft}
+  \textbf{No mesmo volume ou o mesmo servidor}
+  \begin{itemize}
+    \item Permite aos utilziadores recuperar a informação rapidamente;
+    \item Protege contra mudanças/deleções feitas pelos utilizadores;
+    \item Pode não proteger contra mau funcionamento do hardware (ex: macOS Time Machine);
+  \end{itemize}
+
+  \textbf{Num sistema de localização na mesma infrastrutura}
+  \begin{itemize}
+    \item Também com acesso rápido;
+    \item Protege contra falhas de armazenamento isoladas;
+    \item Não protege os dados contra eventos como incêndios, inundações, roubo, \dots
+    \item Ex: Most enterprise storage solutions, backuppc,
+    TimeCapsule, Borg, Kopia
+  \end{itemize}
+
+  \textbf{Remoto (off-site)}
+  \begin{itemize}
+    \item Implementado para um sistema fora do datacenter local, serviço dedicado
+    ou atraves da internet
+    \begin{itemize}
+      \item Ex: Amazon S3, ou servidores em datacenters dedicados;
+      \item Encriptação se recomendado (ou obrigado) em caso de serviços externos;
+    \end{itemize}
+
+    \item Implementado com transporte seguro especializado (carro blindado transportando backups para um sitio seguro);
+    \item Permite recuperação mesmo se eventos far-reaching aconteçam (ex: terrorismo, terremotos, \dots);
+    \item Recuperação é mais lenta (limitada pela velocidade da rede ou do transporte fisico);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{Escolhendo Dispositivos de Armazenamento}
+
+\begin{flushleft}
+  \textbf{Different device grades: Enterprise vs Desktop}
+  \begin{itemize}
+    \item Diferentes qualidades de construção e funcionalidades de recuperação;
+    \item Diferentes MTBF (Mean Time Between Failures)
+    \begin{itemize}
+      \item Enterprise HDD: 1.2M horas a 25ºC, trabalhando 24/7, 100\% use rate;
+      \item Desktop HDD: 700K horas a 25ºC, trabalhando 8/5, 10-20\% use rate; 
+    \end{itemize}
+  \end{itemize}
+
+  \textbf{Ajustar a cada use case}
+  \begin{itemize}
+    \item Write intensive vs read intensive;
+    \item NAS vs Video vs Desktop vs Cold Storage vs Data Center
+    (diferenças no consumo de energia, fiabilidade e performance);
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Ajustado a um nível especifico de performance}
+  \begin{itemize}
+    \item Tier 0: Melhor performance, baixa capacidade (PCIe NVME SLC SSD);
+    \item Tier 1: Alguma performance, alta capacidade e disponibilidade (M2 SATA SSD);
+    \item Tier 3: Baixa performance, alta capacidade, baico preço (SATA HDD);
+  \end{itemize}
+\end{flushleft}
+
+\subsection{RAID (Redundant Array of Inexpensive Drives)}
+
+\begin{flushleft}
+  \textbf{Melhora a subrevivência da iniformação}
+  \begin{itemize}
+    \item Os dados são apenas perdidos depois de múltiplos dispositivos serem perdidos;
+    \item O número de dispositivos perdidos é configurável;
+  \end{itemize}
+
+  \textbf{Baixo preço e solução eficiente}
+  \begin{itemize}
+    \item Pode usar hardware barato e de qualidade mais baixa;
+    \item Podem melhorar a performance de leitura e escrita;
+  \end{itemize}
+
+  \textbf{RAID não substitui backups}
+  \begin{itemize}
+    \item Apenas tolera a falha de um número limitado de dispositivos;
+    \item Não consegue lidar com erros humanos (mudificação/deleção de ficheiros);
+  \end{itemize}
+
+  \textbf{RAID pode até aumentar a probabilidade de falha}
+  \begin{itemize}
+    \item Uma vez que pode ser ajustado para obter melhor performance;
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{RAID 0 (Striping)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{32}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Objetivos:}
+  \begin{itemize}
+    \item Acelerar o acesso aos dados;
+  \end{itemize}
+
+  \textbf{Abordagem:}
+  \begin{itemize}
+    \item Acessar os discos em paralelo;
+    \item \uline{Striping}
+    \begin{itemize}
+      \item Os dados são divididos em pequenos pedaços (stripes);
+      \item Estes stripes são armazenados ao longo de todos os discos de uma forma distribuída;
+    \end{itemize}
+  \end{itemize}
+
+  \pagebreak
+
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item Pode acelerar a performance como fator do número de discos;
+  \end{itemize}
+
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Aumenta a probabilidade de perder dados
+    (se \textbf{Pf} é a probabilidade de falha de um único disco,
+    um volume RAID 0 com \textbf{N} discos tem uma probabilidade
+    de falha de $1-(1-Pf)^N$);
+    \item aumenta o número de dispositivos (pelo menos duplicando o número);
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{RAID 1 (Mirroring)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{33}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Objetivos:}
+  \begin{itemize}
+    \item Tolerância à falha de discos;
+  \end{itemize}
+
+  \textbf{Abordagem:}
+  \begin{itemize}
+    \item Duplicação dos dados (mirroring)
+    \begin{itemize}
+      \item Escrita sincronizada;
+      \item Leitura desitribuida de qualquer disco com ou sem
+      comparação com outro disco;
+    \end{itemize}
+  \end{itemize}
+
+  \textbf{Vantagens:}
+  \begin{itemize}
+    \item Diminui a probabilidade de perda de dados
+    (se \textbf{Pf} é a probabilidade de falha de um único disco,
+    um volume RAID 1 com \textbf{N} discos tem uma probabilidade
+    de falha de $Pf^N$);
+  \end{itemize}
+
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Armazenamento ineficiente (vai perder pelo menos 50\%
+    da capacidade total, para 3 discos vai perder 66\% \dots $(N-1)/N$);
+    \begin{itemize}
+      \item Aumenta o número de dispositivos (pelo menos o dobro);
+    \end{itemize}
+  \end{itemize}
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{RAID 0+1 e 1+0 (Nested)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{34}
+  \includegraphics[scale=0.6]{35}
+\end{center}
+
+\begin{flushleft}
+  \textbf{Objetivos:}
+  \begin{itemize}
+    \item Beneficios de RAID 0  (performance);
+    \item Beneficios de RAID 1 (resiliência);
+  \end{itemize}
+
+  \textbf{Abordagem:}
+  \begin{itemize}
+    \item 0+1: Um volume RAID 1 utilizando volumes RAID 0 (mirroring of striped volumes);
+    \item 1+0: RAID 0 sobre volumes RAID 1 (striping over mirrored volumes);
+  \end{itemize}
+
+  \textbf{Desvantagens:}
+  \begin{itemize}
+    \item Desperdicio da capacidade de armazenamento (pelo menos 50\%);
+    \item Aumenta o número de dispositivos;
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{RAID 4}
 
 \end{document}
