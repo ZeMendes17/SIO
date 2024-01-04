@@ -2355,6 +2355,468 @@ Impõe confiar em múltiplos administradores, por vezes desconhecidos}
   \end{itemize}
 \end{flushleft}
 
+
+\section{Comunicação segura em redes Wi-Fi (802.11)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{40}
+\end{center}
+
 \pagebreak
+
+\subsection{Wireless vs Cabled Communications: Problemas de Segurança}
+
+\begin{flushleft}
+  \textbf{Comunicação Broadcast}
+  \begin{itemize}
+    \item Dificil de impor barreiras físicas de propagação;
+    \item Barreiras físicas tipicamente não são suficientes para previnir:
+    \begin{itemize}
+      \item Interferencia com comunicações;
+      \item O eavesdropping (escuta) de comunicações;
+    \end{itemize}
+  \end{itemize}
+
+  \textbf{Mitigação:}
+    \begin{itemize}
+      \item Reduzir as capacidades de interferencia e escuta (na camada fisica e
+      de data link);
+    \end{itemize}
+\end{flushleft}
+
+\subsubsection{Reduzir as capacidades de interferencia e escuta: Camada Fisica}
+
+\begin{flushleft}
+  \textbf{Previnir eavesdropping através de descodificar o canal},
+  a codificação do canal precisa de usar algum segredo partilhado.
+
+  \vspace{2mm}
+
+  \textbf{Exemplo: Bluetooth FHSS (Frequency Hopping Spread Spectrum)}
+  \begin{itemize}
+    \item O carrier muda a frequência num padrão conhecido pelo transmissor e recetor:
+    \begin{itemize}
+      \item Os dados são divididos em pacotes e são transmitidos por 79 frequências hop num padrão pseudo-aleatório;
+      \item Apenas transmissores e recetores que estão sincronizados no mesmo padrão
+      de frequências hop, vão ter acesso aos dados transmitidos;
+    \end{itemize}
+
+    \item FHSS parece ser um impulso de ruído de curta duração para eavesdroppers. O transmissor muda de frequências
+    hop 1600 vezes por segundo, para assegurar um elevado nível de segurança dos dados;
+  \end{itemize}
+
+  \textbf{Monopolização do canal atual pelos transmissores}. Physical Medium access Policies
+
+  \vspace{2mm}
+
+  \textbf{Exemplos:}
+  \begin{itemize}
+    \item Bluetooth FHSS - Transmissores não sincronizados raramente colidem;
+    \item Wi-Fi - Cada rede é instânciada por cima de uma frequência específica;
+    \item GSM - Cada terminal transmite sobre uma estçaõ móvel específica;
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \textbf{Interferência ainda é possível a partir de fontes externas
+  ou canais sobrepostos}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Reduzir as capacidades de interferencia e escuta: Camada de Dados}
+
+\begin{flushleft}
+  \textbf{Previnir atacantes de identificar os participantes da comunicação}. Headers t~em de ser
+  encriptados, e identificadores temporários devem ser usados.
+
+  \vspace{2mm}
+
+  \textbf{Previnir eavesdroppers de entender os payloads de data link}.
+  Frames precisam de ser encriptados. Normalmente, apenas o payload é encriptado.
+
+  \vspace{2mm}
+
+  \textbf{Previnir atacantes de forjar data link frames aceitáveis}.
+  Frams precisam de ser autenticados (autenticação original, freshness)
+\end{flushleft}
+
+\subsection{IEEE 802.11: Arquitetura (em redes estruturadas)}
+
+\begin{flushleft}
+  \textbf{Station (STA)}
+  \begin{itemize}
+    \item O dispositivo que pode conectar à rede sem fios;
+    \item Tem um identificador único (MAC (Media Access Control) address).
+    Hoje em dia é popular ser aleatório (para permanecer anónimo);
+  \end{itemize}
+
+  \textbf{Access Point (AP)}
+  \begin{itemize}
+    \item O dispositivo que permite a interconecção entre a rede sem fios
+    e outros dispositivos da rede ou redes; 
+  \end{itemize}
+
+  \textbf{Wireless network}
+  \begin{itemize}
+    \item Rede formada por um conjunto de STAs e APs que comunicam utilizando
+    sinais de rádio;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{IEEE 802.11: Terminologia de uma rede estruturada}
+
+\begin{flushleft}
+  \textbf{Basic Service Set (BSS)}
+  \begin{itemize}
+    \item Rede formada por um conjunto de STAs associadas a um AP;
+  \end{itemize}
+
+  \textbf{Extended Service Set (ESS)}
+  \begin{itemize}
+    \item Rede formada por vários BSSs interconectados por um
+    Distribution System (DS);
+  \end{itemize}
+
+  \textbf{Service Set ID (SSID)}
+  \begin{itemize}
+    \item Identificador de uma rede sem fios servido oir um BSS ou ESS;
+    \item A mesma infrastrutura pode usar vários SSIDs;
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.6]{41}
+\end{center}
+
+\pagebreak
+
+\subsection{IEEE 802.11: Máquina de Estados de Autenticação e Associação}
+
+\begin{center}
+  \includegraphics[scale=0.6]{42}
+\end{center}
+
+\subsection{IEEE 802.11: Tipos de Frames}
+
+\begin{center}
+  \includegraphics[scale=0.6]{43}
+\end{center}
+
+\subsection{IEEE 802.11 segurança data link: Overview}
+
+\begin{center}
+  \includegraphics[scale=0.6]{44}
+\end{center}
+
+\pagebreak
+
+\subsection{IEEE 802.11 WEP (Wired Equivalent Privacy)}
+
+\begin{flushleft}
+  \textbf{Autenticação Opcional e unilateral}, pode suportar
+  múltiplos tipos simultânemente.
+
+  \vspace{2mm}
+
+  \textbf{OSA: Open System Authentication}, sem autenticação,
+  apenas para o modelo de transação de estados.
+
+  \vspace{2mm}
+
+  \textbf{SKA: Shared Key Authentication}
+  \begin{itemize}
+    \item Desafio/Resposta entre STA e AP;
+    \item Key (password) por pessoa (MAC address) ou rede;
+    \item Autenticação STA unilateral (sem AP / autenticaçao da rede);
+  \end{itemize}
+
+  \vspace{2mm}
+
+  \textbf{Frame payload encryprion}, com RC4, usando chaves de 40 ou 104 bits.
+
+  \vspace{2mm}
+
+  \textbf{Frame payload authentication w/ CRC-32}
+\end{flushleft}
+
+\subsubsection{WEP: Vários problemas de segurança\dots}
+
+\begin{flushleft}
+  \textbf{SKA é completamete inseguro}
+  \begin{itemize}
+    \item Um eavesdropped tem tudo o que precisa para fingir ser uma vítima (não precisa de saber a password);
+    \item Rogue APs não podem ser detetados; 
+  \end{itemize}
+
+  \textbf{A mesma chave para autenticação e confidencialidade do payload},
+  sem distribuição de chaves, chaves demasiado usadas.
+
+  \vspace{2mm}
+
+  \textbf{Controlo de integridade é fraco}
+  \begin{itemize}
+    \item CRC-32 é linear;
+    \item Frame deterministic modification é trivial;
+  \end{itemize}
+
+  \textbf{Gestão de IVs é mediocre}
+  \begin{itemize}
+    \item IVs são muito pequenos (24 bits), fácil obter criptogramas com
+    o mesmo IV. Tendo o mesmo IV e a mesma chave, obtemos o mesmo keystream,
+    a criptoanálise fica muito fácil;
+    \item IV não é gerido de todo, a reutilização não é controlada/previnida;
+  \end{itemize}
+\end{flushleft}
+
+\begin{center}
+  \includegraphics[scale=0.6]{45}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Mitigação dos problemas do WEP: WPA (Wi-Fi Protected Access)}
+
+\begin{flushleft}
+  \textbf{WPA utiliza WEP de uma forma segura}
+  \begin{itemize}
+    \item Uma chave diferente RC4 por frame;
+    \item Chaves RC4 fracas são evitadas;
+    \item Controlo de integridade criptográfica extra w/ Michael;
+    \item Sequência de IVs estrita para prevenir a reutilização de frames;
+  \end{itemize}
+
+  \textbf{Implementada primeiro por drivers de dispositivos}, mais tarde em firmware.
+
+  \vspace{2mm}
+
+  \textbf{Inline w/ 802.11i}
+  \begin{itemize}
+    \item O verdadeiro padrão de segurança 802.11;
+    \item WPA pode ser usado com 802.1X para autenticações mutuas mais fortes;
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection*{WPA: TKIP (Temporal Key Integrity Protocol)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{46}
+\end{center}
+
+\subsubsection*{TKIP: Frame layout}
+
+\begin{center}
+  \includegraphics[scale=0.6]{47}
+\end{center}
+
+\subsection{IEEE 802.1X: Autenticação Port-Based}
+
+\begin{flushleft}
+  \textbf{Modelo de autenticação para todas as redes IEEE 802},
+  autenticação mutua na camada 2.
+
+  \vspace{2mm}
+
+  \textbf{Originalmente desenvolvido para redes grandes}
+  \begin{itemize}
+    \item Campus universitários, empresas, \dots;
+    \item Modelo foi extendido para redes sem fios;
+  \end{itemize}
+
+  \textbf{Realiza distribuição de chaves}, protocolos adicionais
+  focados nos processos restantes;
+\end{flushleft}
+
+\pagebreak
+
+\subsubsection{IEEE 802.1X: Arquitetura}
+
+\begin{center}
+  \includegraphics[scale=0.8]{48}
+  \includegraphics[scale=0.8]{49}
+\end{center}
+
+\subsubsection{IEEE 802.1X: Fases Operacionais}
+
+\begin{center}
+  \includegraphics[scale=0.6]{50}
+\end{center}
+
+\subsubsection*{Fase 1: Discovery (mensagens 802.11)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{51}
+\end{center}
+
+\textbf{STA apenas teve acesso ao AP} (a porta controlada pelo 802.1X ainda está fechada)
+
+\subsubsection*{Fase 2: Authentication (mensagens EAP)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{52}
+\end{center}
+
+\textbf{No final desta fase, AP e ATA partilham dados crypto}
+\begin{itemize}
+  \item \uline{PMK} (Pairwise Master Key)
+  \item Mas a porta controlada pelo 802.1X ainda está fechada;
+\end{itemize}
+
+\subsubsection*{Fase 3: 4-Way Handshake (mensagens EAPoL)}
+
+\begin{center}
+  \includegraphics[scale=0.6]{53}
+\end{center}
+
+\textbf{No final AP e STA partilham novos dados crypto}
+\begin{itemize}
+  \item \uline{PTK} (Pairwise Transient Key)
+  \item \uline{GTK} (Group Transient Key)
+\end{itemize}
+
+\textbf{Ambos estão convencidos que o par conhece \uline{PMK} e \uline{PTK}},
+devido ao uso de MICs.
+
+\vspace{2mm}
+
+\textbf{A porta controlada pelo 802.1X está agora aberta para \uline{tráfego unicast}}.
+
+\subsubsection{IEEE 802.1X: Opções Arquiteturais}
+
+\begin{center}
+  \includegraphics[scale=0.6]{54}
+\end{center}
+
+\pagebreak
+
+\subsubsection{IEEE 802.1X: Hierarquia de Chaves Completa}
+
+\begin{center}
+  \includegraphics[scale=0.6]{55}
+\end{center}
+
+\subsection{EAP (Extensible Authentication Protocol)}
+
+\begin{flushleft}
+  \textbf{Inicialmente desenvolvido para PPP (Point-to-Point Protocol)},
+  adaptado para 802.1X.
+
+  \vspace{2mm}
+
+  \textbf{AP não se envolve}
+  \begin{itemize}
+    \item Retransmitir tráfego EAP;
+    \item Protocolos EAP diferentes não umplicam mudanças em APs;
+  \end{itemize}
+
+  \textbf{Não concebido para redes sem fios}
+  \begin{itemize}
+    \item Tráfego EAP não é protegido;
+    \item Autenticação mutua não é obrigatória (um STA pode ser enganado
+    por um rogue AP mais forte (nível de rádio));
+  \end{itemize}
+\end{flushleft}
+
+\subsubsection{Alguns protocolos EAP para 802.1X}
+
+\begin{center}
+  \includegraphics[scale=0.6]{56}
+\end{center}
+
+\pagebreak
+
+\subsubsection{Eduroam: 802.1X w/ PEAP + MS-CHAPv2}
+
+\begin{center}
+  \includegraphics[scale=0.6]{57}
+\end{center}
+
+\textbf{Disponível na maioria das universidades do mundo}.
+Servidores de Autenticação Local (usando RADIUS) para acesso roaming.
+
+\subsection{IEEE 802.11i (WPA2)}
+
+\begin{flushleft}
+  \textbf{Define Redes de segurança robustas (RSN)}.
+  São as que suportam WPA e 802.11i.
+
+  \vspace{2mm}
+
+  \textbf{Utiliza mecanismos de segurança avançados para proteção de frames}
+  \begin{itemize}
+    \item Advanced Security Algorithm (AES) para encriptação do payload e
+    controlo de integridade de frames;
+  \end{itemize}
+
+  \textbf{Utiliza 802.1X para autenticação mutua}
+
+  \textbf{Utiliza 802.1X para autenticação de acesso à rede}
+  \begin{itemize}
+    \item Simplified Pre-Shared Key (PSK) mode for SOHO (Small Office, Home
+    Office) environments;
+    \item EAP-based protocol for enterprise environments;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{WEP vs AES-CCMP: Frame Layout}
+
+\begin{center}
+  \includegraphics[scale=0.6]{58}
+\end{center}
+
+
+\pagebreak
+
+\subsection{WPA2 proteção de frames}
+
+\textbf{CCMP - Counter CBC-MAC Protocol}
+
+\begin{center}
+  \includegraphics[scale=0.6]{59}
+\end{center}
+
+
+\subsection{802.11w: Proteção de Gestão de Frames}
+
+\begin{flushleft}
+  \textbf{Gestão de frames que podem ser usados
+  para ataques de DoS são autenticados}
+  \begin{itemize}
+    \item Pedidos de deautenticação e desassociação;
+    \item Outros frames de gestão são unicasted ou broadcasted por um AP;
+  \end{itemize}
+
+  \textbf{BIP (Broadcast Integrity Protocol)}
+  \begin{itemize}
+    \item IGTK (Integrity GTK (Group Temporal Key))
+    \item Para proteger parte do tráfego de Broadcast do AP;
+  \end{itemize}
+
+  \textbf{Security Association Query Request / Response}
+  \begin{itemize}
+    \item Ajuda a lidar com problemas de desincronização;
+  \end{itemize}
+\end{flushleft}
+
+\subsection{IEEE 802.11 segurança: Todos os problemas resolvidos? \uline{NÃO!}}
+
+\begin{flushleft}
+  \textbf{Ataques de dicionário ainda são possíveis com autenticações
+  baseadas em PSK ou EAP}
+  \begin{itemize}
+    \item \uline{E estas vão continuar}, enquanto os humanos continuarem
+    a escolher passwords fracas;
+  \end{itemize}
+
+  \textbf{Ainda existem alguns frames não protegidos}
+
+  \vspace{2mm}
+
+  \textbf{Algumas weaknesses ao nível do CSMA}
+  \begin{itemize}
+    \item Low Congestion Window (CW) values permitem aos atacantes
+    obter toda a largura de banda;
+  \end{itemize}
+\end{flushleft}
 
 \end{document}
